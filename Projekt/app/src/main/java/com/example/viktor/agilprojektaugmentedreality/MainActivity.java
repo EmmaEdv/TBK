@@ -1,5 +1,6 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.app.ListActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,10 +14,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
-    public ListView lV;
+    public ListView listView;
     public TextView tV;
 
-    String[] values = new String[] { "Ben", "Rygg", "Ben" };
 
     final ArrayList<String> list = new ArrayList<String>();
 
@@ -25,20 +25,25 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lV = (ListView) findViewById(R.id.listview);
+        listView = (ListView) findViewById(R.id.listview);
 
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
-        }
 
-        final ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
-        lV.setAdapter(adapter);
+        final ThumbnailAdapter adapter = new ThumbnailAdapter(this, generateData());
+        listView.setAdapter(adapter);
 
         tV = (TextView) findViewById(R.id.textview);
         tV.setText("Här ska bilderna visas");
     }
 
+    private ArrayList<ThumbnailItem> generateData(){
+
+        ArrayList<ThumbnailItem> items = new ArrayList<ThumbnailItem>();
+        items.add(new ThumbnailItem(R.drawable.ryggstod_toppen,"Ryggstöd topp"));
+        items.add(new ThumbnailItem(R.drawable.ryggstod_mitten,"Ryggstöd mitten"));
+        items.add(new ThumbnailItem(R.drawable.skruv,"Jesper"));
+
+        return items;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
