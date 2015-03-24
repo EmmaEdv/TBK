@@ -14,6 +14,10 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
+    /*
+    Variables
+     */
+
     public ListView listView;
     public TextView tV;
 
@@ -35,12 +39,16 @@ public class MainActivity extends ActionBarActivity {
         tV.setText("Här ska bilderna visas");
     }
 
+    /*
+    Generates data for the list.
+    Add both thumbnails and description here.
+     */
     private ArrayList<ThumbnailItem> generateData(){
 
         ArrayList<ThumbnailItem> items = new ArrayList<ThumbnailItem>();
-        items.add(new ThumbnailItem(R.drawable.ryggstod_toppen,"Ryggstöd topp"));
-        items.add(new ThumbnailItem(R.drawable.ryggstod_mitten,"Ryggstöd mitten"));
-        items.add(new ThumbnailItem(R.drawable.skruv,"Jesper"));
+        items.add(new ThumbnailItem(R.drawable.ryggstod_toppen," Ryggstöd topp"));
+        items.add(new ThumbnailItem(R.drawable.ryggstod_mitten," Ryggstöd mitten"));
+        items.add(new ThumbnailItem(R.drawable.skruv," Jesper"));
 
         return items;
     }

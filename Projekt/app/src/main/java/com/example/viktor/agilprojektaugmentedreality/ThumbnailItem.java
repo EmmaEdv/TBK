@@ -2,6 +2,9 @@ package com.example.viktor.agilprojektaugmentedreality;
 
 /**
  * Created by Viktor on 2015-03-24.
+
+    The items in the listview
+
  */
 public class ThumbnailItem {
 
