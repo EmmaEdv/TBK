@@ -4,14 +4,39 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    public ListView lV;
+    public TextView tV;
+
+    String[] values = new String[] { "Ben", "Rygg", "Ben" };
+
+    final ArrayList<String> list = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        lV = (ListView) findViewById(R.id.listview);
+
+        for (int i = 0; i < values.length; ++i) {
+            list.add(values[i]);
+        }
+
+        final ArrayAdapter adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, list);
+        lV.setAdapter(adapter);
+
+        tV = (TextView) findViewById(R.id.textview);
+        tV.setText("Här ska bilderna visas");
     }
 
 
