@@ -3,6 +3,7 @@ package com.example.viktor.agilprojektaugmentedreality;
 import android.app.ListActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,17 +15,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
 public class MainActivity extends ActionBarActivity {
 
     /*
     Variables
      */
-
     public ListView listView;
-    public ImageView imageView;
-
-
+    public ImageView iV;
     final ArrayList<String> list = new ArrayList<String>();
 
     @Override
@@ -33,27 +30,24 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.listview);
-
-
-        final ThumbnailAdapter adapter = new ThumbnailAdapter(this, generateData());
-        listView.setAdapter(adapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         final ArrayList<ThumbnailItem> items = generateData();
+        final ThumbnailAdapter adapter = new ThumbnailAdapter(this, items);
+        listView.setAdapter(adapter);
 
         /*
-        Cick listener for item
+        Click listener for item
          */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                imageView.setImageResource(items.get(position).getResource());
-
+                iV.setImageResource(items.get(position).getResource());
+                listView.setItemChecked(position,true);
             }
         });
 
-        imageView = (ImageView) findViewById(R.id.imageview);
-
+        iV = (ImageView) findViewById(R.id.imageview);
     }
 
     /*
@@ -61,7 +55,6 @@ public class MainActivity extends ActionBarActivity {
     Add both thumbnails and description here.
      */
     private ArrayList<ThumbnailItem> generateData(){
-
         ArrayList<ThumbnailItem> items = new ArrayList<ThumbnailItem>();
 
         items.add(new ThumbnailItem(R.drawable.ryggstod_toppen, "Ryggstöd topp"));
@@ -93,6 +86,4 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }
