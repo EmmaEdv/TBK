@@ -3,6 +3,7 @@ package com.example.viktor.agilprojektaugmentedreality;
 import android.app.ListActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.listview);
-
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         final ThumbnailAdapter adapter = new ThumbnailAdapter(this, generateData());
         listView.setAdapter(adapter);
@@ -40,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 iV.setImageResource(items.get(position).getResource());
+               listView.setItemChecked(position,true);
 
             }
         });
