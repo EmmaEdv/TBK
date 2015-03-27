@@ -21,7 +21,7 @@ public class MainActivity extends ActionBarActivity {
     Variables
      */
     public ListView listView;
-    public ImageView iV;
+    public ImageView imageView;
     final ArrayList<String> list = new ArrayList<String>();
 
     @Override
@@ -42,12 +42,12 @@ public class MainActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                iV.setImageResource(items.get(position).getResource());
+                imageView.setImageResource(items.get(position).getResource());
                 listView.setItemChecked(position,true);
             }
         });
 
-        iV = (ImageView) findViewById(R.id.imageview);
+        imageView = (ImageView) findViewById(R.id.imageview);
     }
 
     /*
