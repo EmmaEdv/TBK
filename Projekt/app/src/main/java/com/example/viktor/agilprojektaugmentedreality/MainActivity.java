@@ -5,7 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity {
 
     public ListView listView;
-    public TextView tV;
+    public ImageView iV;
 
 
     final ArrayList<String> list = new ArrayList<String>();
@@ -31,16 +34,27 @@ public class MainActivity extends ActionBarActivity {
         final ThumbnailAdapter adapter = new ThumbnailAdapter(this, generateData());
         listView.setAdapter(adapter);
 
-        tV = (TextView) findViewById(R.id.textview);
-        tV.setText("Här ska bilderna visas");
+        final ArrayList<ThumbnailItem> items = generateData();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                iV.setImageResource(items.get(position).getResource());
+
+            }
+        });
+
+             iV = (ImageView) findViewById(R.id.imageview);
+
     }
 
     private ArrayList<ThumbnailItem> generateData(){
 
         ArrayList<ThumbnailItem> items = new ArrayList<ThumbnailItem>();
-        items.add(new ThumbnailItem(R.drawable.ryggstod_toppen,"Ryggstöd topp"));
+        items.add(new ThumbnailItem(R.drawable.ryggstod_toppen, "Ryggstöd topp"));
         items.add(new ThumbnailItem(R.drawable.ryggstod_mitten,"Ryggstöd mitten"));
-        items.add(new ThumbnailItem(R.drawable.skruv,"Jesper"));
+        items.add(new ThumbnailItem(R.drawable.skruv,"Skruv"));
+        items.add(new ThumbnailItem(R.drawable.sits, "Sits"));
 
         return items;
     }
@@ -66,4 +80,6 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
