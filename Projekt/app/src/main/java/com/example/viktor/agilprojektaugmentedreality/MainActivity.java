@@ -1,32 +1,36 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
-import android.app.ListActivity;
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     /*
     Variables
      */
     public ListView listView;
-    public ImageView imageView;
-    final ArrayList<String> list = new ArrayList<String>();
+    private GLSurfaceView mSurfaceView;
+    private GLRenderer mGLRenderer = new GLRenderer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.listview);
@@ -42,12 +46,17 @@ public class MainActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                imageView.setImageResource(items.get(position).getResource());
+
+                // Add stuff here for Item selection from the list view
+
                 listView.setItemChecked(position,true);
+
             }
         });
-
-        imageView = (ImageView) findViewById(R.id.imageview);
+        // Get the GL Surface View from the activity XML by Id
+        mSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
+        // Then assign a renderer to the fetched view
+        mSurfaceView.setRenderer(mGLRenderer);
     }
 
     /*
@@ -85,5 +94,30 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /*
+         * The activity must call the GL surface view's
+         * onResume() on activity onResume().
+         */
+        if (mSurfaceView != null) {
+            mSurfaceView.onResume();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        /*
+         * The activity must call the GL surface view's
+         * onPause() on activity onPause().
+         */
+        if (mSurfaceView != null) {
+            mSurfaceView.onPause();
+        }
     }
 }

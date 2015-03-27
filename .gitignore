@@ -1,1 +1,8 @@
+# OS specific
+.DS_Store
 
+# Mergecrap files
+*.orig
+
+# Ignore Metaio to avoid unnecessary shit
+Projekt/metaioSDK
