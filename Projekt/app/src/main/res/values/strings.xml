@@ -4,5 +4,6 @@
     <string name="app_name">Agilprojekt Augmented Reality</string>
     <string name="hello_world">Neeeeej kniven...</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_new">newActivity</string>
 
 </resources>
