@@ -11,8 +11,15 @@ public class ThumbnailItem {
     private String title;
     private int resource;
 
+
+    /*
+    Empty constructor
+     */
     public ThumbnailItem() {}
 
+    /*
+    Construtor
+     */
     public ThumbnailItem(int resource, String title) {
         super();
         this.resource = resource;

@@ -22,7 +22,7 @@ public class ThumbnailAdapter extends ArrayAdapter<ThumbnailItem>{
 
     public ThumbnailAdapter(Context context, ArrayList<ThumbnailItem> itemsArrayList) {
 
-        super(context, R.layout.row, itemsArrayList); // knas ändra sen
+        super(context, R.layout.row, itemsArrayList);
 
         this.context = context;
         this.itemsArrayList = itemsArrayList;

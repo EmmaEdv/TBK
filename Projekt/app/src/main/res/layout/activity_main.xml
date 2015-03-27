@@ -10,8 +10,8 @@
         android:layout_width="300dp"
         android:layout_height="match_parent"></ListView>
 
-    <TextView
-        android:id="@+id/textview"
+    <ImageView
+        android:id="@+id/imageview"
         android:layout_toRightOf="@+id/listview"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
