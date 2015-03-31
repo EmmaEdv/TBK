@@ -1,1 +1,4 @@
+.DS_Store
 
+# Ignora denna mapp. Både i push och pull
+Projekt/metaioSDK/
