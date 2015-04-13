@@ -1,5 +1,6 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.graphics.Color;
 import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import android.content.Context;
@@ -38,15 +39,27 @@ public class ThumbnailAdapter extends ArrayAdapter<ThumbnailItem>{
         // 2. Get rowView from inflater
         View rowView = inflater.inflate(R.layout.row, parent, false);
 
-        // 3. Get the two text view from the rowView
-        ImageView thumbnailView = (ImageView) rowView.findViewById(R.id.thumbnail);
-        TextView titleView = (TextView) rowView.findViewById(R.id.title);
+        // 3. Set different title views according to position in the list
+        TextView titleView;
 
-        // 4. Set the text for textView
-        thumbnailView.setImageResource(itemsArrayList.get(position).getResource());
+        if(position == 0 || position == 5) {
+            rowView.setBackgroundColor(Color.DKGRAY);
+
+            // 4. Set the text for textView
+            titleView = (TextView) rowView.findViewById(R.id.headtitle);
+        }
+        else {
+            // 4. Set the text for textView
+            titleView = (TextView) rowView.findViewById(R.id.title);
+
+            // 5. Set image
+            ImageView thumbnailView = (ImageView) rowView.findViewById(R.id.thumbnail);
+            thumbnailView.setImageResource(itemsArrayList.get(position).getResource());
+        }
+
         titleView.setText(itemsArrayList.get(position).getTitle());
 
-        // 5. retrn rowView
+        // 6. Return rowView
         return rowView;
     }
 
