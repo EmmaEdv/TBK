@@ -66,10 +66,14 @@ public class MainActivity extends Activity {
     private ArrayList<ThumbnailItem> generateData(){
         ArrayList<ThumbnailItem> items = new ArrayList<ThumbnailItem>();
 
-        items.add(new ThumbnailItem(R.drawable.ryggstod_toppen, "Ryggstöd topp"));
-        items.add(new ThumbnailItem(R.drawable.ryggstod_mitten,"Ryggstöd mitten"));
-        items.add(new ThumbnailItem(R.drawable.skruv,"Skruv"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Stora delar"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Ryggstöd topp"));
+        items.add(new ThumbnailItem(R.drawable.rygg_mitt,"Ryggstöd mitten"));
+        items.add(new ThumbnailItem(R.drawable.ram, "Ram"));
         items.add(new ThumbnailItem(R.drawable.sits, "Sits"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Små delar"));
+        items.add(new ThumbnailItem(R.drawable.skruv,"Skruv"));
+        items.add(new ThumbnailItem(R.drawable.plugg, "Plugg"));
 
         return items;
     }
