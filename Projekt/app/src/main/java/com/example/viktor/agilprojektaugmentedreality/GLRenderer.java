@@ -1,7 +1,10 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.app.Activity;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
+import android.opengl.Matrix;
+import android.util.DisplayMetrics;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -12,6 +15,18 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class GLRenderer implements Renderer {
     private Square square;
+
+    //Used for the GLView object rotation.
+    public float mDeltaX = 0;
+    public float mDeltaY = 0;
+
+    /** Store the accumulated rotation. */
+    private final float[] mAccumulatedRotation = new float[16];
+
+    /** Store the current rotation. */
+    private final float[] mCurrentRotation = new float[16];
+
+    private float[] mTemporaryMatrix = new float[16];
 
     public GLRenderer() {
         // Initialize our square, change this to our custom object in the future
@@ -31,17 +46,24 @@ public class GLRenderer implements Renderer {
         gl.glDepthFunc(GL10.GL_LEQUAL);
         // Really nice perspective calculations.
         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
+        // Initialize the accumulated rotation matrix
+        Matrix.setIdentityM(mAccumulatedRotation, 0);
     }
 
     public void onDrawFrame(GL10 gl) {
+
         // Clears the screen and depth buffer.
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
         // Replace the current matrix with the identity matrix
         gl.glLoadIdentity();
         // Translates 4 units into the screen.
         gl.glTranslatef(0, 0, -4);
+        //Rotation for GLView
+        gl.glRotatef(mDeltaX,0f,1f,0f);
+        gl.glRotatef(mDeltaY,1f,0f,0f);
         // Draw our square.
         square.draw(gl);
+
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height) {

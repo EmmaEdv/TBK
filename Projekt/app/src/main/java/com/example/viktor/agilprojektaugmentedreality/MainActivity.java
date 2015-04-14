@@ -3,8 +3,10 @@ package com.example.viktor.agilprojektaugmentedreality;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,7 +15,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
 
     /*
     Variables
@@ -22,11 +24,17 @@ public class MainActivity extends Activity {
     private GLSurfaceView mSurfaceView;
     private GLRenderer mGLRenderer = new GLRenderer();
 
+    //Used for rotation in GLView
+    private float mPreviousX;
+    private float mPreviousY;
+    private float mDensity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mDensity = getResources().getDisplayMetrics().density;
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -122,6 +130,37 @@ public class MainActivity extends Activity {
          */
         if (mSurfaceView != null) {
             mSurfaceView.onPause();
+        }
+    }
+
+    //Event listener for touch on the GLView, gets the data needed for proper rotation.
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        if (event != null)
+        {
+            float x = event.getX();
+            float y = event.getY();
+
+            if (event.getAction() == MotionEvent.ACTION_MOVE)
+            {
+                if (mGLRenderer != null)
+                {
+                    float deltaX = (x - mPreviousX) / mDensity / 2f;
+                    float deltaY = (y - mPreviousY) / mDensity / 2f;
+
+                    mGLRenderer.mDeltaX += deltaX;
+                    mGLRenderer.mDeltaY += deltaY;
+                }
+            }
+
+            mPreviousX = x;
+            mPreviousY = y;
+
+            return true;
+        }
+        else
+        {
+            return super.onTouchEvent(event);
         }
     }
 }
