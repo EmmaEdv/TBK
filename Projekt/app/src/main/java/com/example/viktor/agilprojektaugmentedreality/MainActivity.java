@@ -1,6 +1,7 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -33,7 +34,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mDensity = getResources().getDisplayMetrics().density;
         super.onCreate(savedInstanceState);
-
+        //Locks the orientation to landscape
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -57,12 +59,40 @@ public class MainActivity extends ActionBarActivity {
 
                 // Add stuff here for Item selection from the list view
 
-                listView.setItemChecked(position,true);
+                listView.setItemChecked(position, true);
 
             }
         });
         // Get the GL Surface View from the activity XML by Id
         mSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
+        //Event listener for touch on the GLView, gets the data needed for proper rotation.
+        mSurfaceView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event != null) {
+                    float x = event.getX();
+                    float y = event.getY();
+
+                    if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                        if (mGLRenderer != null) {
+                            float deltaX = (x - mPreviousX) / mDensity / 2f;
+                            float deltaY = (y - mPreviousY) / mDensity / 2f;
+
+                            mGLRenderer.mDeltaX += deltaX;
+                            mGLRenderer.mDeltaY += deltaY;
+                        }
+                    }
+
+                    mPreviousX = x;
+                    mPreviousY = y;
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
         // Then assign a renderer to the fetched view
         mSurfaceView.setRenderer(mGLRenderer);
     }
@@ -71,16 +101,16 @@ public class MainActivity extends ActionBarActivity {
     Generates data for the list.
     Add both thumbnails and description here.
      */
-    private ArrayList<ThumbnailItem> generateData(){
+    private ArrayList<ThumbnailItem> generateData() {
         ArrayList<ThumbnailItem> items = new ArrayList<ThumbnailItem>();
 
         items.add(new ThumbnailItem(R.drawable.rygg_topp, "Stora delar"));
         items.add(new ThumbnailItem(R.drawable.rygg_topp, "Ryggstöd topp"));
-        items.add(new ThumbnailItem(R.drawable.rygg_mitt,"Ryggstöd mitten"));
+        items.add(new ThumbnailItem(R.drawable.rygg_mitt, "Ryggstöd mitten"));
         items.add(new ThumbnailItem(R.drawable.ram, "Ram"));
         items.add(new ThumbnailItem(R.drawable.sits, "Sits"));
         items.add(new ThumbnailItem(R.drawable.rygg_topp, "Små delar"));
-        items.add(new ThumbnailItem(R.drawable.skruv,"Skruv"));
+        items.add(new ThumbnailItem(R.drawable.skruv, "Skruv"));
         items.add(new ThumbnailItem(R.drawable.plugg, "Plugg"));
 
         return items;
@@ -133,34 +163,4 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    //Event listener for touch on the GLView, gets the data needed for proper rotation.
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        if (event != null)
-        {
-            float x = event.getX();
-            float y = event.getY();
-
-            if (event.getAction() == MotionEvent.ACTION_MOVE)
-            {
-                if (mGLRenderer != null)
-                {
-                    float deltaX = (x - mPreviousX) / mDensity / 2f;
-                    float deltaY = (y - mPreviousY) / mDensity / 2f;
-
-                    mGLRenderer.mDeltaX += deltaX;
-                    mGLRenderer.mDeltaY += deltaY;
-                }
-            }
-
-            mPreviousX = x;
-            mPreviousY = y;
-
-            return true;
-        }
-        else
-        {
-            return super.onTouchEvent(event);
-        }
-    }
 }
