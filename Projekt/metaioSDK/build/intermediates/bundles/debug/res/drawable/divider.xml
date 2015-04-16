@@ -2,4 +2,4 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
     <size android:height="1dip" />
     <solid android:color="@color/metaiocolor" />
-</shape><!-- From: file:/C:/Users/Viktor/Desktop/Agilprojekt/TBK/Projekt/metaioSDK/res/drawable/divider.xml -->
+</shape><!-- From: file:/Users/alexander/Documents/TBK/Projekt/metaioSDK/res/drawable/divider.xml -->

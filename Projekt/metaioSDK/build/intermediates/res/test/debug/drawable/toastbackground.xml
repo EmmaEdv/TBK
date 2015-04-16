@@ -11,4 +11,4 @@
 		android:right="20dip" 
 		android:bottom="2dip" />
 	<corners android:radius="5dip" />
-</shape><!-- From: file:/C:/Users/Viktor/Desktop/Agilprojekt/TBK/Projekt/metaioSDK/res/drawable/toastbackground.xml --><!-- From: file:/C:/Users/Viktor/Desktop/Agilprojekt/TBK/Projekt/metaioSDK/build/intermediates/bundles/debug/res/drawable/toastbackground.xml -->
+</shape><!-- From: file:/Users/alexander/Documents/TBK/Projekt/metaioSDK/res/drawable/toastbackground.xml --><!-- From: file:/Users/alexander/Documents/TBK/Projekt/metaioSDK/build/intermediates/bundles/debug/res/drawable/toastbackground.xml -->

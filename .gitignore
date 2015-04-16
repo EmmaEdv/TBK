@@ -1,4 +1,14 @@
+<<<<<<< HEAD
+# OS specific
+.DS_Store
+
+# Mergecrap files
+*.orig
+
+# Ignore Metaio to avoid unnecessary shit
+=======
 .DS_Store
 
 # Ignora denna mapp. Både i push och pull
+>>>>>>> develop
 Projekt/metaioSDK/
