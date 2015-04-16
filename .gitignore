@@ -11,6 +11,11 @@ Projekt/metaioSDK/
 # Ignore build folder
 Projekt/metaioSDK/build/
 
+Projekt/.gradle/
+Projekt/local.properties
+
+Projekt/.idea/
+
 # Intellij project files
 *.iml
 *.ipr
