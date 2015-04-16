@@ -10,3 +10,19 @@ Projekt/metaioSDK/
 
 # Ignore build folder
 Projekt/metaioSDK/build/
+
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# generated files
+bin/
+gen/
+build/
+obj/
+
+# built application files
+*.apk
+*.ap_
