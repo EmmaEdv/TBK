@@ -1,90 +1,111 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Toast;
 
-import com.metaio.sdk.ARELActivity;
 import com.metaio.sdk.ARViewActivity;
 import com.metaio.sdk.MetaioDebug;
 import com.metaio.sdk.jni.IGeometry;
 import com.metaio.sdk.jni.IMetaioSDKCallback;
+import com.metaio.sdk.jni.TrackingValues;
+import com.metaio.sdk.jni.TrackingValuesVector;
 import com.metaio.tools.io.AssetsManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
-
 
 public class CameraActivity extends ARViewActivity {
 
-    WebView mWebView;
+    /**
+     * Reference to loaded metaioman geometry
+     */
+    private IGeometry mMetaioMan;
 
     /**
-     * Progress view
+     * Tiger geometry
      */
-    View mProgress;
+    private IGeometry mTiger;
+
+    /**
+     * Currently loaded tracking configuration file
+     */
+    File trackingConfigFile;
+
+    private MetaioSDKCallbackHandler mCallbackHandler;
 
     @Override
-    protected int getGUILayout() {
-        return 0;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.camera_activity);
+
+        mCallbackHandler = new MetaioSDKCallbackHandler();
     }
 
     @Override
-    protected IMetaioSDKCallback getMetaioSDKCallbackHandler() {
-        return null;
+    protected void onDestroy() {
+        super.onDestroy();
+        mCallbackHandler.delete();
+        mCallbackHandler = null;
+    }
+
+    @Override
+    protected int getGUILayout() {
+        return R.layout.empty_layout;
     }
 
     @Override
     protected void loadContents() {
-        try
-        {
-            //Lade till denna try/catch från AssetsExtracter/doInBackground i TemplateAREL/MainActivity = MAGI!!!
-            try
-            {
+        try {
+            //Copied from AssetsExtracter/doInBackground
+            try {
                 // Extract all assets and overwrite existing files if debug build
                 AssetsManager.extractAllAssets(getApplicationContext(), BuildConfig.DEBUG);
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 MetaioDebug.log(Log.ERROR, "Error extracting assets: "+e.getMessage());
                 MetaioDebug.printStackTrace(Log.ERROR, e);
             }
 
-            //Kopierat från TutorialHelloWorld.java
-            // Getting a file path for tracking configuration XML file
-            File trackingConfigFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "TutorialHelloWorld/Assets/TrackingData_MarkerlessFast.xml");
+            //Copied from TutorialTrackingSamples & TutorialInstantSamples
+            trackingConfigFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/TrackingData_PictureMarker.xml");
+            MetaioDebug.log("Tracking Config path = "+trackingConfigFile);
 
-            // Assigning tracking configuration
             boolean result = metaioSDK.setTrackingConfiguration(trackingConfigFile);
-            MetaioDebug.log("Tracking data loaded: " + result);
+            MetaioDebug.log("Picture Marker tracking data loaded: " + result);
 
-            // Getting a file path for a 3D geometry
-            File metaioManModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "TutorialHelloWorld/Assets/metaioman.md2");
-            if (metaioManModel != null)
-            {
-                // Loading 3D geometry
-                IGeometry geometry = metaioSDK.createGeometry(metaioManModel);
-                if (geometry != null)
-                {
+            // Load all the geometries. First - Model
+            // Load metaioman model
+            final File metaioManModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/metaioman.md2");
+            if (metaioManModel != null) {
+                mMetaioMan = metaioSDK.createGeometry(metaioManModel);
+                if (mMetaioMan != null) {
                     // Set geometry properties
-                    geometry.setScale(4f);
+                    mMetaioMan.setScale(4f);
+                    mMetaioMan.setVisible(false);
+                    MetaioDebug.log("Loaded geometry "+metaioManModel);
                 }
                 else
                     MetaioDebug.log(Log.ERROR, "Error loading geometry: "+metaioManModel);
             }
+
+            // Load tiger model
+            final File tigerModelPath =
+                    AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/tiger.md2");
+            if (tigerModelPath != null) {
+                mTiger = metaioSDK.createGeometry(tigerModelPath);
+                if (mTiger != null) {
+                    // Set geometry properties
+                    mTiger.setScale(20f);
+                    mTiger.setVisible(false);
+                    MetaioDebug.log("Loaded geometry "+tigerModelPath);
+                }
+                else
+                    MetaioDebug.log(Log.ERROR, "Error loading geometry: "+tigerModelPath);
+            }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             MetaioDebug.printStackTrace(Log.ERROR, e);
         }
     }
@@ -94,20 +115,6 @@ public class CameraActivity extends ARViewActivity {
 
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.camera_activity);
-    }
-
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new, menu);
-        return true;
-    }
-*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -123,4 +130,78 @@ public class CameraActivity extends ARViewActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected IMetaioSDKCallback getMetaioSDKCallbackHandler() {
+        return mCallbackHandler;
+    }
+
+    final class MetaioSDKCallbackHandler extends IMetaioSDKCallback {
+
+        @Override
+        public void onSDKReady() {
+            // show GUI
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mGUIView.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
+        @Override
+        public void onTrackingEvent(TrackingValuesVector trackingValues) {
+
+            // if we detect any target, we bind the loaded geometry to this target
+            if (mTiger != null && mMetaioMan != null) {
+                for (int i = 0; i < trackingValues.size(); i++) {
+                    //TrackingValue is received from TrackingData_PictureMarker.xml
+                    final TrackingValues tv = trackingValues.get(i);
+
+                    if (tv.isTrackingState()) {
+                        //Cases for each part of the chair (shows tiger/metaioman atm, should show parts of chair)
+                        switch (tv.getCoordinateSystemID()) {
+                            case 1:
+                                mTiger.setVisible(true);
+                                mMetaioMan.setVisible(false);
+                                mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                break;
+
+                            case 2:
+                                mMetaioMan.setVisible(true);
+                                mTiger.setVisible(false);
+                                mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                break;
+
+                            case 3:
+                                mTiger.setVisible(true);
+                                mMetaioMan.setVisible(false);
+                                mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                break;
+
+                            case 4:
+                                mMetaioMan.setVisible(true);
+                                mTiger.setVisible(false);
+                                mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                break;
+
+                            case 5:
+                                mTiger.setVisible(true);
+                                mMetaioMan.setVisible(false);
+                                mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                break;
+
+                            case 6:
+                                mMetaioMan.setVisible(true);
+                                mTiger.setVisible(false);
+                                mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
