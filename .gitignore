@@ -5,4 +5,4 @@
 *.orig
 
 # Ignore Metaio to avoid unnecessary shit
-Projekt/metaioSDK
+Projekt/metaioSDK/

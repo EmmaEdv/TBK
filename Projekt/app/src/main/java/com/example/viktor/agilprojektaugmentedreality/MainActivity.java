@@ -1,6 +1,7 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
 import android.app.Activity;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,10 +22,13 @@ public class MainActivity extends Activity {
     public ListView listView;
     private GLSurfaceView mSurfaceView;
     private GLRenderer mGLRenderer = new GLRenderer();
+    private static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mContext = getApplicationContext();
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(
@@ -119,5 +123,9 @@ public class MainActivity extends Activity {
         if (mSurfaceView != null) {
             mSurfaceView.onPause();
         }
+    }
+
+    public static Context getContext() {
+        return mContext;
     }
 }
