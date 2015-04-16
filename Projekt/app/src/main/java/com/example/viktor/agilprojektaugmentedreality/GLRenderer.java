@@ -15,6 +15,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     private Square square;
     private float mRotationAngle = 0.0f;
 
+
+
     // New stuff
 
     /** This is a handle to our per-vertex cube shading program. */
@@ -83,6 +85,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+
         // Set the background color to black ( rgba ).
         //System.out.println(GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -158,7 +161,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
 
     public void onDrawFrame(GL10 gl) {
-
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         // Do a complete rotation every 10 seconds.

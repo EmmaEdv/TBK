@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
+
+
     /*
     Variables
      */
@@ -23,6 +25,7 @@ public class MainActivity extends Activity {
     private GLSurfaceView mSurfaceView;
     private GLRenderer mGLRenderer = new GLRenderer();
     private static Context mContext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +60,10 @@ public class MainActivity extends Activity {
 
             }
         });
+
         // Get the GL Surface View from the activity XML by Id
         mSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
+        mSurfaceView.setEGLContextClientVersion(2);
         // Then assign a renderer to the fetched view
         mSurfaceView.setRenderer(mGLRenderer);
     }
