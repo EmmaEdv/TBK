@@ -11,7 +11,7 @@ Projekt/metaioSDK/
 # Ignore build folder
 Projekt/metaioSDK/build/
 
-Projekt/.gradle/
+#Projekt/.gradle/
 Projekt/local.properties
 	
 Projekt/.idea/
