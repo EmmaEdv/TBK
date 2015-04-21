@@ -31,14 +31,14 @@ obj/
 # built application files
 *.apk
 *.ap_
-
+*.so
 
 Projekt/.gradle
-Projekt//local.properties
-Projekt//.idea/workspace.xml
-Projekt//.idea/libraries
+Projekt/local.properties
+Projekt/.idea/workspace.xml
+Projekt/.idea/libraries
 Projekt/.DS_Store
-Projekt//build
+Projekt/build
 
 # Intellij project files
 *.iml
