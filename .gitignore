@@ -5,8 +5,7 @@
 *.orig
 
 # Ignore Metaio to avoid unnecessary shit
-# Ignora denna mapp. Både i push och pull
-Projekt/metaioSDK/
+.DS_Store
 
-# Ignore build folder
-Projekt/metaioSDK/build/
+# Ignora denna mapp. BŒde i push och pull
+Projekt/metaioSDK/
