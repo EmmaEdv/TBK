@@ -11,6 +11,7 @@ import com.metaio.sdk.jni.IGeometry;
 import com.metaio.sdk.jni.IMetaioSDKCallback;
 import com.metaio.sdk.jni.TrackingValues;
 import com.metaio.sdk.jni.TrackingValuesVector;
+import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.io.AssetsManager;
 
 import java.io.File;
@@ -35,12 +36,57 @@ public class CameraActivity extends ARViewActivity {
 
     private MetaioSDKCallbackHandler mCallbackHandler;
 
+    private int buildStep = 0;
+
+    @Override
+    protected int getGUILayout()
+    {
+        // Attaching layout to the activity
+        return R.layout.camera_activity;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.camera_activity);
+        //setContentView(R.layout.camera_activity);
 
         mCallbackHandler = new MetaioSDKCallbackHandler();
+    }
+
+    public void showStep() {
+
+        //setVisible(true) for the objects that are included in that step
+        switch(buildStep){
+            case 1:
+                mMetaioMan.setVisible(false);
+            break;
+            case 0:
+                mMetaioMan.setVisible(true);
+
+            break;
+        }
+    System.out.println("i showStep " + buildStep);
+    }
+
+    /**
+     * nextStep button click, for next step in the building schematics
+     */
+    public void nextStep(View v) {
+        if (buildStep < 1) {
+            buildStep++;
+        }
+            showStep();
+    }
+
+    /**
+     * prevStep button click, for previous step in the building schematics
+     */
+    public void prevStep(View v) {
+
+        if(buildStep > 0) {
+            buildStep--;
+        }
+        showStep();
     }
 
     @Override
@@ -48,11 +94,6 @@ public class CameraActivity extends ARViewActivity {
         super.onDestroy();
         mCallbackHandler.delete();
         mCallbackHandler = null;
-    }
-
-    @Override
-    protected int getGUILayout() {
-        return R.layout.empty_layout;
     }
 
     @Override
@@ -161,42 +202,61 @@ public class CameraActivity extends ARViewActivity {
                         //Cases for each part of the chair (shows tiger/metaioman atm, should show parts of chair)
                         switch (tv.getCoordinateSystemID()) {
                             case 1:
-                                mTiger.setVisible(true);
-                                mMetaioMan.setVisible(false);
-                                mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                if(buildStep==0) {
+                                    mTiger.setVisible(true);
+                                    mMetaioMan.setVisible(false);
+                                    mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                }
+                                System.out.println("case1 " + buildStep);
                                 break;
 
                             case 2:
-                                mMetaioMan.setVisible(true);
-                                mTiger.setVisible(false);
-                                mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
-                                break;
+                                if(buildStep==0) {
+                                    mMetaioMan.setVisible(true);
+                                    mTiger.setVisible(false);
+                                    mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                }
+                                System.out.println("case2 " + buildStep);
+                                    break;
 
                             case 3:
-                                mTiger.setVisible(true);
-                                mMetaioMan.setVisible(false);
-                                mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                if(buildStep==0) {
+                                    mTiger.setVisible(true);
+                                    mMetaioMan.setVisible(false);
+                                    mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                }
+                                System.out.println("case3 " + buildStep);
                                 break;
 
                             case 4:
-                                mMetaioMan.setVisible(true);
-                                mTiger.setVisible(false);
-                                mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                if(buildStep==0) {
+                                    mMetaioMan.setVisible(true);
+                                    mTiger.setVisible(false);
+                                    mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                }
+                                System.out.println("case4 " + buildStep);
                                 break;
 
                             case 5:
-                                mTiger.setVisible(true);
-                                mMetaioMan.setVisible(false);
-                                mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                if(buildStep==0) {
+                                    mTiger.setVisible(true);
+                                    mMetaioMan.setVisible(false);
+                                    mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                }
+                                System.out.println("case5 " + buildStep);
                                 break;
 
                             case 6:
-                                mMetaioMan.setVisible(true);
-                                mTiger.setVisible(false);
-                                mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                if(buildStep==0) {
+                                    mMetaioMan.setVisible(true);
+                                    mTiger.setVisible(false);
+                                    mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
+                                }
+                                System.out.println("case6 " + buildStep);
                                 break;
 
                             default:
+                                System.out.println("default " + buildStep);
                                 break;
                         }
                     }
