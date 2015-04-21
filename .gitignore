@@ -31,3 +31,27 @@ obj/
 # built application files
 *.apk
 *.ap_
+
+
+Projekt/.gradle
+Projekt//local.properties
+Projekt//.idea/workspace.xml
+Projekt//.idea/libraries
+Projekt/.DS_Store
+Projekt//build
+
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+Projekt/.idea/
+
+# generated files
+Projekt/bin/
+Projekt/gen/
+Projekt/build/
+Projekt/obj/
+
+# built application files
+*.apk
+*.ap_
