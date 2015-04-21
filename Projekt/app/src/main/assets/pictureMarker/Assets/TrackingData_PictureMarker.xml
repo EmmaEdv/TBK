@@ -30,7 +30,11 @@
                 <!--    Parameters for the marker tracker itself. These 
                         parameters are independent from the specific markers. 
                         -->
-                <MarkerTrackingParameters>
+
+                        <MaxObjectsToTrackInParallel>6</MaxObjectsToTrackInParallel>
+                        <MaxObjectsToDetectPerFrame>6</MaxObjectsToDetectPerFrame>
+
+                 <MarkerTrackingParameters>
 
                     <!--    Strategy which is used for the marker detection. 
                             There are two types available:

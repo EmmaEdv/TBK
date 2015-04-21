@@ -21,12 +21,20 @@ public class CameraActivity extends ARViewActivity {
     /**
      * Reference to loaded metaioman geometry
      */
-    private IGeometry mMetaioMan;
+    private IGeometry sits;
+    private IGeometry sida;
+    private IGeometry rygg_top;
+    private IGeometry rygg_mid;
+
 
     /**
      * Tiger geometry
      */
-    private IGeometry mTiger;
+    //private IGeometry mTiger;
+    //private IGeometry mTiger2;
+    //private IGeometry mTiger3;
+
+    private TrackingValuesVector poses;
 
     /**
      * Currently loaded tracking configuration file
@@ -77,33 +85,60 @@ public class CameraActivity extends ARViewActivity {
 
             // Load all the geometries. First - Model
             // Load metaioman model
-            final File metaioManModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/metaioman.md2");
-            if (metaioManModel != null) {
-                mMetaioMan = metaioSDK.createGeometry(metaioManModel);
-                if (mMetaioMan != null) {
+            final File sitsModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sits.obj");
+            final File sidaModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
+            final File ryggToppModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_top.obj");
+            final File ryggMidModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_mid.obj");
+
+
+            if (sitsModel != null) {
+                sits = metaioSDK.createGeometry(sitsModel);
+                if (sits != null) {
                     // Set geometry properties
-                    mMetaioMan.setScale(4f);
-                    mMetaioMan.setVisible(false);
-                    MetaioDebug.log("Loaded geometry "+metaioManModel);
+                    sits.setScale(4f);
+                    sits.setVisible(false);
+                    MetaioDebug.log("Loaded geometry "+sitsModel);
                 }
                 else
-                    MetaioDebug.log(Log.ERROR, "Error loading geometry: "+metaioManModel);
+                    MetaioDebug.log(Log.ERROR, "Error loading geometry: "+sitsModel);
             }
 
-            // Load tiger model
-            final File tigerModelPath =
-                    AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/tiger.md2");
-            if (tigerModelPath != null) {
-                mTiger = metaioSDK.createGeometry(tigerModelPath);
-                if (mTiger != null) {
+            if (sidaModel != null) {
+                sida = metaioSDK.createGeometry(sidaModel);
+                if (sida != null) {
                     // Set geometry properties
-                    mTiger.setScale(20f);
-                    mTiger.setVisible(false);
-                    MetaioDebug.log("Loaded geometry "+tigerModelPath);
+                    sida.setScale(4f);
+                    sida.setVisible(false);
+                    MetaioDebug.log("Loaded geometry "+sidaModel);
                 }
                 else
-                    MetaioDebug.log(Log.ERROR, "Error loading geometry: "+tigerModelPath);
+                    MetaioDebug.log(Log.ERROR, "Error loading geometry: "+sidaModel);
             }
+
+            if (ryggToppModel != null) {
+                rygg_top = metaioSDK.createGeometry(ryggToppModel);
+                if (rygg_top != null) {
+                    // Set geometry properties
+                    rygg_top.setScale(4f);
+                    rygg_top.setVisible(false);
+                    MetaioDebug.log("Loaded geometry "+ryggToppModel);
+                }
+                else
+                    MetaioDebug.log(Log.ERROR, "Error loading geometry: "+ryggToppModel);
+            }
+
+            if (ryggMidModel != null) {
+                rygg_mid = metaioSDK.createGeometry(ryggMidModel);
+                if (rygg_mid != null) {
+                    // Set geometry properties
+                    rygg_mid.setScale(4f);
+                    rygg_mid.setVisible(false);
+                    MetaioDebug.log("Loaded geometry "+ryggMidModel);
+                }
+                else
+                    MetaioDebug.log(Log.ERROR, "Error loading geometry: "+ryggMidModel);
+            }
+
         }
         catch (Exception e) {
             MetaioDebug.printStackTrace(Log.ERROR, e);
@@ -152,54 +187,37 @@ public class CameraActivity extends ARViewActivity {
         public void onTrackingEvent(TrackingValuesVector trackingValues) {
 
             // if we detect any target, we bind the loaded geometry to this target
-            if (mTiger != null && mMetaioMan != null) {
+            if (sida != null && sits != null && rygg_top != null && rygg_mid != null) {
+
                 for (int i = 0; i < trackingValues.size(); i++) {
+
                     //TrackingValue is received from TrackingData_PictureMarker.xml
-                    final TrackingValues tv = trackingValues.get(i);
 
-                    if (tv.isTrackingState()) {
+                    //bort?
+                    //final TrackingValues tv = trackingValues.get(i);
+
+                    if (metaioSDK != null) {
+                        // get all detected poses/targets
+                        poses = metaioSDK.getTrackingValues();
+
+
                         //Cases for each part of the chair (shows tiger/metaioman atm, should show parts of chair)
-                        switch (tv.getCoordinateSystemID()) {
-                            case 1:
-                                mTiger.setVisible(true);
-                                mMetaioMan.setVisible(false);
-                                mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
-                                break;
+                        //if we have detected one, attach our metaio man to this coordinate system Id
+                        if (poses.size() != 0) {
 
-                            case 2:
-                                mMetaioMan.setVisible(true);
-                                mTiger.setVisible(false);
-                                mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
-                                break;
+                            sits.setVisible(true);
+                            sida.setVisible(true);
+                            rygg_mid.setVisible(true);
+                            rygg_top.setVisible(true);
 
-                            case 3:
-                                mTiger.setVisible(true);
-                                mMetaioMan.setVisible(false);
-                                mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
-                                break;
+                            sida.setCoordinateSystemID(1);
+                            sits.setCoordinateSystemID(2);
+                            rygg_mid.setCoordinateSystemID(3);
+                            rygg_top.setCoordinateSystemID(4);
 
-                            case 4:
-                                mMetaioMan.setVisible(true);
-                                mTiger.setVisible(false);
-                                mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
-                                break;
-
-                            case 5:
-                                mTiger.setVisible(true);
-                                mMetaioMan.setVisible(false);
-                                mTiger.setCoordinateSystemID(tv.getCoordinateSystemID());
-                                break;
-
-                            case 6:
-                                mMetaioMan.setVisible(true);
-                                mTiger.setVisible(false);
-                                mMetaioMan.setCoordinateSystemID(tv.getCoordinateSystemID());
-                                break;
-
-                            default:
-                                break;
                         }
                     }
+
                 }
             }
         }
