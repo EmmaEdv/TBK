@@ -11,6 +11,7 @@ import com.metaio.sdk.jni.IGeometry;
 import com.metaio.sdk.jni.IMetaioSDKCallback;
 import com.metaio.sdk.jni.TrackingValues;
 import com.metaio.sdk.jni.TrackingValuesVector;
+import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.io.AssetsManager;
 
 import java.io.File;
@@ -26,14 +27,6 @@ public class CameraActivity extends ARViewActivity {
     private IGeometry rygg_top;
     private IGeometry rygg_mid;
 
-
-    /**
-     * Tiger geometry
-     */
-    //private IGeometry mTiger;
-    //private IGeometry mTiger2;
-    //private IGeometry mTiger3;
-
     private TrackingValuesVector poses;
 
     /**
@@ -43,12 +36,57 @@ public class CameraActivity extends ARViewActivity {
 
     private MetaioSDKCallbackHandler mCallbackHandler;
 
+    private int buildStep = 0;
+
+    @Override
+    protected int getGUILayout()
+    {
+        // Attaching layout to the activity
+        return R.layout.camera_activity;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.camera_activity);
+        //setContentView(R.layout.camera_activity);
 
         mCallbackHandler = new MetaioSDKCallbackHandler();
+    }
+
+    public void showStep() {
+
+        //setVisible(true) for the objects that are included in that step
+        switch(buildStep){
+            case 1:
+                sida.setVisible(false);
+            break;
+            case 0:
+                sida.setVisible(true);
+
+            break;
+        }
+    System.out.println("i showStep " + buildStep);
+    }
+
+    /**
+     * nextStep button click, for next step in the building schematics
+     */
+    public void nextStep(View v) {
+        if (buildStep < 1) {
+            buildStep++;
+        }
+            showStep();
+    }
+
+    /**
+     * prevStep button click, for previous step in the building schematics
+     */
+    public void prevStep(View v) {
+
+        if(buildStep > 0) {
+            buildStep--;
+        }
+        showStep();
     }
 
     @Override
@@ -56,11 +94,6 @@ public class CameraActivity extends ARViewActivity {
         super.onDestroy();
         mCallbackHandler.delete();
         mCallbackHandler = null;
-    }
-
-    @Override
-    protected int getGUILayout() {
-        return R.layout.empty_layout;
     }
 
     @Override
@@ -200,15 +233,18 @@ public class CameraActivity extends ARViewActivity {
                         // get all detected poses/targets
                         poses = metaioSDK.getTrackingValues();
 
-
-                        //Cases for each part of the chair (shows tiger/metaioman atm, should show parts of chair)
                         //if we have detected one, attach our metaio man to this coordinate system Id
                         if (poses.size() != 0) {
 
                             sits.setVisible(true);
-                            sida.setVisible(true);
                             rygg_mid.setVisible(true);
                             rygg_top.setVisible(true);
+
+
+                            if(buildStep==0) {
+                                sida.setVisible(true);
+                            }
+                            //Added
 
                             sida.setCoordinateSystemID(1);
                             sits.setCoordinateSystemID(2);
@@ -217,7 +253,6 @@ public class CameraActivity extends ARViewActivity {
 
                         }
                     }
-
                 }
             }
         }
