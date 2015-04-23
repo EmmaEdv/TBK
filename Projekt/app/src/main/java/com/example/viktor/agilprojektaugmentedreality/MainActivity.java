@@ -3,6 +3,7 @@ package com.example.viktor.agilprojektaugmentedreality;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.opengl.GLSurfaceView;
 
 import android.app.ListActivity;
@@ -40,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mDensity = getResources().getDisplayMetrics().density;
         super.onCreate(savedInstanceState);
+
         //Locks the orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
