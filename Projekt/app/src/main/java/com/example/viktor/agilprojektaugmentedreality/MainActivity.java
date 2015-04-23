@@ -20,10 +20,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     /*
     Variables
@@ -41,7 +42,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mDensity = getResources().getDisplayMetrics().density;
         super.onCreate(savedInstanceState);
-
         //Locks the orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -49,7 +49,12 @@ public class MainActivity extends ActionBarActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
+
         setContentView(R.layout.activity_main);
+
+        TextView headerText = (TextView) findViewById(R.id.topText);
+        headerText.setTypeface(font);
 
         listView = (ListView) findViewById(R.id.listview);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -112,14 +117,14 @@ public class MainActivity extends ActionBarActivity {
     private ArrayList<ThumbnailItem> generateData() {
         ArrayList<ThumbnailItem> items = new ArrayList<ThumbnailItem>();
 
-        items.add(new ThumbnailItem(R.drawable.rygg_topp, "      Stora delar"));
-        items.add(new ThumbnailItem(R.drawable.rygg_topp, "    Ryggstöd topp"));
-        items.add(new ThumbnailItem(R.drawable.rygg_mitt, "    Ryggstöd mitten"));
-        items.add(new ThumbnailItem(R.drawable.ram, "    Ram"));
-        items.add(new ThumbnailItem(R.drawable.sits, "    Sits"));
-        items.add(new ThumbnailItem(R.drawable.rygg_topp, "      Små delar"));
-        items.add(new ThumbnailItem(R.drawable.skruv, "    Skruv"));
-        items.add(new ThumbnailItem(R.drawable.plugg, "    Plugg"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Stora delar"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Ryggstöd topp"));
+        items.add(new ThumbnailItem(R.drawable.rygg_mitt, "Ryggstöd mitten"));
+        items.add(new ThumbnailItem(R.drawable.ram, "Ram"));
+        items.add(new ThumbnailItem(R.drawable.sits, "Sits"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Små delar"));
+        items.add(new ThumbnailItem(R.drawable.skruv, "Skruv"));
+        items.add(new ThumbnailItem(R.drawable.plugg, "Plugg"));
 
         return items;
     }

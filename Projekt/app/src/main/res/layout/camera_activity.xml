@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:id="@+id/topBar"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/headerHeight"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
         android:background="@color/custom_gray"
@@ -21,7 +21,7 @@
             android:text="Montering, steg 1"
            android:visibility="invisible"
             android:gravity="center"
-            android:fontFamily="Arial"
+            android:fontFamily="Berlin Sans FB"
             android:textStyle="bold"
             android:textSize="40px"
             />
