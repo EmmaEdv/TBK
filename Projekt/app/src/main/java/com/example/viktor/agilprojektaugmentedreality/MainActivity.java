@@ -1,21 +1,15 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
 
-import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
-
-import android.app.ListActivity;
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
-
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
