@@ -14,16 +14,12 @@ import javax.microedition.khronos.opengles.GL10;
 public class GLRenderer implements GLSurfaceView.Renderer {
     private Square square;
     private float mRotationAngle = 0.0f;
-
     // New stuff
 
     /** This is a handle to our per-vertex cube shading program. */
     private int mPerVertexProgramHandle;
 
-
     public GLRenderer() {
-
-        //super(MainActivity.getContext());
 
         // Initialize our square, change this to our custom object in the future
         square = new Square();
@@ -87,6 +83,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         //System.out.println(GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
+        // Enable the depth test for back face culling
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         // Use culling to remove back faces.
         GLES20.glEnable(GLES20.GL_CULL_FACE);
 

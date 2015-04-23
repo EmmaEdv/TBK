@@ -4,7 +4,6 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -88,25 +87,20 @@ public class Square {
 
 
 	public Square() {
-       /* try {
-            reader();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-*/
+
         //setEGLContextClientVersion(2);
 
-        mCubePositions = ByteBuffer.allocateDirect(Util.cubePositionData.length * mBytesPerFloat)
+        mCubePositions = ByteBuffer.allocateDirect(MainActivity.cubeVerts.length * mBytesPerFloat)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
-        mCubePositions.put(Util.cubePositionData).position(0);
+        mCubePositions.put(MainActivity.cubeVerts).position(0);
 
-        mCubeColors = ByteBuffer.allocateDirect(Util.cubeColorData.length * mBytesPerFloat)
+        mCubeColors = ByteBuffer.allocateDirect(MainActivity.cubeColorCoords.length * mBytesPerFloat)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
-        mCubeColors.put(Util.cubeColorData).position(0);
+        mCubeColors.put(MainActivity.cubeColorCoords).position(0);
 
-        mCubeNormals = ByteBuffer.allocateDirect(Util.cubeNormalData.length * mBytesPerFloat)
+        mCubeNormals = ByteBuffer.allocateDirect(MainActivity.cubeNormals.length * mBytesPerFloat)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer();
-        mCubeNormals.put(Util.cubeNormalData).position(0);
+        mCubeNormals.put(MainActivity.cubeNormals).position(0);
 
 
         /*
@@ -144,6 +138,7 @@ public class Square {
 	 *
 	 */
 	public void draw() {
+
 
         // Pass in the position information
         mCubePositions.position(0);
@@ -184,7 +179,7 @@ public class Square {
         GLES20.glUniform3f(mLightPosHandle, mLightPosInEyeSpace[0], mLightPosInEyeSpace[1], mLightPosInEyeSpace[2]);
 
         // Draw the cube.
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, MainActivity.numCubeVerts/3);
 
         /*
         // Set color of object
@@ -332,28 +327,10 @@ public class Square {
     }
 
     /**************************************************
-     NICE TXT READER WOW
-     **************************************************/
-
-    private void reader() throws FileNotFoundException {
-/*
-        try {
-            InputStream is = MainActivity.getContext().getAssets().open("epic_parsed_list.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-*/
-    }
-
-
-    /**************************************************
      Setters for some variables needed in our renderer
     **************************************************/
 
-    void setPositionHandle(int p) {
-        this.mPositionHandle = p;
-    }
+    void setPositionHandle(int p) { this.mPositionHandle = p; }
 
     void setColorHandle(int c) {
         this.mColorHandle = c;
