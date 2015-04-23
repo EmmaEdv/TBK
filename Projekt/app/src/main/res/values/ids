@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="listButton" />
+    <item type="id" name="arButton" />
+    <item type="id" name="listText" />
+    <item type="id" name="arText" />
+    <item type="id" name="headerText" />
+</resources>
