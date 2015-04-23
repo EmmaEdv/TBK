@@ -1,6 +1,8 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,13 +11,17 @@ import com.metaio.sdk.ARViewActivity;
 import com.metaio.sdk.MetaioDebug;
 import com.metaio.sdk.jni.IGeometry;
 import com.metaio.sdk.jni.IMetaioSDKCallback;
+import com.metaio.sdk.jni.Rotation;
 import com.metaio.sdk.jni.TrackingValues;
 import com.metaio.sdk.jni.TrackingValuesVector;
 import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.io.AssetsManager;
 
+import org.apache.http.impl.conn.Wire;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 public class CameraActivity extends ARViewActivity {
 
@@ -154,9 +160,11 @@ public class CameraActivity extends ARViewActivity {
 
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
+                sits.setRotation(new Rotation(1.57f, 0.0f, 0.0f));
+                sits.setTranslation(new Vector3d(-900.0f, 900.0f, -600.0f));
                 if (sits != null) {
                     // Set geometry properties
-                    sits.setScale(4f);
+                    sits.setScale(11f);
                     sits.setVisible(false);
                     MetaioDebug.log("Loaded geometry "+sitsModel);
                 }
