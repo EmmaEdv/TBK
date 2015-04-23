@@ -10,7 +10,7 @@
     <ListView
         android:id="@+id/listview"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="fill_parent"></ListView>
 
     <!-- GL Surface View -->
     <android.opengl.GLSurfaceView android:id="@+id/surfaceviewclass"

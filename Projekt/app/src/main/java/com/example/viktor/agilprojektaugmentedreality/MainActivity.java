@@ -3,6 +3,7 @@ package com.example.viktor.agilprojektaugmentedreality;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.opengl.GLSurfaceView;
 
 import android.app.ListActivity;
@@ -40,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         mDensity = getResources().getDisplayMetrics().density;
         super.onCreate(savedInstanceState);
+
         //Locks the orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -110,14 +112,14 @@ public class MainActivity extends ActionBarActivity {
     private ArrayList<ThumbnailItem> generateData() {
         ArrayList<ThumbnailItem> items = new ArrayList<ThumbnailItem>();
 
-        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Stora delar"));
-        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Ryggstöd topp"));
-        items.add(new ThumbnailItem(R.drawable.rygg_mitt, "Ryggstöd mitten"));
-        items.add(new ThumbnailItem(R.drawable.ram, "Ram"));
-        items.add(new ThumbnailItem(R.drawable.sits, "Sits"));
-        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Små delar"));
-        items.add(new ThumbnailItem(R.drawable.skruv, "Skruv"));
-        items.add(new ThumbnailItem(R.drawable.plugg, "Plugg"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "      Stora delar"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "    Ryggstöd topp"));
+        items.add(new ThumbnailItem(R.drawable.rygg_mitt, "    Ryggstöd mitten"));
+        items.add(new ThumbnailItem(R.drawable.ram, "    Ram"));
+        items.add(new ThumbnailItem(R.drawable.sits, "    Sits"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "      Små delar"));
+        items.add(new ThumbnailItem(R.drawable.skruv, "    Skruv"));
+        items.add(new ThumbnailItem(R.drawable.plugg, "    Plugg"));
 
         return items;
     }
