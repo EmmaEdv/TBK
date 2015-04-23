@@ -71,11 +71,21 @@ public class CameraActivity extends ARViewActivity {
     /**
      * nextStep button click, for next step in the building schematics
      */
+    //View b = findViewById(R.id.infoBox);
     public void nextStep(View v) {
         if (buildStep < 1) {
             buildStep++;
         }
             showStep();
+        findViewById(R.id.topText).setVisibility(View.VISIBLE);
+
+        //findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
+        findViewById(R.id.prevButton).setVisibility(View.VISIBLE);
+        findViewById(R.id.infoText).setVisibility(View.GONE);
+
+        findViewById(R.id.infoImage).setVisibility(View.VISIBLE);
+
+
     }
 
     /**
@@ -87,6 +97,24 @@ public class CameraActivity extends ARViewActivity {
             buildStep--;
         }
         showStep();
+        findViewById(R.id.topText).setVisibility(View.INVISIBLE);
+        findViewById(R.id.prevButton).setVisibility(View.GONE);
+
+
+    }
+
+
+    public void btnCancel(View v)
+    {
+
+        findViewById(R.id.infoBox).setVisibility(View.INVISIBLE);
+
+    }
+
+    public void btnHelp(View v)
+    {
+        findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
+
     }
 
     @Override

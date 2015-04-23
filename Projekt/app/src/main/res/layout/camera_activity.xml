@@ -5,14 +5,78 @@
     android:visibility="visible"
     tools:context="com.example.viktor.agilprojektaugmentedreality.CameraActivity">
 
-    <ImageButton
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_height="60dp"
+        android:layout_width="fill_parent"
+        android:layout_alignParentTop="true"
+        android:background="@color/custom_gray"
+
+        >
+
+        <TextView
+            android:id="@+id/topText"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 1"
+           android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Arial"
+            android:textStyle="bold"
+            android:textSize="40px"
+            />
+
+        <ImageButton
+            android:id="@+id/helpBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:onClick="btnHelp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/wrench"
+            android:background="@android:color/transparent"
+            />
+
+</RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/infoBox"
+        android:layout_height="400dp"
+        android:layout_width="400dp"
         android:layout_alignParentRight="true"
-        android:background="@android:color/transparent"
-        android:onClick="onButtonClick"
-        android:src="@drawable/cancel" />
+        android:layout_marginTop="70dp"
+        android:background="@color/custom_gray"
+        >
+
+        <ImageView
+            android:id="@+id/infoImage"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step1"
+            android:visibility="gone"
+            />
+
+
+        <ImageButton
+            android:id="@+id/closeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="btnCancel"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/cancel"
+            android:background="@android:color/transparent" />
+        
+        <TextView
+            android:id="@+id/infoText"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+            android:fontFamily="Arial"
+            android:textSize="20dp"
+            android:padding="10dp"
+            />
+
+        </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/buttonBar"
@@ -26,18 +90,20 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/idButton"
+            android:id="@+id/nextButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="nextStep"
             android:text="Next Step" />
 
         <Button
-            android:id="@+id/pictureButton"
+            android:id="@+id/prevButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:onClick="prevStep"
-            android:text="Previous Step" />
+            android:text="Previous Step"
+            />
 
     </LinearLayout>
 
