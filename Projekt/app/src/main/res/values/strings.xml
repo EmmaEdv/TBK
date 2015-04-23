@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Agilprojekt Augmented Reality</string>
+    <string name="app_name">Krit \'it</string>
     <string name="hello_world">Neeeeej kniven...</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_new">newActivity</string>
     <string name="camera">Byt till kameravy</string>
+
+    <string name="listButton">Lista över delar</string>
+    <string name="arButton">Hitta objekt</string>
+    <string name="stepButton">Instruktioner</string>
+    <string name="extraButton">Hejhej</string>
 
 </resources>

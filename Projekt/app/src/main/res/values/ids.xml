@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="listBtn" />
+    <item type="id" name="arBtn" />
+    <item type="id" name="listTxt" />
+    <item type="id" name="arTxt" />
+</resources>
