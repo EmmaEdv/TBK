@@ -1,20 +1,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+
+    <!-- Header View -->
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_height="@dimen/headerHeight"
+        android:layout_width="fill_parent"
+        android:layout_alignParentTop="true"
+        android:background="@color/custom_gray"
+        >
+
+        <TextView
+            android:id="@+id/topText"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/listButton"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="40px"
+            />
+
+    </RelativeLayout>
 
     <!-- List View -->
     <ListView
         android:id="@+id/listview"
         android:layout_width="300dp"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/topBar"></ListView>
 
     <!-- GL Surface View -->
     <android.opengl.GLSurfaceView android:id="@+id/surfaceviewclass"
         android:layout_toRightOf="@+id/listview"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/listview" />
 
 </RelativeLayout>

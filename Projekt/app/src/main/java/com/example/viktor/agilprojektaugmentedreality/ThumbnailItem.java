@@ -1,5 +1,9 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.content.Context;
+import android.graphics.Typeface;
+import android.widget.TextView;
+
 /**
  * Created by Viktor on 2015-03-24.
 
@@ -11,6 +15,7 @@ public class ThumbnailItem {
     private String title;
     private int resource;
 
+    private TextView tv;
 
     /*
     Empty constructor
@@ -22,6 +27,7 @@ public class ThumbnailItem {
      */
     public ThumbnailItem(int resource, String title) {
         super();
+
         this.resource = resource;
         this.title = title;
     }

@@ -4,4 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="marginWidth_btn">30dp</dimen>
     <dimen name="marginHeight_btn">50dp</dimen>
+    <dimen name="headerHeight">60dp</dimen>
+
 </resources>
+

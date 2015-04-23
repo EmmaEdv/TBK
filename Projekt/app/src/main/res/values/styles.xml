@@ -3,8 +3,6 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-        <!--  <item name="android:activatedBackgroundIndicator">@drawable/list_item_bg</item>-->
-
     </style>
 
 

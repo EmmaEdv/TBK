@@ -2,39 +2,64 @@ package com.example.viktor.agilprojektaugmentedreality;
 
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
-import android.opengl.GLSurfaceView;
-
-import android.app.ListActivity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
-
+import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     /*
     Variables
      */
     public ListView listView;
+    // Arrays for "rygg top" object
+    protected static float[] ryggTopVerts;
+    protected static float[] ryggTopNormals;
+    protected static float[] ryggTopCoords;
+
+    // Arrays for "rygg mitten" objects
+    protected static float[] ryggMittVerts;
+    protected static float[] ryggMittNormals;
+    protected static float[] ryggMittCoords;
+
+    // Arrays for "ram" objects
+    protected static float[] ramVerts;
+    protected static float[] ramNormals;
+    protected static float[] ramCoords;
+
+    // Arrays for "sits" objects
+    protected static float[] sitsVerts;
+    protected static float[] sitsNormals;
+    protected static float[] sitsCoords;
+
     private GLSurfaceView mSurfaceView;
-    private GLRenderer mGLRenderer = new GLRenderer();
+    private GLRenderer mGLRenderer;
+    protected static int numObjectVerts;
 
     //Used for rotation in GLView
     private float mPreviousX;
     private float mPreviousY;
     private float mDensity;
+    public static int currentObject = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +72,18 @@ public class MainActivity extends ActionBarActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
+
         setContentView(R.layout.activity_main);
+
+        // Load vertex, normal and color lists for all objects
+        loadObjectLists();
+
+        // Create our openGL renderer
+        mGLRenderer = new GLRenderer();
+
+        TextView headerText = (TextView) findViewById(R.id.topText);
+        headerText.setTypeface(font);
 
         listView = (ListView) findViewById(R.id.listview);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -63,14 +99,38 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // Add stuff here for Item selection from the list view
 
                 listView.setItemChecked(position, true);
+                // Check which object to render
+                switch (position) {
+                    case 1:
+                        currentObject = 1;
+                        numObjectVerts = ryggTopVerts.length;
+                        break;
+                    case 2:
+                        currentObject = 2;
+                        numObjectVerts = ryggMittVerts.length;
+                        break;
+                    case 3:
+                        currentObject = 3;
+                        numObjectVerts = ramVerts.length;
+                        break;
+                    case 4:
+                        currentObject = 4;
+                        numObjectVerts = sitsVerts.length;
+                        break;
+                    default:
+                        currentObject = 1;
+                        numObjectVerts = ryggTopVerts.length;
+                        break;
+                }
+
 
             }
         });
         // Get the GL Surface View from the activity XML by Id
         mSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
+        mSurfaceView.setEGLContextClientVersion(2);
         //Event listener for touch on the GLView, gets the data needed for proper rotation.
         mSurfaceView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -170,4 +230,157 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * Reads a vertex list from a text file
+     */
+    public float[] readObjVertecies(int id) throws IOException {
+
+        // Create list for the strings that we read from the text file
+        List<String> temps = new ArrayList<String>();
+        String string;
+        // Open the file that is to be read
+        InputStream is = getResources().openRawResource(id);
+
+        try{
+            // Create the reader that reades the lines in the text file
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            if(is != null) {
+                // Read lines until there are no lines left
+                while((string = reader.readLine()) != null) {
+                    // Skip the flags for vertecies and normals
+                    if(!string.equals("V") && !string.equals("N")) {
+                        // Split the line that has been read
+                        StringTokenizer st = new StringTokenizer(string);
+                        // Go through all the words in a line
+                        while (st.hasMoreTokens()) {
+                            // Get the word
+                            string = st.nextToken();
+                            // Remove the "comma"
+                            string = string.replace(",", "");
+                            // Add the word to pur temporary holder
+                            temps.add(string);
+                        }
+                    }
+                }
+            }
+        } finally {
+            try {
+                // Close the file
+                is.close();
+            } catch (Throwable ignore) { }
+        }
+
+        // Create an array of floats, to hold our vertecies
+        float[] vertecies = new float[temps.size() / 2];
+        // Get the number of vertecies, this is needed when we draw,
+        // since we need to now how many lines to draw
+        numObjectVerts = vertecies.length;
+
+        // Parse all strings from the text file to floats
+        for(int i = 0; i < temps.size() / 2; i++)
+            vertecies[i] = Float.parseFloat(temps.get(i));
+
+        // And boom, return the vertex list
+        return vertecies;
+    }
+
+    /**
+     * Reads a normal list from a text file
+     */
+    public float[] readObjNormals(int id) throws IOException {
+
+        // Create list for the strings that we read from the text file
+        List<String> temps = new ArrayList<String>();
+        String string;
+        // Open the file that is to be read
+        InputStream is = getResources().openRawResource(id);
+        try{
+            // Create the reader that reades the lines in the text file
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            if(is != null) {
+                // Read lines until there are no lines left
+                while((string = reader.readLine()) != null) {
+                    // Skip the flags for vertecies and normals
+                    if(!string.equals("V") && !string.equals("N")) {
+                        // Split the line that has been read
+                        StringTokenizer st = new StringTokenizer(string);
+                        // Go through all the words in a line
+                        while (st.hasMoreTokens()) {
+                            // Get the word
+                            string = st.nextToken();
+                            // Remove the "comma"
+                            string = string.replace(",", "");
+                            // Add the word to pur temporary holder
+                            temps.add(string);
+                        }
+                    }
+                }
+            }
+        } finally {
+            try {
+                // Close the file
+                is.close();
+            } catch (Throwable ignore) { }
+        }
+
+        // Create an array of floats, to hold our normals
+        float[] normals = new float[temps.size() / 2];
+        // Parse all strings from the text file to floats
+        for(int i = 0; i < temps.size() / 2; i++)
+            normals[i] = Float.parseFloat(temps.get(i + temps.size() / 2));
+
+        // And boom, return the vertex list
+        return normals;
+    }
+
+    /**
+     * Creates a color list with one single color
+     */
+    public float[] createColorCoords(float color) {
+
+        // Calculate how many color coordinates that we need for the object
+        double s = ( numObjectVerts * (4.0 / 3.0));
+        final int SIZE = (int)s;
+
+        // Create an array to hold all the color information
+        float[] colorCoords = new float[SIZE];
+
+        // Set the color
+        for(int i = 0; i < SIZE; i++)
+            colorCoords[i] = color;
+
+        return colorCoords;
+    }
+
+    /**
+     * Loads all objects that we want to use
+     */
+    void loadObjectLists() {
+
+        // Object 1
+        try {
+            ryggTopVerts = readObjVertecies(R.raw.rygg_top);
+            ryggMittVerts = readObjVertecies(R.raw.rygg_mid);
+            ramVerts = readObjVertecies(R.raw.sida);
+            sitsVerts = readObjVertecies(R.raw.sits);
+
+            ryggTopNormals = readObjNormals(R.raw.rygg_top);
+            ryggMittNormals = readObjNormals(R.raw.rygg_mid);
+            ramNormals = readObjNormals(R.raw.sida);
+            sitsNormals = readObjNormals(R.raw.sits);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ryggTopNormals = readObjNormals(R.raw.rygg_top);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ryggTopCoords = createColorCoords(1.0f);
+        ryggMittCoords = createColorCoords(1.0f);
+        ramCoords = createColorCoords(1.0f);
+        sitsCoords = createColorCoords(1.0f);
+    }
 }
