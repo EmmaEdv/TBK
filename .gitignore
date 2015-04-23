@@ -5,4 +5,53 @@
 *.orig
 
 # Ignore Metaio to avoid unnecessary shit
+# Ignora denna mapp. Både i push och pull
 Projekt/metaioSDK/
+
+# Ignore build folder
+Projekt/metaioSDK/build/
+
+Projekt/.gradle/
+Projekt/local.properties
+	
+Projekt/.idea/
+
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# generated files
+bin/
+gen/
+build/
+obj/
+
+# built application files
+*.apk
+*.ap_
+*.so
+
+Projekt/.gradle
+Projekt/local.properties
+Projekt/.idea/workspace.xml
+Projekt/.idea/libraries
+Projekt/.DS_Store
+Projekt/build
+
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+Projekt/.idea/
+
+# generated files
+Projekt/bin/
+Projekt/gen/
+Projekt/build/
+Projekt/obj/
+
+# built application files
+*.apk
+*.ap_

@@ -1,13 +1,15 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
-import android.app.Activity;
+
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -20,53 +22,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
 
     /*
     Variables
      */
     public ListView listView;
-    protected static float[] cubeVerts;
-    protected static float[] cubeNormals;
-    protected static float[] cubeColorCoords;
+    // Arrays for "rygg top" object
+    protected static float[] ryggTopVerts;
+    protected static float[] ryggTopNormals;
+    protected static float[] ryggTopCoords;
+
+    // Arrays for "rygg mitten" objects
+    protected static float[] ryggMittVerts;
+    protected static float[] ryggMittNormals;
+    protected static float[] ryggMittCoords;
+
+    // Arrays for "ram" objects
+    protected static float[] ramVerts;
+    protected static float[] ramNormals;
+    protected static float[] ramCoords;
+
+    // Arrays for "sits" objects
+    protected static float[] sitsVerts;
+    protected static float[] sitsNormals;
+    protected static float[] sitsCoords;
+
     private GLSurfaceView mSurfaceView;
     private GLRenderer mGLRenderer;
-    protected static int numCubeVerts;
+    protected static int numObjectVerts;
+
+    //Used for rotation in GLView
+    private float mPreviousX;
+    private float mPreviousY;
+    private float mDensity;
+    public static int currentObject = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
+        mDensity = getResources().getDisplayMetrics().density;
         super.onCreate(savedInstanceState);
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //Locks the orientation to landscape
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
 
-        try {
-            cubeVerts = readObjVertecies();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Load vertex, normal and color lists for all objects
+        loadObjectLists();
 
-        try {
-            cubeNormals = readObjNormals();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        cubeColorCoords = createColorCoords(1.0f);
-
-/*
-        Log.d("VERTS SIZE: ", Integer.toString(cubeVerts.length));
-        Log.d("NORMALS SIZE: ", Integer.toString(cubeNormals.length));
-        Log.d("COLORS SIZE: ", Integer.toString(cubeColorCoords.length));
-        Log.d("NUMVERTS: ", Integer.toString(numCubeVerts));
-*/
+        // Create our openGL renderer
         mGLRenderer = new GLRenderer();
 
         listView = (ListView) findViewById(R.id.listview);
@@ -83,50 +91,85 @@ public class MainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // Add stuff here for Item selection from the list view
 
-                listView.setItemChecked(position,true);
+                listView.setItemChecked(position, true);
+                // Check which object to render
+                switch (position) {
+                    case 1:
+                        currentObject = 1;
+                        numObjectVerts = ryggTopVerts.length;
+                        break;
+                    case 2:
+                        currentObject = 2;
+                        numObjectVerts = ryggMittVerts.length;
+                        break;
+                    case 3:
+                        currentObject = 3;
+                        numObjectVerts = ramVerts.length;
+                        break;
+                    case 4:
+                        currentObject = 4;
+                        numObjectVerts = sitsVerts.length;
+                        break;
+                    default:
+                        currentObject = 1;
+                        numObjectVerts = ryggTopVerts.length;
+                        break;
+                }
+
 
             }
         });
         // Get the GL Surface View from the activity XML by Id
         mSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
         mSurfaceView.setEGLContextClientVersion(2);
+        //Event listener for touch on the GLView, gets the data needed for proper rotation.
+        mSurfaceView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event != null) {
+                    float x = event.getX();
+                    float y = event.getY();
+
+                    if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                        if (mGLRenderer != null) {
+                            float deltaX = (x - mPreviousX) / mDensity / 2f;
+                            float deltaY = (y - mPreviousY) / mDensity / 2f;
+
+                            mGLRenderer.mDeltaX += deltaX;
+                            mGLRenderer.mDeltaY += deltaY;
+                        }
+                    }
+
+                    mPreviousX = x;
+                    mPreviousY = y;
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
         // Then assign a renderer to the fetched view
         mSurfaceView.setRenderer(mGLRenderer);
-
-
-
-
-       /* for(int i = 0; i < cubeVerts.length; i++) {
-            Log.d("VERT:", Float.toString(cubeVerts[i]));
-        }*/
-
-/*
-        try {
-            reader();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
-        /*try {
-            Float[] verts = reader();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
     /*
     Generates data for the list.
     Add both thumbnails and description here.
      */
-    private ArrayList<ThumbnailItem> generateData(){
+    private ArrayList<ThumbnailItem> generateData() {
         ArrayList<ThumbnailItem> items = new ArrayList<ThumbnailItem>();
 
-        items.add(new ThumbnailItem(R.drawable.ryggstod_toppen, "Ryggstöd topp"));
-        items.add(new ThumbnailItem(R.drawable.ryggstod_mitten,"Ryggstöd mitten"));
-        items.add(new ThumbnailItem(R.drawable.skruv,"Skruv"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Stora delar"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Ryggstöd topp"));
+        items.add(new ThumbnailItem(R.drawable.rygg_mitt, "Ryggstöd mitten"));
+        items.add(new ThumbnailItem(R.drawable.ram, "Ram"));
         items.add(new ThumbnailItem(R.drawable.sits, "Sits"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Små delar"));
+        items.add(new ThumbnailItem(R.drawable.skruv, "Skruv"));
+        items.add(new ThumbnailItem(R.drawable.plugg, "Plugg"));
 
         return items;
     }
@@ -145,9 +188,10 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (item.getItemId() == R.id.Camera) {
+
+            Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
+            startActivity(cameraScreen);
         }
 
         return super.onOptionsItemSelected(item);
@@ -178,22 +222,34 @@ public class MainActivity extends Activity {
         }
     }
 
-    public float[] readObjVertecies() throws IOException {
+    /**
+     * Reads a vertex list from a text file
+     */
+    public float[] readObjVertecies(int id) throws IOException {
 
+        // Create list for the strings that we read from the text file
         List<String> temps = new ArrayList<String>();
         String string;
-        InputStream is = getResources().openRawResource(R.raw.epic_parsed_list);
+        // Open the file that is to be read
+        InputStream is = getResources().openRawResource(id);
+
         try{
+            // Create the reader that reades the lines in the text file
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             if(is != null) {
+                // Read lines until there are no lines left
                 while((string = reader.readLine()) != null) {
-
+                    // Skip the flags for vertecies and normals
                     if(!string.equals("V") && !string.equals("N")) {
+                        // Split the line that has been read
                         StringTokenizer st = new StringTokenizer(string);
+                        // Go through all the words in a line
                         while (st.hasMoreTokens()) {
-
+                            // Get the word
                             string = st.nextToken();
+                            // Remove the "comma"
                             string = string.replace(",", "");
+                            // Add the word to pur temporary holder
                             temps.add(string);
                         }
                     }
@@ -201,34 +257,52 @@ public class MainActivity extends Activity {
             }
         } finally {
             try {
+                // Close the file
                 is.close();
             } catch (Throwable ignore) { }
         }
 
+        // Create an array of floats, to hold our vertecies
         float[] vertecies = new float[temps.size() / 2];
-        numCubeVerts = vertecies.length;
+        // Get the number of vertecies, this is needed when we draw,
+        // since we need to now how many lines to draw
+        numObjectVerts = vertecies.length;
 
+        // Parse all strings from the text file to floats
         for(int i = 0; i < temps.size() / 2; i++)
             vertecies[i] = Float.parseFloat(temps.get(i));
 
+        // And boom, return the vertex list
         return vertecies;
     }
 
-    public float[] readObjNormals() throws IOException {
+    /**
+     * Reads a normal list from a text file
+     */
+    public float[] readObjNormals(int id) throws IOException {
 
+        // Create list for the strings that we read from the text file
         List<String> temps = new ArrayList<String>();
         String string;
-        InputStream is = getResources().openRawResource(R.raw.epic_parsed_list);
+        // Open the file that is to be read
+        InputStream is = getResources().openRawResource(id);
         try{
+            // Create the reader that reades the lines in the text file
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             if(is != null) {
+                // Read lines until there are no lines left
                 while((string = reader.readLine()) != null) {
-
+                    // Skip the flags for vertecies and normals
                     if(!string.equals("V") && !string.equals("N")) {
+                        // Split the line that has been read
                         StringTokenizer st = new StringTokenizer(string);
+                        // Go through all the words in a line
                         while (st.hasMoreTokens()) {
+                            // Get the word
                             string = st.nextToken();
+                            // Remove the "comma"
                             string = string.replace(",", "");
+                            // Add the word to pur temporary holder
                             temps.add(string);
                         }
                     }
@@ -236,27 +310,69 @@ public class MainActivity extends Activity {
             }
         } finally {
             try {
+                // Close the file
                 is.close();
             } catch (Throwable ignore) { }
         }
 
+        // Create an array of floats, to hold our normals
         float[] normals = new float[temps.size() / 2];
+        // Parse all strings from the text file to floats
         for(int i = 0; i < temps.size() / 2; i++)
             normals[i] = Float.parseFloat(temps.get(i + temps.size() / 2));
 
+        // And boom, return the vertex list
         return normals;
     }
 
+    /**
+     * Creates a color list with one single color
+     */
     public float[] createColorCoords(float color) {
 
-        double s = ( numCubeVerts * (4.0 / 3.0));
+        // Calculate how many color coordinates that we need for the object
+        double s = ( numObjectVerts * (4.0 / 3.0));
         final int SIZE = (int)s;
-        Log.d("SIZE: ", Integer.toString(SIZE));
+
+        // Create an array to hold all the color information
         float[] colorCoords = new float[SIZE];
 
+        // Set the color
         for(int i = 0; i < SIZE; i++)
             colorCoords[i] = color;
 
         return colorCoords;
+    }
+
+    /**
+     * Loads all objects that we want to use
+     */
+    void loadObjectLists() {
+
+        // Object 1
+        try {
+            ryggTopVerts = readObjVertecies(R.raw.rygg_top);
+            ryggMittVerts = readObjVertecies(R.raw.rygg_mid);
+            ramVerts = readObjVertecies(R.raw.sida);
+            sitsVerts = readObjVertecies(R.raw.sits);
+
+            ryggTopNormals = readObjNormals(R.raw.rygg_top);
+            ryggMittNormals = readObjNormals(R.raw.rygg_mid);
+            ramNormals = readObjNormals(R.raw.sida);
+            sitsNormals = readObjNormals(R.raw.sits);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            ryggTopNormals = readObjNormals(R.raw.rygg_top);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ryggTopCoords = createColorCoords(1.0f);
+        ryggMittCoords = createColorCoords(1.0f);
+        ramCoords = createColorCoords(1.0f);
+        sitsCoords = createColorCoords(1.0f);
     }
 }
