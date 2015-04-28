@@ -58,7 +58,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
                         + "   vec3 lightVector = normalize(u_LightPos - modelViewVertex);        \n"
                         // Calculate the dot product of the light vector and vertex normal. If the normal and light vector are
                         // pointing in the same direction then it will get max illumination.
-                        + "   float diffuse = max(dot(modelViewNormal, lightVector), 0.1);       \n"
+                        + "   float diffuse = max(dot(modelViewNormal, lightVector), 0.3);       \n"
                         // Attenuate the light based on distance.
                         + "   diffuse = diffuse * (1.0 / (1.0 + (0.005 * distance * distance)));  \n"
                         // Multiply the color by the illumination level. It will be interpolated across the triangle.

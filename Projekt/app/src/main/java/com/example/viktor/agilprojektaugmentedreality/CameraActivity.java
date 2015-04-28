@@ -1,6 +1,6 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -9,8 +9,11 @@ import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.PopupMenu;
-
 import com.metaio.sdk.ARViewActivity;
 import com.metaio.sdk.MetaioDebug;
 import com.metaio.sdk.jni.IGeometry;
@@ -19,7 +22,6 @@ import com.metaio.sdk.jni.Rotation;
 import com.metaio.sdk.jni.TrackingValuesVector;
 import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.io.AssetsManager;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -29,11 +31,23 @@ public class CameraActivity extends ARViewActivity {
      * Reference to loaded metaioman geometry
      */
     private IGeometry sits;
-    private IGeometry sida;
+    private IGeometry rightSide;
+    private IGeometry leftSide;
     private IGeometry rygg_top;
     private IGeometry rygg_mid;
+    private TutorialCases TC = new TutorialCases();
 
     private TrackingValuesVector poses;
+
+    TextView topText, infoText;
+
+    Button prevButton, nextButton;
+
+    RelativeLayout infoBox;
+
+    ImageButton helpButton;
+
+    boolean helpClick = true;
 
     /**
      * Currently loaded tracking configuration file
@@ -91,19 +105,96 @@ public class CameraActivity extends ARViewActivity {
         //setContentView(R.layout.camera_activity);
 
         mCallbackHandler = new MetaioSDKCallbackHandler();
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
+
+        topText = (TextView) mGUIView.findViewById(R.id.topText0);
+        infoText = (TextView) mGUIView.findViewById(R.id.infoText);
+        prevButton = (Button) mGUIView.findViewById(R.id.prevButton);
+        nextButton = (Button) mGUIView.findViewById(R.id.nextButton);
+        helpButton = (ImageButton) mGUIView.findViewById(R.id.helpBtn);
+        infoBox = (RelativeLayout) mGUIView.findViewById(R.id.infoBox);
+
+        topText.setTypeface(font);
+        infoText.setTypeface(font);
+        prevButton.setTypeface(font);
+        nextButton.setTypeface(font);
     }
+
+
 
     public void showStep() {
 
         //setVisible(true) for the objects that are included in that step
         switch(buildStep){
-            case 1:
-                sida.setVisible(false);
-            break;
             case 0:
-                sida.setVisible(true);
+                rightSide.setVisible(true);
+                leftSide.setVisible(true);
+                sits.setVisible(true);
+                rygg_mid.setVisible(true);
+                rygg_top.setVisible(true);
+                TC.case0(this.mGUIView);
 
             break;
+            case 1:
+                rygg_mid.setVisible(true);
+                rygg_top.setVisible(true);
+                rightSide.setVisible(false);
+                leftSide.setVisible(false);
+                sits.setVisible(false);
+              TC.case1(this.mGUIView);
+            break;
+            case 2:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                rightSide.setVisible(false);
+                leftSide.setVisible(false);
+                sits.setVisible(true);
+             TC.case2(this.mGUIView);
+
+            break;
+            case 3:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                rightSide.setVisible(true);
+                leftSide.setVisible(false);
+                sits.setVisible(false);
+              TC.case3(this.mGUIView);
+            break;
+            case 4:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                rightSide.setVisible(false);
+                leftSide.setVisible(true);
+                sits.setVisible(false);
+             TC.case4(this.mGUIView);
+
+            break;
+            case 5:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                rightSide.setVisible(false);
+                leftSide.setVisible(false);
+                sits.setVisible(false);
+             TC.case5(this.mGUIView);
+            break;
+            case 6:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                rightSide.setVisible(false);
+                leftSide.setVisible(false);
+                sits.setVisible(false);
+               TC.case6(this.mGUIView);
+            break;
+            case 7:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                rightSide.setVisible(false);
+                leftSide.setVisible(false);
+                sits.setVisible(false);
+             TC.case7(this.mGUIView);
+             break;
+
         }
 
         System.out.println("i showStep " + buildStep);
@@ -114,19 +205,16 @@ public class CameraActivity extends ARViewActivity {
      */
     //View b = findViewById(R.id.infoBox);
     public void nextStep(View v) {
-        if (buildStep < 1) {
+        if (buildStep < 7) {
             buildStep++;
         }
-            showStep();
-        findViewById(R.id.topText).setVisibility(View.VISIBLE);
+
+        showStep();
+        topText.setVisibility(View.VISIBLE);
 
         //findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
-        findViewById(R.id.prevButton).setVisibility(View.VISIBLE);
-        findViewById(R.id.infoText).setVisibility(View.GONE);
-
-        findViewById(R.id.infoImage).setVisibility(View.VISIBLE);
-
-
+        prevButton.setVisibility(View.VISIBLE);
+        infoText.setVisibility(View.GONE);
     }
 
     /**
@@ -138,17 +226,25 @@ public class CameraActivity extends ARViewActivity {
             buildStep--;
         }
         showStep();
-        findViewById(R.id.topText).setVisibility(View.INVISIBLE);
-        findViewById(R.id.prevButton).setVisibility(View.GONE);
+
+        topText.setVisibility(View.INVISIBLE);
+        prevButton.setVisibility(View.GONE);
     }
 
-
-    public void btnCancel(View v) {
-        findViewById(R.id.infoBox).setVisibility(View.INVISIBLE);
-    }
-
-    public void btnHelp(View v) {
-        findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
+    public void btnHelp(View v)
+    {
+        if(helpClick)
+        {
+            infoBox.setVisibility(View.INVISIBLE);
+            helpButton.setImageResource(R.drawable.wrench_button);
+            helpClick = false;
+        }
+        else
+        {
+            infoBox.setVisibility(View.VISIBLE);
+            helpButton.setImageResource(R.drawable.wrench_button_pressed);
+            helpClick = true;
+        }
     }
 
     //List
@@ -176,10 +272,10 @@ public class CameraActivity extends ARViewActivity {
         itemRightSideF = new SpannableString("Höger sida (Found)");
         itemRightSideF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.sidaHoger)), 0, itemRightSideF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        itemLeftSideNF = new SpannableString("Höger sida (Not found)");
+        itemLeftSideNF = new SpannableString("Vänster sida (Not found)");
         itemLeftSideNF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.sidaVanster)), 0, itemLeftSideNF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        itemLeftSideF = new SpannableString("Höger sida (Found)");
+        itemLeftSideF = new SpannableString("Vänster sida (Found)");
         itemLeftSideF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.sidaVanster)), 0, itemLeftSideF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         itemRyggMidNF  = new SpannableString("Rygg mitt (Not found)");
@@ -203,11 +299,17 @@ public class CameraActivity extends ARViewActivity {
         else
             item_sits.setTitle(itemSitsTextNF);
 
-        if(leftSideFound){
+        if(rightSideFound){
             item_right.setTitle(itemRightSideF);
         }
         else
             item_right.setTitle(itemRightSideNF);
+
+        if(leftSideFound){
+            item_left.setTitle(itemLeftSideF);
+        }
+        else
+            item_left.setTitle(itemLeftSideNF);
 
         if(ryggMidFound){
             item_ryggmid.setTitle(itemRyggMidF);
@@ -220,7 +322,6 @@ public class CameraActivity extends ARViewActivity {
         }
         else
             item_ryggtop.setTitle(itemRyggTopNF);
-
 
     }
 
@@ -264,6 +365,8 @@ public class CameraActivity extends ARViewActivity {
             final File sidaModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
             final File ryggToppModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_top.obj");
             final File ryggMidModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_mid.obj");
+            final File sidaModel2 = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
+
 
 
             if (sitsModel != null) {
@@ -282,17 +385,23 @@ public class CameraActivity extends ARViewActivity {
             }
 
             if (sidaModel != null) {
-                sida = metaioSDK.createGeometry(sidaModel);
 
-                if (sida != null) {
+                rightSide = metaioSDK.createGeometry(sidaModel);
+                leftSide = metaioSDK.createGeometry(sidaModel2);
+
+                if (rightSide != null) {
                     // Set geometry properties
-                    sida.setScale(4f);
-                    sida.setVisible(false);
-                    MetaioDebug.log("Loaded geometry " + sidaModel);
+                    rightSide.setScale(4f);
+                    rightSide.setVisible(false);
+                    leftSide.setScale(4f);
+                    leftSide.setVisible(false);
+                    MetaioDebug.log("Loaded geometry "+sidaModel);
                 }
                 else
                     MetaioDebug.log(Log.ERROR, "Error loading geometry: "+sidaModel);
             }
+
+
 
             if (ryggToppModel != null) {
                 rygg_top = metaioSDK.createGeometry(ryggToppModel);
@@ -366,7 +475,7 @@ public class CameraActivity extends ARViewActivity {
         public void onTrackingEvent(TrackingValuesVector trackingValues) {
 
             // if we detect any target, we bind the loaded geometry to this target
-            if (sida != null && sits != null && rygg_top != null && rygg_mid != null) {
+            if (rightSide != null && sits != null && rygg_top != null && rygg_mid != null) {
 
                 for (int i = 0; i < trackingValues.size(); i++) {
 
@@ -391,11 +500,14 @@ public class CameraActivity extends ARViewActivity {
                                             item_sits.setTitle(itemSitsTextF);
                                             sitsFound = true;
                                         }
-                                        if (sida.getIsRendered()) {
+                                        if (rightSide.getIsRendered()) {
                                             item_right.setTitle(itemRightSideF);
+                                            rightSideFound = true;
+                                        }
+                                        if (leftSide.getIsRendered()) {
+                                            item_left.setTitle(itemLeftSideF);
                                             leftSideFound = true;
                                         }
-
                                         if (rygg_mid.getIsRendered()) {
                                             item_ryggmid.setTitle(itemRyggMidF);
                                             ryggMidFound = true;
@@ -412,13 +524,37 @@ public class CameraActivity extends ARViewActivity {
                             rygg_mid.setVisible(true);
                             rygg_top.setVisible(true);
 
-
                             if(buildStep==0) {
-                                sida.setVisible(true);
+                                rightSide.setVisible(true);
+                                leftSide.setVisible(true);
+                                rygg_mid.setVisible(true);
+                                rygg_top.setVisible(true);
+                                sits.setVisible(true);
+
+
                             }
+
+                            if(buildStep==1) {
+                                rygg_mid.setVisible(true);
+                                rygg_top.setVisible(true);
+                            }
+
+                            if(buildStep==2) {
+                                sits.setVisible(true);
+                            }
+
+                            if(buildStep==3) {
+                                rightSide.setVisible(true);
+                            }
+                            if(buildStep==4) {
+                                leftSide.setVisible(true);
+                            }
+
+
                             //Added
 
-                            sida.setCoordinateSystemID(1);
+                            rightSide.setCoordinateSystemID(1);
+                            leftSide.setCoordinateSystemID(5);
                             sits.setCoordinateSystemID(2);
                             rygg_mid.setCoordinateSystemID(3);
                             rygg_top.setCoordinateSystemID(4);
