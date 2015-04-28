@@ -29,9 +29,11 @@ public class CameraActivity extends ARViewActivity {
      * Reference to loaded metaioman geometry
      */
     private IGeometry sits;
-    private IGeometry sida;
+    private IGeometry sida1;
+    private IGeometry sida2;
     private IGeometry rygg_top;
     private IGeometry rygg_mid;
+    private TutorialCases TC = new TutorialCases();
 
     private TrackingValuesVector poses;
 
@@ -63,13 +65,74 @@ public class CameraActivity extends ARViewActivity {
 
         //setVisible(true) for the objects that are included in that step
         switch(buildStep){
-            case 1:
-                sida.setVisible(false);
-            break;
             case 0:
-                sida.setVisible(true);
+                sida1.setVisible(true);
+                sida2.setVisible(true);
+                sits.setVisible(true);
+                rygg_mid.setVisible(true);
+                rygg_top.setVisible(true);
+                TC.case0(this.mGUIView);
 
             break;
+            case 1:
+                rygg_mid.setVisible(true);
+                rygg_top.setVisible(true);
+                sida1.setVisible(false);
+                sida2.setVisible(false);
+                sits.setVisible(false);
+              TC.case1(this.mGUIView);
+            break;
+            case 2:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                sida1.setVisible(false);
+                sida2.setVisible(false);
+                sits.setVisible(true);
+             TC.case2(this.mGUIView);
+
+            break;
+            case 3:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                sida1.setVisible(true);
+                sida2.setVisible(false);
+                sits.setVisible(false);
+              TC.case3(this.mGUIView);
+            break;
+            case 4:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                sida1.setVisible(false);
+                sida2.setVisible(true);
+                sits.setVisible(false);
+             TC.case4(this.mGUIView);
+
+            break;
+            case 5:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                sida1.setVisible(false);
+                sida2.setVisible(false);
+                sits.setVisible(false);
+             TC.case5(this.mGUIView);
+            break;
+            case 6:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                sida1.setVisible(false);
+                sida2.setVisible(false);
+                sits.setVisible(false);
+               TC.case6(this.mGUIView);
+            break;
+            case 7:
+                rygg_mid.setVisible(false);
+                rygg_top.setVisible(false);
+                sida1.setVisible(false);
+                sida2.setVisible(false);
+                sits.setVisible(false);
+             TC.case7(this.mGUIView);
+             break;
+
         }
     System.out.println("i showStep " + buildStep);
     }
@@ -79,17 +142,14 @@ public class CameraActivity extends ARViewActivity {
      */
     //View b = findViewById(R.id.infoBox);
     public void nextStep(View v) {
-        if (buildStep < 1) {
+        if (buildStep < 7) {
             buildStep++;
         }
-            showStep();
-        findViewById(R.id.topText).setVisibility(View.VISIBLE);
+
+        showStep();
 
         //findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
-        findViewById(R.id.prevButton).setVisibility(View.VISIBLE);
-        findViewById(R.id.infoText).setVisibility(View.GONE);
 
-        findViewById(R.id.infoImage).setVisibility(View.VISIBLE);
 
 
     }
@@ -103,10 +163,6 @@ public class CameraActivity extends ARViewActivity {
             buildStep--;
         }
         showStep();
-        findViewById(R.id.topText).setVisibility(View.INVISIBLE);
-        findViewById(R.id.prevButton).setVisibility(View.GONE);
-
-
     }
 
 
@@ -156,6 +212,8 @@ public class CameraActivity extends ARViewActivity {
             final File sidaModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
             final File ryggToppModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_top.obj");
             final File ryggMidModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_mid.obj");
+            final File sidaModel2 = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
+
 
 
             if (sitsModel != null) {
@@ -173,16 +231,22 @@ public class CameraActivity extends ARViewActivity {
             }
 
             if (sidaModel != null) {
-                sida = metaioSDK.createGeometry(sidaModel);
-                if (sida != null) {
+                sida1 = metaioSDK.createGeometry(sidaModel);
+                sida2 = metaioSDK.createGeometry(sidaModel2);
+
+                if (sida1 != null) {
                     // Set geometry properties
-                    sida.setScale(4f);
-                    sida.setVisible(false);
+                    sida1.setScale(4f);
+                    sida1.setVisible(false);
+                    sida2.setScale(4f);
+                    sida2.setVisible(false);
                     MetaioDebug.log("Loaded geometry "+sidaModel);
                 }
                 else
                     MetaioDebug.log(Log.ERROR, "Error loading geometry: "+sidaModel);
             }
+
+
 
             if (ryggToppModel != null) {
                 rygg_top = metaioSDK.createGeometry(ryggToppModel);
@@ -256,7 +320,7 @@ public class CameraActivity extends ARViewActivity {
         public void onTrackingEvent(TrackingValuesVector trackingValues) {
 
             // if we detect any target, we bind the loaded geometry to this target
-            if (sida != null && sits != null && rygg_top != null && rygg_mid != null) {
+            if (sida1 != null && sits != null && rygg_top != null && rygg_mid != null) {
 
                 for (int i = 0; i < trackingValues.size(); i++) {
 
@@ -272,17 +336,36 @@ public class CameraActivity extends ARViewActivity {
                         //if we have detected one, attach our metaio man to this coordinate system Id
                         if (poses.size() != 0) {
 
-                            sits.setVisible(true);
-                            rygg_mid.setVisible(true);
-                            rygg_top.setVisible(true);
-
-
                             if(buildStep==0) {
-                                sida.setVisible(true);
+                                sida1.setVisible(true);
+                                sida2.setVisible(true);
+                                rygg_mid.setVisible(true);
+                                rygg_top.setVisible(true);
+                                sits.setVisible(true);
+
                             }
+
+                            if(buildStep==1) {
+                                rygg_mid.setVisible(true);
+                                rygg_top.setVisible(true);
+                            }
+
+                            if(buildStep==2) {
+                                sits.setVisible(true);
+                            }
+
+                            if(buildStep==3) {
+                                sida1.setVisible(true);
+                            }
+                            if(buildStep==4) {
+                                sida2.setVisible(true);
+                            }
+
+
                             //Added
 
-                            sida.setCoordinateSystemID(1);
+                            sida1.setCoordinateSystemID(1);
+                            sida2.setCoordinateSystemID(5);
                             sits.setCoordinateSystemID(2);
                             rygg_mid.setCoordinateSystemID(3);
                             rygg_top.setCoordinateSystemID(4);
