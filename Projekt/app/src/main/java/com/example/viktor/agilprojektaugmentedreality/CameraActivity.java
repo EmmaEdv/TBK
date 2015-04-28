@@ -1,11 +1,16 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.metaio.sdk.ARViewActivity;
 import com.metaio.sdk.MetaioDebug;
@@ -35,6 +40,16 @@ public class CameraActivity extends ARViewActivity {
 
     private TrackingValuesVector poses;
 
+    TextView topText, infoText;
+
+    Button prevButton, nextButton;
+
+    RelativeLayout infoBox;
+
+    ImageButton helpButton;
+
+    boolean helpClick = true;
+
     /**
      * Currently loaded tracking configuration file
      */
@@ -57,7 +72,23 @@ public class CameraActivity extends ARViewActivity {
         //setContentView(R.layout.camera_activity);
 
         mCallbackHandler = new MetaioSDKCallbackHandler();
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
+
+        topText = (TextView) mGUIView.findViewById(R.id.topText);
+        infoText = (TextView) mGUIView.findViewById(R.id.infoText);
+        prevButton = (Button) mGUIView.findViewById(R.id.prevButton);
+        nextButton = (Button) mGUIView.findViewById(R.id.nextButton);
+        helpButton = (ImageButton) mGUIView.findViewById(R.id.helpBtn);
+        infoBox = (RelativeLayout) mGUIView.findViewById(R.id.infoBox);
+
+        topText.setTypeface(font);
+        infoText.setTypeface(font);
+        prevButton.setTypeface(font);
+        nextButton.setTypeface(font);
     }
+
+
 
     public void showStep() {
 
@@ -83,11 +114,11 @@ public class CameraActivity extends ARViewActivity {
             buildStep++;
         }
             showStep();
-        findViewById(R.id.topText).setVisibility(View.VISIBLE);
+        topText.setVisibility(View.VISIBLE);
 
         //findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
-        findViewById(R.id.prevButton).setVisibility(View.VISIBLE);
-        findViewById(R.id.infoText).setVisibility(View.GONE);
+        prevButton.setVisibility(View.VISIBLE);
+        infoText.setVisibility(View.GONE);
 
         findViewById(R.id.infoImage).setVisibility(View.VISIBLE);
 
@@ -103,8 +134,8 @@ public class CameraActivity extends ARViewActivity {
             buildStep--;
         }
         showStep();
-        findViewById(R.id.topText).setVisibility(View.INVISIBLE);
-        findViewById(R.id.prevButton).setVisibility(View.GONE);
+        topText.setVisibility(View.INVISIBLE);
+        prevButton.setVisibility(View.GONE);
 
 
     }
@@ -113,13 +144,24 @@ public class CameraActivity extends ARViewActivity {
     public void btnCancel(View v)
     {
 
-        findViewById(R.id.infoBox).setVisibility(View.INVISIBLE);
+        infoBox.setVisibility(View.INVISIBLE);
 
     }
 
     public void btnHelp(View v)
     {
-        findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
+        if(helpClick)
+        {
+            infoBox.setVisibility(View.INVISIBLE);
+            helpButton.setImageResource(R.drawable.wrench_button);
+            helpClick = false;
+        }
+        else
+        {
+            infoBox.setVisibility(View.VISIBLE);
+            helpButton.setImageResource(R.drawable.wrench_button_pressed);
+            helpClick = true;
+        }
 
     }
 

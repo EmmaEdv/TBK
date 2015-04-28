@@ -19,9 +19,8 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="Montering, steg 1"
-           android:visibility="invisible"
+            android:visibility="invisible"
             android:gravity="center"
-            android:fontFamily="Berlin Sans FB"
             android:textStyle="bold"
             android:textSize="40px"
             />
@@ -32,9 +31,9 @@
             android:layout_height="60dp"
             android:onClick="btnHelp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/wrench"
+            android:src="@drawable/wrench_button_pressed"
             android:background="@android:color/transparent"
-            />
+            android:scaleType="fitXY" />
 
 </RelativeLayout>
 
@@ -56,16 +55,6 @@
             />
 
 
-        <ImageButton
-            android:id="@+id/closeBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="btnCancel"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:src="@drawable/cancel"
-            android:background="@android:color/transparent" />
-        
         <TextView
             android:id="@+id/infoText"
             android:layout_width="fill_parent"
