@@ -1,10 +1,8 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.widget.ArrayAdapter;
-import java.util.ArrayList;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.viktor.agilprojektaugmentedreality.ThumbnailItem;
+import java.util.ArrayList;
 
 /**
  * Created by Viktor on 2015-03-24.
@@ -46,7 +44,7 @@ public class ThumbnailAdapter extends ArrayAdapter<ThumbnailItem>{
         // 3.1 Create typeface for custom fonts
         Typeface font = Typeface.createFromAsset(context.getAssets(), "Berlin Sans FB.ttf");
 
-        if(position == 0 || position == 5) {
+        if(position == 0 || position == 6) {
             rowView.setBackgroundColor(Color.DKGRAY);
 
             // 4. Set the text for textView
