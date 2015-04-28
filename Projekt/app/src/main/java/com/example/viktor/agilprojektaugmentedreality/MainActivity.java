@@ -173,11 +173,11 @@ public class MainActivity extends Activity {
         items.add(new ThumbnailItem(R.drawable.rygg_topp, "Stora delar"));
         items.add(new ThumbnailItem(R.drawable.rygg_topp, "Ryggstöd topp"));
         items.add(new ThumbnailItem(R.drawable.rygg_mitt, "Ryggstöd mitten"));
-        items.add(new ThumbnailItem(R.drawable.ram, "Ram"));
+        items.add(new ThumbnailItem(R.drawable.ram, "Ram 2x"));
         items.add(new ThumbnailItem(R.drawable.sits, "Sits"));
         items.add(new ThumbnailItem(R.drawable.rygg_topp, "Små delar"));
-        items.add(new ThumbnailItem(R.drawable.skruv, "Skruv"));
-        items.add(new ThumbnailItem(R.drawable.plugg, "Plugg"));
+        items.add(new ThumbnailItem(R.drawable.skruv, "Skruv 6x"));
+        items.add(new ThumbnailItem(R.drawable.plugg, "Plugg 2x"));
 
         return items;
     }
