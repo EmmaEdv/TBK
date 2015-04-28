@@ -1,27 +1,26 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 
 import com.metaio.sdk.ARViewActivity;
 import com.metaio.sdk.MetaioDebug;
 import com.metaio.sdk.jni.IGeometry;
 import com.metaio.sdk.jni.IMetaioSDKCallback;
 import com.metaio.sdk.jni.Rotation;
-import com.metaio.sdk.jni.TrackingValues;
 import com.metaio.sdk.jni.TrackingValuesVector;
 import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.io.AssetsManager;
 
-import org.apache.http.impl.conn.Wire;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
 
 public class CameraActivity extends ARViewActivity {
 
@@ -43,6 +42,24 @@ public class CameraActivity extends ARViewActivity {
     private MetaioSDKCallbackHandler mCallbackHandler;
 
     private int buildStep = 0;
+
+    // Da popup menu
+    PopupMenu popup;
+
+    MenuItem item_sits;
+    MenuItem item_right;
+    MenuItem item_left;
+    MenuItem item_ryggtop;
+    MenuItem item_ryggmid;
+
+    boolean initiated = false;
+
+    boolean sitsFound = false;
+    boolean leftSideFound = false;
+    boolean rightSideFound = false;
+    boolean ryggMidFound = false;
+    boolean ryggTopFound = false;
+
 
     @Override
     protected int getGUILayout()
@@ -71,7 +88,8 @@ public class CameraActivity extends ARViewActivity {
 
             break;
         }
-    System.out.println("i showStep " + buildStep);
+
+        System.out.println("i showStep " + buildStep);
     }
 
     /**
@@ -105,23 +123,65 @@ public class CameraActivity extends ARViewActivity {
         showStep();
         findViewById(R.id.topText).setVisibility(View.INVISIBLE);
         findViewById(R.id.prevButton).setVisibility(View.GONE);
-
-
     }
 
 
-    public void btnCancel(View v)
-    {
-
+    public void btnCancel(View v) {
         findViewById(R.id.infoBox).setVisibility(View.INVISIBLE);
-
     }
 
-    public void btnHelp(View v)
-    {
+    public void btnHelp(View v) {
         findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
+    }
+
+    //List
+    public void showPopup(View v) {
+
+        popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_cameralist, popup.getMenu());
+
+        item_sits = popup.getMenu().getItem(0);
+        item_right = popup.getMenu().getItem(1);
+        item_left = popup.getMenu().getItem(2);
+        item_ryggtop = popup.getMenu().getItem(3);
+        item_ryggmid = popup.getMenu().getItem(4);
+
+        popup.show();
+
+        if(sitsFound){
+            item_sits.setTitle("Sits (Found)");
+        }
+        else
+            item_sits.setTitle("Sits (Not found)");
+
+        if(leftSideFound){
+            item_right.setTitle("Höger ben (Found)");
+        }
+        else
+            item_right.setTitle("Höger ben (Not found");
+
+        if(ryggMidFound){
+            item_ryggmid.setTitle("Rygg mid (Found)");
+        }
+        else
+            item_ryggmid.setTitle("Rygg mid (Not found)");
+
+        if(ryggTopFound){
+            item_ryggtop.setTitle("Rygg top (Found)");
+        }
+        else
+            item_ryggtop.setTitle("Rygg top (Not found)");
+
 
     }
+
+    public void listBtnClick(View v) {
+        //findViewById(R.id.infoBox).setVisibility(View.INVISIBLE);
+        initiated = true;
+        showPopup(v);
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -162,11 +222,12 @@ public class CameraActivity extends ARViewActivity {
                 sits = metaioSDK.createGeometry(sitsModel);
                 sits.setRotation(new Rotation(1.57f, 0.0f, 0.0f));
                 sits.setTranslation(new Vector3d(-900.0f, 900.0f, -600.0f));
+
                 if (sits != null) {
                     // Set geometry properties
                     sits.setScale(11f);
                     sits.setVisible(false);
-                    MetaioDebug.log("Loaded geometry "+sitsModel);
+                    MetaioDebug.log("Loaded geometry " + sitsModel);
                 }
                 else
                     MetaioDebug.log(Log.ERROR, "Error loading geometry: "+sitsModel);
@@ -174,11 +235,12 @@ public class CameraActivity extends ARViewActivity {
 
             if (sidaModel != null) {
                 sida = metaioSDK.createGeometry(sidaModel);
+
                 if (sida != null) {
                     // Set geometry properties
                     sida.setScale(4f);
                     sida.setVisible(false);
-                    MetaioDebug.log("Loaded geometry "+sidaModel);
+                    MetaioDebug.log("Loaded geometry " + sidaModel);
                 }
                 else
                     MetaioDebug.log(Log.ERROR, "Error loading geometry: "+sidaModel);
@@ -190,7 +252,7 @@ public class CameraActivity extends ARViewActivity {
                     // Set geometry properties
                     rygg_top.setScale(4f);
                     rygg_top.setVisible(false);
-                    MetaioDebug.log("Loaded geometry "+ryggToppModel);
+                    MetaioDebug.log("Loaded geometry " + ryggToppModel);
                 }
                 else
                     MetaioDebug.log(Log.ERROR, "Error loading geometry: "+ryggToppModel);
@@ -202,7 +264,7 @@ public class CameraActivity extends ARViewActivity {
                     // Set geometry properties
                     rygg_mid.setScale(4f);
                     rygg_mid.setVisible(false);
-                    MetaioDebug.log("Loaded geometry "+ryggMidModel);
+                    MetaioDebug.log("Loaded geometry " + ryggMidModel);
                 }
                 else
                     MetaioDebug.log(Log.ERROR, "Error loading geometry: "+ryggMidModel);
@@ -262,15 +324,40 @@ public class CameraActivity extends ARViewActivity {
 
                     //TrackingValue is received from TrackingData_PictureMarker.xml
 
-                    //bort?
-                    //final TrackingValues tv = trackingValues.get(i);
-
                     if (metaioSDK != null) {
                         // get all detected poses/targets
                         poses = metaioSDK.getTrackingValues();
 
                         //if we have detected one, attach our metaio man to this coordinate system Id
                         if (poses.size() != 0) {
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    // If popuplist has been created
+                                    if(initiated) {
+
+                                        if (sits.getIsRendered()) {
+                                            item_sits.setTitle("Sits (Found)");
+                                            sitsFound = true;
+                                        }
+                                        if (sida.getIsRendered()) {
+                                            item_right.setTitle("Höger ben (Found)");
+                                            leftSideFound = true;
+                                        }
+
+                                        if (rygg_mid.getIsRendered()) {
+                                            item_ryggmid.setTitle("Rygg mid (Found)");
+                                            ryggMidFound = true;
+                                        }
+                                        if (rygg_top.getIsRendered()) {
+                                            item_ryggtop.setTitle("Rygg top (Found)");
+                                            ryggTopFound = true;
+                                        }
+                                    }
+                                }
+                            });
 
                             sits.setVisible(true);
                             rygg_mid.setVisible(true);
