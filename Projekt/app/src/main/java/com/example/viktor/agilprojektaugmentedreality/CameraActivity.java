@@ -1,5 +1,6 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.PopupMenu;
@@ -32,7 +34,6 @@ public class CameraActivity extends ARViewActivity {
     private IGeometry sida2;
     private IGeometry rygg_top;
     private IGeometry rygg_mid;
-    private TutorialCases TC = new TutorialCases();
 
     private TrackingValuesVector poses;
 
@@ -43,6 +44,7 @@ public class CameraActivity extends ARViewActivity {
     RelativeLayout infoBox;
 
     ImageButton helpButton;
+    ImageView infoImage;
 
     boolean helpClick = true;
 
@@ -85,23 +87,26 @@ public class CameraActivity extends ARViewActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.camera_activity);
 
+        //Locks the orientation to landscape
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         mCallbackHandler = new MetaioSDKCallbackHandler();
 
         Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
 
-        topText = (TextView) mGUIView.findViewById(R.id.topText0);
+        topText = (TextView) mGUIView.findViewById(R.id.topText);
         infoText = (TextView) mGUIView.findViewById(R.id.infoText);
         prevButton = (Button) mGUIView.findViewById(R.id.prevButton);
         nextButton = (Button) mGUIView.findViewById(R.id.nextButton);
         helpButton = (ImageButton) mGUIView.findViewById(R.id.helpBtn);
         infoBox = (RelativeLayout) mGUIView.findViewById(R.id.infoBox);
+        infoImage = (ImageView) mGUIView.findViewById(R.id.infoImage);
 
         topText.setTypeface(font);
         infoText.setTypeface(font);
         prevButton.setTypeface(font);
         nextButton.setTypeface(font);
     }
-
 
 
     public void showStep() {
@@ -114,8 +119,10 @@ public class CameraActivity extends ARViewActivity {
                 sits.setVisible(true);
                 rygg_mid.setVisible(true);
                 rygg_top.setVisible(true);
-                TC.case0(this.mGUIView);
-
+                topText.setText(R.string.step_zero);
+                infoImage.setVisibility(View.INVISIBLE);
+                infoText.setText(R.string.stepStart);
+                infoText.setVisibility(View.VISIBLE);
             break;
             case 1:
                 rygg_mid.setVisible(true);
@@ -123,7 +130,10 @@ public class CameraActivity extends ARViewActivity {
                 sida1.setVisible(false);
                 sida2.setVisible(false);
                 sits.setVisible(false);
-              TC.case1(this.mGUIView);
+                topText.setText(R.string.step_one);
+                infoText.setVisibility(View.INVISIBLE);
+                infoImage.setVisibility(View.VISIBLE);
+                infoImage.setImageResource(R.drawable.step1_color);
             break;
             case 2:
                 rygg_mid.setVisible(false);
@@ -131,8 +141,8 @@ public class CameraActivity extends ARViewActivity {
                 sida1.setVisible(false);
                 sida2.setVisible(false);
                 sits.setVisible(true);
-             TC.case2(this.mGUIView);
-
+                topText.setText(R.string.step_two);
+                infoImage.setImageResource(R.drawable.step2_color);
             break;
             case 3:
                 rygg_mid.setVisible(false);
@@ -140,7 +150,8 @@ public class CameraActivity extends ARViewActivity {
                 sida1.setVisible(true);
                 sida2.setVisible(false);
                 sits.setVisible(false);
-              TC.case3(this.mGUIView);
+                topText.setText(R.string.step_three);
+                infoImage.setImageResource(R.drawable.step3_color);
             break;
             case 4:
                 rygg_mid.setVisible(false);
@@ -148,8 +159,8 @@ public class CameraActivity extends ARViewActivity {
                 sida1.setVisible(false);
                 sida2.setVisible(true);
                 sits.setVisible(false);
-             TC.case4(this.mGUIView);
-
+                topText.setText(R.string.step_four);
+                infoImage.setImageResource(R.drawable.step4_color);
             break;
             case 5:
                 rygg_mid.setVisible(false);
@@ -157,7 +168,8 @@ public class CameraActivity extends ARViewActivity {
                 sida1.setVisible(false);
                 sida2.setVisible(false);
                 sits.setVisible(false);
-             TC.case5(this.mGUIView);
+                topText.setText(R.string.step_five);
+                infoImage.setImageResource(R.drawable.step5_color);
             break;
             case 6:
                 rygg_mid.setVisible(false);
@@ -165,7 +177,10 @@ public class CameraActivity extends ARViewActivity {
                 sida1.setVisible(false);
                 sida2.setVisible(false);
                 sits.setVisible(false);
-               TC.case6(this.mGUIView);
+                topText.setText(R.string.step_six);
+                infoImage.setImageResource(R.drawable.step6_color);
+                infoText.setVisibility(View.INVISIBLE);
+                infoImage.setVisibility(View.VISIBLE);
             break;
             case 7:
                 rygg_mid.setVisible(false);
@@ -173,12 +188,15 @@ public class CameraActivity extends ARViewActivity {
                 sida1.setVisible(false);
                 sida2.setVisible(false);
                 sits.setVisible(false);
-             TC.case7(this.mGUIView);
+                topText.setText(R.string.step_seven);
+                infoImage.setVisibility(View.INVISIBLE);
+                infoText.setText(R.string.stepDone);
+                infoText.setVisibility(View.VISIBLE);
              break;
 
         }
 
-        System.out.println("i showStep " + buildStep);
+        //System.out.println("i showStep " + buildStep);
     }
 
     /**
@@ -193,9 +211,15 @@ public class CameraActivity extends ARViewActivity {
         showStep();
         topText.setVisibility(View.VISIBLE);
 
-        //findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
-        prevButton.setVisibility(View.VISIBLE);
-        infoText.setVisibility(View.GONE);
+        //Show previous button only if not at first step
+        if(buildStep == 0) {
+            prevButton.setVisibility(View.GONE);
+            Log.i("NextStep", "Steg nr: "+buildStep);
+        }
+        else{
+            prevButton.setVisibility(View.VISIBLE);
+            Log.i("NextStep > 1", "Steg nr: "+buildStep);
+        }
     }
 
     /**
@@ -208,20 +232,25 @@ public class CameraActivity extends ARViewActivity {
         }
         showStep();
 
-        topText.setVisibility(View.INVISIBLE);
-        prevButton.setVisibility(View.GONE);
+        //Show next button only if not at last step
+        if(buildStep == 7) {
+            nextButton.setVisibility(View.GONE);
+            Log.i("PrevStep", "Steg nr: " + buildStep);
+        }
+        else{
+            nextButton.setVisibility(View.VISIBLE);
+            Log.i("PrevStep < 6", "Steg nr: " + buildStep);
+        }
     }
 
     public void btnHelp(View v)
     {
-        if(helpClick)
-        {
+        if(helpClick){
             infoBox.setVisibility(View.INVISIBLE);
             helpButton.setImageResource(R.drawable.wrench_button);
             helpClick = false;
         }
-        else
-        {
+        else {
             infoBox.setVisibility(View.VISIBLE);
             helpButton.setImageResource(R.drawable.wrench_button_pressed);
             helpClick = true;

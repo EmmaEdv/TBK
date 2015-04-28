@@ -13,7 +13,7 @@
         android:background="@color/custom_gray">
 
         <TextView
-            android:id="@+id/topText0"
+            android:id="@+id/topText"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="Montering"
@@ -23,82 +23,6 @@
             android:textStyle="bold"
             android:textSize="40px" />
 
-
-        <TextView
-            android:id="@+id/topText1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="Montering, steg 1"
-            android:visibility="invisible"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="40px" />
-
-        <TextView
-            android:id="@+id/topText2"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="Montering, steg 2"
-            android:visibility="invisible"
-            android:gravity="center"
-            android:fontFamily="Berlin Sans FB"
-            android:textStyle="bold"
-            android:textSize="40px" />
-
-        <TextView
-            android:id="@+id/topText3"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="Montering, steg 3"
-            android:visibility="invisible"
-            android:gravity="center"
-            android:fontFamily="Berlin Sans FB"
-            android:textStyle="bold"
-            android:textSize="40px" />
-
-        <TextView
-            android:id="@+id/topText4"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="Montering, steg 4"
-            android:visibility="invisible"
-            android:gravity="center"
-            android:fontFamily="Berlin Sans FB"
-            android:textStyle="bold"
-            android:textSize="40px" />
-
-        <TextView
-            android:id="@+id/topText5"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="Montering, steg 5"
-            android:visibility="invisible"
-            android:gravity="center"
-            android:fontFamily="Berlin Sans FB"
-            android:textStyle="bold"
-            android:textSize="40px" />
-
-        <TextView
-            android:id="@+id/topText6"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="Montering, steg 6"
-            android:visibility="invisible"
-            android:gravity="center"
-            android:fontFamily="Berlin Sans FB"
-            android:textStyle="bold"
-            android:textSize="40px" />
-
-        <TextView
-            android:id="@+id/topText7"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="Montering KLAR!"
-            android:visibility="invisible"
-            android:gravity="center"
-            android:fontFamily="Berlin Sans FB"
-            android:textStyle="bold"
-            android:textSize="40px" />
 
         <ImageButton
             android:id="@+id/helpBtn"
@@ -133,50 +57,10 @@
         >
 
         <ImageView
-            android:id="@+id/infoImage1"
+            android:id="@+id/infoImage"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:src="@drawable/step1_color"
-            android:visibility="gone"
-            />
-
-        <ImageView
-            android:id="@+id/infoImage2"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/step2_color"
-            android:visibility="gone"
-            />
-
-        <ImageView
-            android:id="@+id/infoImage3"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/step3_color"
-            android:visibility="gone"
-            />
-
-        <ImageView
-            android:id="@+id/infoImage4"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/step4_color"
-            android:visibility="gone"
-            />
-
-        <ImageView
-            android:id="@+id/infoImage5"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/step5_color"
-            android:visibility="gone"
-            />
-
-        <ImageView
-            android:id="@+id/infoImage6"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/step6_color"
             android:visibility="gone"
             />
 
@@ -185,7 +69,6 @@
             android:id="@+id/infoText"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
             android:fontFamily="Arial"
             android:textSize="20dp"
             android:padding="10dp"
