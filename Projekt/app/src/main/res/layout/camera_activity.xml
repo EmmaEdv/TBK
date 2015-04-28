@@ -10,21 +10,95 @@
         android:layout_height="@dimen/headerHeight"
         android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
-        android:background="@color/custom_gray"
-
-        >
+        android:background="@color/custom_gray">
 
         <TextView
-            android:id="@+id/topText"
+            android:id="@+id/topText0"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="Montering, steg 1"
-           android:visibility="invisible"
+            android:text="Montering"
+            android:visibility="visible"
             android:gravity="center"
             android:fontFamily="Berlin Sans FB"
             android:textStyle="bold"
-            android:textSize="40px"
-            />
+            android:textSize="40px" />
+
+
+        <TextView
+            android:id="@+id/topText1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 1"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 2"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText3"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 3"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText4"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 4"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText5"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 5"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText6"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 6"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText7"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering KLAR!"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
 
         <ImageButton
             android:id="@+id/helpBtn"
@@ -32,11 +106,22 @@
             android:layout_height="60dp"
             android:onClick="btnHelp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/wrench"
+            android:src="@drawable/wrench_button_pressed"
             android:background="@android:color/transparent"
-            />
+            android:scaleType="fitXY" />
 
-</RelativeLayout>
+        <ImageButton
+            android:id="@+id/listBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:onClick="listBtnClick"
+            android:layout_toLeftOf="@+id/helpBtn"
+            android:src="@drawable/wrench_button"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY" />
+
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/infoBox"
@@ -48,24 +133,54 @@
         >
 
         <ImageView
-            android:id="@+id/infoImage"
+            android:id="@+id/infoImage1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:src="@drawable/step1"
+            android:src="@drawable/step1_color"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/infoImage2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step2_color"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/infoImage3"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step3_color"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/infoImage4"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step4_color"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/infoImage5"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step5_color"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/infoImage6"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step6_color"
             android:visibility="gone"
             />
 
 
-        <ImageButton
-            android:id="@+id/closeBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="btnCancel"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:src="@drawable/cancel"
-            android:background="@android:color/transparent" />
-        
         <TextView
             android:id="@+id/infoText"
             android:layout_width="fill_parent"
