@@ -6,6 +6,7 @@
     <item name="green" type="color">#FF99CC00</item>
     <item name="custom_gray" type="color">#cccccc</item>
     <item name="WHITE" type="color">#ffffff</item>
+
     <item name="sits" type="color">#e2bd77</item>
     <item name="sidaHoger" type="color">#b8a6e8</item>
     <item name="sidaVanster" type="color">#a6e8e7</item>

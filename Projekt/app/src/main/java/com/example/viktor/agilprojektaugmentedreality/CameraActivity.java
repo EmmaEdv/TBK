@@ -2,6 +2,7 @@ package com.example.viktor.agilprojektaugmentedreality;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -60,6 +61,22 @@ public class CameraActivity extends ARViewActivity {
     boolean ryggMidFound = false;
     boolean ryggTopFound = false;
 
+    // En lång radda spannable strings
+    // Behövs för att ändra färg på menu items
+    SpannableString itemSitsTextF;
+    SpannableString itemSitsTextNF;
+
+    SpannableString itemRightSideF;
+    SpannableString itemRightSideNF;
+
+    SpannableString itemLeftSideF;
+    SpannableString itemLeftSideNF;
+
+    SpannableString itemRyggMidF;
+    SpannableString itemRyggMidNF;
+
+    SpannableString itemRyggTopF;
+    SpannableString itemRyggTopNF;
 
     @Override
     protected int getGUILayout()
@@ -147,31 +164,62 @@ public class CameraActivity extends ARViewActivity {
         item_ryggtop = popup.getMenu().getItem(3);
         item_ryggmid = popup.getMenu().getItem(4);
 
+        itemSitsTextNF = new SpannableString("Sits (Not found)");
+        itemSitsTextNF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.sits)), 0, itemSitsTextNF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        itemSitsTextF = new SpannableString("Sits (Found)");
+        itemSitsTextF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.sits)), 0, itemSitsTextF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        itemRightSideNF = new SpannableString("Höger sida (Not found)");
+        itemRightSideNF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.sidaHoger)), 0, itemRightSideNF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        itemRightSideF = new SpannableString("Höger sida (Found)");
+        itemRightSideF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.sidaHoger)), 0, itemRightSideF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        itemLeftSideNF = new SpannableString("Höger sida (Not found)");
+        itemLeftSideNF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.sidaVanster)), 0, itemLeftSideNF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        itemLeftSideF = new SpannableString("Höger sida (Found)");
+        itemLeftSideF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.sidaVanster)), 0, itemLeftSideF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        itemRyggMidNF  = new SpannableString("Rygg mitt (Not found)");
+        itemRyggMidNF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.ryggMid)), 0, itemRyggMidNF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        itemRyggMidF  = new SpannableString("Rygg mitt (Found)");
+        itemRyggMidF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.ryggMid)), 0, itemRyggMidF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        itemRyggTopNF  = new SpannableString("Rygg topp (Not found)");
+        itemRyggTopNF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.ryggTop)), 0, itemRyggTopNF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        itemRyggTopF  = new SpannableString("Rygg topp (Found)");
+        itemRyggTopF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.ryggTop)), 0, itemRyggTopF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
         popup.show();
 
         if(sitsFound){
-            item_sits.setTitle("Sits (Found)");
+            item_sits.setTitle(itemSitsTextF);
         }
         else
-            item_sits.setTitle("Sits (Not found)");
+            item_sits.setTitle(itemSitsTextNF);
 
         if(leftSideFound){
-            item_right.setTitle("Höger ben (Found)");
+            item_right.setTitle(itemRightSideF);
         }
         else
-            item_right.setTitle("Höger ben (Not found");
+            item_right.setTitle(itemRightSideNF);
 
         if(ryggMidFound){
-            item_ryggmid.setTitle("Rygg mid (Found)");
+            item_ryggmid.setTitle(itemRyggMidF);
         }
         else
-            item_ryggmid.setTitle("Rygg mid (Not found)");
+            item_ryggmid.setTitle(itemRyggMidNF);
 
         if(ryggTopFound){
-            item_ryggtop.setTitle("Rygg top (Found)");
+            item_ryggtop.setTitle(itemRyggTopF);
         }
         else
-            item_ryggtop.setTitle("Rygg top (Not found)");
+            item_ryggtop.setTitle(itemRyggTopNF);
 
 
     }
@@ -338,21 +386,22 @@ public class CameraActivity extends ARViewActivity {
                                     // If popuplist has been created
                                     if(initiated) {
 
+                                        // Tillåter oss att ändra listan dynamiskt
                                         if (sits.getIsRendered()) {
-                                            item_sits.setTitle("Sits (Found)");
+                                            item_sits.setTitle(itemSitsTextF);
                                             sitsFound = true;
                                         }
                                         if (sida.getIsRendered()) {
-                                            item_right.setTitle("Höger ben (Found)");
+                                            item_right.setTitle(itemRightSideF);
                                             leftSideFound = true;
                                         }
 
                                         if (rygg_mid.getIsRendered()) {
-                                            item_ryggmid.setTitle("Rygg mid (Found)");
+                                            item_ryggmid.setTitle(itemRyggMidF);
                                             ryggMidFound = true;
                                         }
                                         if (rygg_top.getIsRendered()) {
-                                            item_ryggtop.setTitle("Rygg top (Found)");
+                                            item_ryggtop.setTitle(itemRyggTopF);
                                             ryggTopFound = true;
                                         }
                                     }
