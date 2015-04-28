@@ -15,11 +15,89 @@
         >
 
         <TextView
-            android:id="@+id/topText"
+            android:id="@+id/topText0"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering"
+            android:visibility="visible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+
+        <TextView
+            android:id="@+id/topText1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="Montering, steg 1"
-           android:visibility="invisible"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 2"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText3"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 3"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText4"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 4"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText5"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 5"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText6"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering, steg 6"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:fontFamily="Berlin Sans FB"
+            android:textStyle="bold"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/topText7"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Montering KLAR!"
+            android:visibility="invisible"
             android:gravity="center"
             android:fontFamily="Berlin Sans FB"
             android:textStyle="bold"
@@ -56,10 +134,50 @@
         >
 
         <ImageView
-            android:id="@+id/infoImage"
+            android:id="@+id/infoImage1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:src="@drawable/step1"
+            android:src="@drawable/step1_color"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/infoImage2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step2_color"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/infoImage3"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step3_color"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/infoImage4"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step4_color"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/infoImage5"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step5_color"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/infoImage6"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/step6_color"
             android:visibility="gone"
             />
 
