@@ -38,15 +38,10 @@ public class CameraActivity extends ARViewActivity {
     private TrackingValuesVector poses;
 
     TextView topText, infoText;
-
     Button prevButton, nextButton;
-
     RelativeLayout infoBox;
-
-    ImageButton helpButton;
+    ImageButton helpButton, listButton;
     ImageView infoImage;
-
-    boolean helpClick = true;
 
     /**
      * Currently loaded tracking configuration file
@@ -60,13 +55,13 @@ public class CameraActivity extends ARViewActivity {
     // Da popup menu
     PopupMenu popup;
 
-    MenuItem item_sits;
-    MenuItem item_right;
-    MenuItem item_left;
-    MenuItem item_ryggtop;
-    MenuItem item_ryggmid;
+    MenuItem item_sits, item_right, item_left,item_ryggtop, item_ryggmid;
 
     boolean initiated = false;
+
+    //Bools to check if button in topbar is clicked or not
+    boolean helpClick = true;
+    boolean listClick = false;
 
     boolean sitsFound = false;
     boolean leftSideFound = false;
@@ -74,10 +69,8 @@ public class CameraActivity extends ARViewActivity {
     boolean ryggMidFound = false;
     boolean ryggTopFound = false;
 
-
     @Override
-    protected int getGUILayout()
-    {
+    protected int getGUILayout() {
         // Attaching layout to the activity
         return R.layout.camera_activity;
     }
@@ -99,6 +92,7 @@ public class CameraActivity extends ARViewActivity {
         prevButton = (Button) mGUIView.findViewById(R.id.prevButton);
         nextButton = (Button) mGUIView.findViewById(R.id.nextButton);
         helpButton = (ImageButton) mGUIView.findViewById(R.id.helpBtn);
+        listButton = (ImageButton) mGUIView.findViewById(R.id.listBtn);
         infoBox = (RelativeLayout) mGUIView.findViewById(R.id.infoBox);
         infoImage = (ImageView) mGUIView.findViewById(R.id.infoImage);
 
@@ -119,6 +113,7 @@ public class CameraActivity extends ARViewActivity {
                 sits.setVisible(true);
                 rygg_mid.setVisible(true);
                 rygg_top.setVisible(true);
+                prevButton.setVisibility(View.GONE);
                 topText.setText(R.string.step_zero);
                 infoImage.setVisibility(View.INVISIBLE);
                 infoText.setText(R.string.stepStart);
@@ -130,6 +125,7 @@ public class CameraActivity extends ARViewActivity {
                 sida1.setVisible(false);
                 sida2.setVisible(false);
                 sits.setVisible(false);
+                prevButton.setVisibility(View.VISIBLE);
                 topText.setText(R.string.step_one);
                 infoText.setVisibility(View.INVISIBLE);
                 infoImage.setVisibility(View.VISIBLE);
@@ -177,6 +173,7 @@ public class CameraActivity extends ARViewActivity {
                 sida1.setVisible(false);
                 sida2.setVisible(false);
                 sits.setVisible(false);
+                nextButton.setVisibility(View.VISIBLE);
                 topText.setText(R.string.step_six);
                 infoImage.setImageResource(R.drawable.step6_color);
                 infoText.setVisibility(View.INVISIBLE);
@@ -188,6 +185,7 @@ public class CameraActivity extends ARViewActivity {
                 sida1.setVisible(false);
                 sida2.setVisible(false);
                 sits.setVisible(false);
+                nextButton.setVisibility(View.GONE);
                 topText.setText(R.string.step_seven);
                 infoImage.setVisibility(View.INVISIBLE);
                 infoText.setText(R.string.stepDone);
@@ -209,17 +207,8 @@ public class CameraActivity extends ARViewActivity {
         }
 
         showStep();
+        showinfoBox();
         topText.setVisibility(View.VISIBLE);
-
-        //Show previous button only if not at first step
-        if(buildStep == 0) {
-            prevButton.setVisibility(View.GONE);
-            Log.i("NextStep", "Steg nr: "+buildStep);
-        }
-        else{
-            prevButton.setVisibility(View.VISIBLE);
-            Log.i("NextStep > 1", "Steg nr: "+buildStep);
-        }
     }
 
     /**
@@ -231,16 +220,7 @@ public class CameraActivity extends ARViewActivity {
             buildStep--;
         }
         showStep();
-
-        //Show next button only if not at last step
-        if(buildStep == 7) {
-            nextButton.setVisibility(View.GONE);
-            Log.i("PrevStep", "Steg nr: " + buildStep);
-        }
-        else{
-            nextButton.setVisibility(View.VISIBLE);
-            Log.i("PrevStep < 6", "Steg nr: " + buildStep);
-        }
+        showinfoBox();
     }
 
     public void btnHelp(View v)
@@ -257,9 +237,14 @@ public class CameraActivity extends ARViewActivity {
         }
     }
 
+    public void showinfoBox(){
+        infoBox.setVisibility(View.VISIBLE);
+        helpButton.setImageResource(R.drawable.wrench_button_pressed);
+        helpClick = true;
+    }
+
     //List
     public void showPopup(View v) {
-
         popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_cameralist, popup.getMenu());
@@ -300,6 +285,7 @@ public class CameraActivity extends ARViewActivity {
     public void listBtnClick(View v) {
         //findViewById(R.id.infoBox).setVisibility(View.INVISIBLE);
         initiated = true;
+
         showPopup(v);
     }
 
@@ -339,8 +325,6 @@ public class CameraActivity extends ARViewActivity {
             final File ryggMidModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_mid.obj");
             final File sidaModel2 = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
 
-
-
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
                 sits.setRotation(new Rotation(1.57f, 0.0f, 0.0f));
@@ -372,8 +356,6 @@ public class CameraActivity extends ARViewActivity {
                 else
                     MetaioDebug.log(Log.ERROR, "Error loading geometry: "+sidaModel);
             }
-
-
 
             if (ryggToppModel != null) {
                 rygg_top = metaioSDK.createGeometry(ryggToppModel);
@@ -445,14 +427,12 @@ public class CameraActivity extends ARViewActivity {
 
         @Override
         public void onTrackingEvent(TrackingValuesVector trackingValues) {
-
             // if we detect any target, we bind the loaded geometry to this target
             if (sida1 != null && sits != null && rygg_top != null && rygg_mid != null) {
 
                 for (int i = 0; i < trackingValues.size(); i++) {
 
                     //TrackingValue is received from TrackingData_PictureMarker.xml
-
                     if (metaioSDK != null) {
                         // get all detected poses/targets
                         poses = metaioSDK.getTrackingValues();
@@ -463,10 +443,8 @@ public class CameraActivity extends ARViewActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-
                                     // If popuplist has been created
                                     if(initiated) {
-
                                         if (sits.getIsRendered()) {
                                             item_sits.setTitle("Sits (Found)");
                                             sitsFound = true;
@@ -498,8 +476,6 @@ public class CameraActivity extends ARViewActivity {
                                 rygg_mid.setVisible(true);
                                 rygg_top.setVisible(true);
                                 sits.setVisible(true);
-
-
                             }
 
                             if(buildStep==1) {
@@ -518,15 +494,12 @@ public class CameraActivity extends ARViewActivity {
                                 sida2.setVisible(true);
                             }
 
-
                             //Added
-
                             sida1.setCoordinateSystemID(1);
                             sida2.setCoordinateSystemID(5);
                             sits.setCoordinateSystemID(2);
                             rygg_mid.setCoordinateSystemID(3);
                             rygg_top.setCoordinateSystemID(4);
-
                         }
                     }
                 }
