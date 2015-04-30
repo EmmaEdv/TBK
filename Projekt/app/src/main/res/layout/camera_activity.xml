@@ -40,9 +40,10 @@
             android:layout_height="@dimen/topBarButtonSize"
             android:onClick="listBtnClick"
             android:layout_toLeftOf="@+id/helpBtn"
-            android:src="@drawable/list_button"
+            android:src="@drawable/button_state"
             android:background="@android:color/transparent"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:clickable="false" />
 
 
     </RelativeLayout>

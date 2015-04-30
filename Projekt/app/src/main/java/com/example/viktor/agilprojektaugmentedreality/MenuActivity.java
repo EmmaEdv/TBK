@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-
 /**
  * Created by emmaedv on 21/04/15.
  */
