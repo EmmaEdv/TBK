@@ -62,10 +62,10 @@ public class MenuActivity extends Activity{
         headerText = new TextView(this);
 
         //Set id:s
-        listBtn.setId(R.id.listButton);
-        arBtn.setId(R.id.arButton);
-        listText.setId(R.id.listText);
-        arText.setId(R.id.arText);
+        listBtn.setId(R.id.listBtn);
+        arBtn.setId(R.id.arBtn);
+        listText.setId(R.id.listTxt);
+        arText.setId(R.id.arTxt);
         headerText.setId(R.id.headerText);
 
         //Set text and images
