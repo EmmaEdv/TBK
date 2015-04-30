@@ -81,13 +81,12 @@ public class ThumbnailAdapter extends ArrayAdapter<ThumbnailItem>{
         //set the text for the title view. from the list in MainActivity
         titleView.setText(itemsArrayList.get(position).getTitle());
 
-
-
         // 6. Return rowView
         return rowView;
     }
-    public void updateStatus(int position){
+    public void updateStatus(int position, boolean found){
         TextView tv;
+        itemsArrayList.get(position).setFound(found);
         View v = getView(position, null, null);
         if(v != null){
             tv = (TextView)v.findViewById(R.id.status);

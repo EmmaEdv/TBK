@@ -92,7 +92,10 @@ public class MainActivity extends Activity {
         final ThumbnailAdapter adapter = new ThumbnailAdapter(this, items);
         listView.setAdapter(adapter);
 
-        adapter.updateStatus(1);
+        adapter.updateStatus(1, true);
+        adapter.updateStatus(2, false);
+        adapter.updateStatus(3, false);
+        adapter.updateStatus(4, false);
 
         /*
         Click listener for item
