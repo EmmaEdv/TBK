@@ -52,6 +52,17 @@ public class MainActivity extends Activity {
     protected static float[] sitsNormals;
     protected static float[] sitsCoords;
 
+
+    // Arrays for screw
+    protected static float[] screwVerts;
+    protected static float[] screwNormals;
+    protected static float[] screwCoords;
+
+    // Arrays for plug
+    protected static float[] plugVerts;
+    protected static float[] plugNormals;
+    protected static float[] plugCoords;
+
     private GLSurfaceView mSurfaceView;
     private GLRenderer mGLRenderer;
     protected static int numObjectVerts;
@@ -79,6 +90,10 @@ public class MainActivity extends Activity {
 
         // Load vertex, normal and color lists for all objects
         loadObjectLists();
+
+        // Set initial lists to be the correct length for our default object
+        numObjectVerts = ryggTopVerts.length;
+        currentObject = 1;
 
         // Create our openGL renderer
         mGLRenderer = new GLRenderer();
@@ -122,6 +137,14 @@ public class MainActivity extends Activity {
                 case 5:
                     currentObject = 5;
                     numObjectVerts = sitsVerts.length;
+                    break;
+                case 7:
+                    currentObject = 7;
+                    numObjectVerts = screwVerts.length;
+                    break;
+                case 8:
+                    currentObject = 8;
+                    numObjectVerts = plugVerts.length;
                     break;
                 default:
                     currentObject = 1;
@@ -370,11 +393,16 @@ public class MainActivity extends Activity {
             ryggMittVerts = readObjVertecies(R.raw.rygg_mid);
             ramVerts = readObjVertecies(R.raw.sida);
             sitsVerts = readObjVertecies(R.raw.sits);
+            screwVerts = readObjVertecies(R.raw.skruv);
+            plugVerts = readObjVertecies(R.raw.plugg);
 
             ryggTopNormals = readObjNormals(R.raw.rygg_top);
             ryggMittNormals = readObjNormals(R.raw.rygg_mid);
             ramNormals = readObjNormals(R.raw.sida);
             sitsNormals = readObjNormals(R.raw.sits);
+            screwNormals = readObjNormals(R.raw.skruv);
+            plugNormals = readObjNormals(R.raw.plugg);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -385,6 +413,7 @@ public class MainActivity extends Activity {
         ramCoordsRight = createColorCoords(0.72f, 0.65f, 0.91f, 1.0f);
         ramCoordsLeft = createColorCoords(0.65f, 0.91f, 0.90f, 1.0f);
         sitsCoords = createColorCoords(0.88f, 0.74f, 0.47f, 1.0f);
-
+        screwCoords = createColorCoords(1.0f, 1.0f, 1.0f, 1.0f);
+        plugCoords = createColorCoords(1.0f, 1.0f, 1.0f, 1.0f);
     }
 }
