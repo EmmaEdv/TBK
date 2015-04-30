@@ -269,7 +269,7 @@ public class CameraActivity extends ARViewActivity {
 
     public void backBtnClick(View v) {
         v.setSelected(!v.isSelected());
-
+        goBack();
     }
 
     //List
@@ -357,7 +357,10 @@ public class CameraActivity extends ARViewActivity {
 
     @Override
     public void onBackPressed() {
+        goBack();
+    }
 
+    public void goBack(){
         // Create intent and with it send a bundle
         // populated with data if we found parts
         Intent returnIntent = new Intent();

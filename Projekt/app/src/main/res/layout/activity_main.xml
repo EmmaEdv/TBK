@@ -31,8 +31,10 @@
             android:id="@+id/arrowBtn1"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:src="@drawable/back_button"
-            android:scaleType="fitXY" />
+            android:src="@drawable/backbuttonstate"
+            android:scaleType="fitXY"
+            android:background="@color/transparent"
+            android:onClick="backBtnClick" />
 
     </RelativeLayout>
 
