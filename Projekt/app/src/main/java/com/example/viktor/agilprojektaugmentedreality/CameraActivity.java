@@ -53,6 +53,7 @@ public class CameraActivity extends ARViewActivity {
 
     private MetaioSDKCallbackHandler mCallbackHandler;
 
+
     private int buildStep = 0;
 
     // Da popup menu
@@ -191,11 +192,11 @@ public class CameraActivity extends ARViewActivity {
         }
 
         showStep();
-        topText.setVisibility(View.VISIBLE);
+        //topText.setVisibility(View.VISIBLE);
 
         //findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
-        prevButton.setVisibility(View.VISIBLE);
-        infoText.setVisibility(View.GONE);
+        //prevButton.setVisibility(View.VISIBLE);
+        //infoText.setVisibility(View.GONE);
     }
 
     /**
@@ -310,16 +311,16 @@ public class CameraActivity extends ARViewActivity {
             final File ryggMidModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_mid.obj");
             final File sidaModel2 = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
 
-
-
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
                 sits.setRotation(new Rotation(1.57f, 0.0f, 0.0f));
-                sits.setTranslation(new Vector3d(-900.0f, 900.0f, -600.0f));
+                sits.setTranslation(new Vector3d(-2300.0f, 2800.0f, -1300.0f));
+                sits.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "seatTexture.png"));
+                sits.setTransparency(0.5f);
 
                 if (sits != null) {
                     // Set geometry properties
-                    sits.setScale(11f);
+                    sits.setScale(24.0f);
                     sits.setVisible(false);
                     MetaioDebug.log("Loaded geometry " + sitsModel);
                 }
@@ -328,29 +329,41 @@ public class CameraActivity extends ARViewActivity {
             }
 
             if (sidaModel != null) {
-
+                //Specialare, samma model för båda sidorna, kan behövas bytas ut senare...
                 sida1 = metaioSDK.createGeometry(sidaModel);
+                sida1.setTranslation(new Vector3d(200.0f, -5500.0f, -1000.0f));
+                sida1.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "leftSideTexture.png"));
+                sida1.setTransparency(0.5f);
+
                 sida2 = metaioSDK.createGeometry(sidaModel2);
+                sida2.setRotation(new Rotation(0.0f, 3.14f, 0.0f));
+                sida2.setTranslation(new Vector3d(200.0f, -5000.0f, -1000.0f));
+                sida2.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "rightSideTexture.png"));
+                sida2.setTransparency(0.5f);
 
                 if (sida1 != null) {
                     // Set geometry properties
-                    sida1.setScale(4f);
+                    sida1.setScale(23.0f);
+                    sida2.setScale(23.0f);
+
                     sida1.setVisible(false);
-                    sida2.setScale(4f);
-                    sida2.setVisible(false);
                     MetaioDebug.log("Loaded geometry "+sidaModel);
                 }
                 else
                     MetaioDebug.log(Log.ERROR, "Error loading geometry: "+sidaModel);
             }
 
-
-
             if (ryggToppModel != null) {
                 rygg_top = metaioSDK.createGeometry(ryggToppModel);
+                rygg_top.setRotation(new Rotation(0.0f, 1.57f, 0.0f));
+                rygg_top.setTranslation(new Vector3d(1600.0f, -400.0f, -300.0f));
+                rygg_top.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "backTopTexture.png"));
+                rygg_top.setTransparency(0.5f);
+
                 if (rygg_top != null) {
                     // Set geometry properties
-                    rygg_top.setScale(4f);
+                    rygg_top.setScale(24.0f);
+
                     rygg_top.setVisible(false);
                     MetaioDebug.log("Loaded geometry " + ryggToppModel);
                 }
@@ -360,9 +373,13 @@ public class CameraActivity extends ARViewActivity {
 
             if (ryggMidModel != null) {
                 rygg_mid = metaioSDK.createGeometry(ryggMidModel);
+                rygg_mid.setRotation(new Rotation(0.0f, 1.57f, 0.0f));
+                rygg_mid.setTranslation(new Vector3d(-100.0f,4000f, -300.0f));
+                rygg_mid.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "backMidTexture.png"));
+                rygg_mid.setTransparency(0.5f);
                 if (rygg_mid != null) {
                     // Set geometry properties
-                    rygg_mid.setScale(4f);
+                    rygg_mid.setScale(22.0f);
                     rygg_mid.setVisible(false);
                     MetaioDebug.log("Loaded geometry " + ryggMidModel);
                 }
@@ -459,9 +476,9 @@ public class CameraActivity extends ARViewActivity {
                                 }
                             });
 
-                            sits.setVisible(true);
-                            rygg_mid.setVisible(true);
-                            rygg_top.setVisible(true);
+                          //  sits.setVisible(true);
+                          //  rygg_mid.setVisible(true);
+                           // rygg_top.setVisible(true);
 
                             if(buildStep==0) {
                                 sida1.setVisible(true);
