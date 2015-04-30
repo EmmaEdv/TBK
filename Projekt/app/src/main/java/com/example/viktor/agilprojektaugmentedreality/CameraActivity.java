@@ -1,5 +1,6 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -135,65 +136,65 @@ public class CameraActivity extends ARViewActivity {
                 rygg_top.setVisible(true);
                 TC.case0(this.mGUIView);
 
-            break;
+                break;
             case 1:
                 rygg_mid.setVisible(true);
                 rygg_top.setVisible(true);
                 rightSide.setVisible(false);
                 leftSide.setVisible(false);
                 sits.setVisible(false);
-              TC.case1(this.mGUIView);
-            break;
+                TC.case1(this.mGUIView);
+                break;
             case 2:
                 rygg_mid.setVisible(false);
                 rygg_top.setVisible(false);
                 rightSide.setVisible(false);
                 leftSide.setVisible(false);
                 sits.setVisible(true);
-             TC.case2(this.mGUIView);
+                TC.case2(this.mGUIView);
 
-            break;
+                break;
             case 3:
                 rygg_mid.setVisible(false);
                 rygg_top.setVisible(false);
                 rightSide.setVisible(true);
                 leftSide.setVisible(false);
                 sits.setVisible(false);
-              TC.case3(this.mGUIView);
-            break;
+                TC.case3(this.mGUIView);
+                break;
             case 4:
                 rygg_mid.setVisible(false);
                 rygg_top.setVisible(false);
                 rightSide.setVisible(false);
                 leftSide.setVisible(true);
                 sits.setVisible(false);
-             TC.case4(this.mGUIView);
+                TC.case4(this.mGUIView);
 
-            break;
+                break;
             case 5:
                 rygg_mid.setVisible(false);
                 rygg_top.setVisible(false);
                 rightSide.setVisible(false);
                 leftSide.setVisible(false);
                 sits.setVisible(false);
-             TC.case5(this.mGUIView);
-            break;
+                TC.case5(this.mGUIView);
+                break;
             case 6:
                 rygg_mid.setVisible(false);
                 rygg_top.setVisible(false);
                 rightSide.setVisible(false);
                 leftSide.setVisible(false);
                 sits.setVisible(false);
-               TC.case6(this.mGUIView);
-            break;
+                TC.case6(this.mGUIView);
+                break;
             case 7:
                 rygg_mid.setVisible(false);
                 rygg_top.setVisible(false);
                 rightSide.setVisible(false);
                 leftSide.setVisible(false);
                 sits.setVisible(false);
-             TC.case7(this.mGUIView);
-             break;
+                TC.case7(this.mGUIView);
+                break;
 
         }
 
@@ -323,6 +324,23 @@ public class CameraActivity extends ARViewActivity {
         else
             item_ryggtop.setTitle(itemRyggTopNF);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        // Create intent and with it send a bundle
+        // populated with data if we found parts
+        Intent returnIntent = new Intent();
+
+        returnIntent.putExtra("foundSits", sitsFound);
+        returnIntent.putExtra("foundRightSide", rightSideFound);
+        returnIntent.putExtra("foundLeftSide", leftSideFound);
+        returnIntent.putExtra("foundRyggMid", ryggMidFound);
+        returnIntent.putExtra("foundRyggTop", ryggTopFound);
+
+        setResult(0,returnIntent);
+        finish();
     }
 
     public void listBtnClick(View v) {

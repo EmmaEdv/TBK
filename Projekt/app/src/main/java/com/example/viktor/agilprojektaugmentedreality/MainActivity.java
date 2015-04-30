@@ -93,6 +93,13 @@ public class MainActivity extends Activity {
         final ThumbnailAdapter adapter = new ThumbnailAdapter(this, items);
         listView.setAdapter(adapter);
 
+        //update the status of the listitems according to the result form metaio recognition
+        adapter.updateStatus(1, getIntent().getBooleanExtra("foundRyggTop", false));
+        adapter.updateStatus(2, getIntent().getBooleanExtra("foundRyggMid", false));
+        adapter.updateStatus(3, getIntent().getBooleanExtra("foundRightSide", false));
+        adapter.updateStatus(4, getIntent().getBooleanExtra("foundLeftSide", false));
+        adapter.updateStatus(5, getIntent().getBooleanExtra("foundSits", false));
+
         /*
         Click listener for item
          */
@@ -172,15 +179,16 @@ public class MainActivity extends Activity {
     private ArrayList<ThumbnailItem> generateData() {
         ArrayList<ThumbnailItem> items = new ArrayList<ThumbnailItem>();
 
-        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Stora delar"));
-        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Ryggstöd topp"));
-        items.add(new ThumbnailItem(R.drawable.rygg_mitt, "Ryggstöd mitten"));
-        items.add(new ThumbnailItem(R.drawable.ram, "Ram höger"));
-        items.add(new ThumbnailItem(R.drawable.ram, "Ram vänster"));
-        items.add(new ThumbnailItem(R.drawable.sits, "Sits"));
-        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Små delar"));
-        items.add(new ThumbnailItem(R.drawable.skruv, "Skruv 6x"));
-        items.add(new ThumbnailItem(R.drawable.plugg, "Plugg 2x"));
+
+        items.add(new ThumbnailItem("Stora delar"));
+        items.add(new ThumbnailItem(R.drawable.rygg_topp, "Ryggstöd topp", false));
+        items.add(new ThumbnailItem(R.drawable.rygg_mitt, "Ryggstöd mitten", false));
+        items.add(new ThumbnailItem(R.drawable.ram, "Ram höger",false));
+        items.add(new ThumbnailItem(R.drawable.ram, "Ram vänster",false));
+        items.add(new ThumbnailItem(R.drawable.sits, "Sits", false));
+        items.add(new ThumbnailItem("Små delar"));
+        items.add(new ThumbnailItem(R.drawable.skruv, "Skruv", false));
+        items.add(new ThumbnailItem(R.drawable.plugg, "Plugg", false));
 
         return items;
     }
