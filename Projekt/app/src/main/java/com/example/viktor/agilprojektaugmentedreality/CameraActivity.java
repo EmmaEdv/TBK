@@ -1,5 +1,6 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -323,6 +324,21 @@ public class CameraActivity extends ARViewActivity {
         else
             item_ryggtop.setTitle(itemRyggTopNF);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent returnIntent = new Intent();
+
+        returnIntent.putExtra("foundSits", sitsFound);
+        returnIntent.putExtra("foundRightSide", rightSideFound);
+        returnIntent.putExtra("foundLeftSide", leftSideFound);
+        returnIntent.putExtra("foundRyggMid", ryggMidFound);
+        returnIntent.putExtra("foundRyggTop", ryggTopFound);
+
+        setResult(0,returnIntent);
+        finish();
     }
 
     public void listBtnClick(View v) {

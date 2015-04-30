@@ -23,12 +23,14 @@ public class MenuActivity extends Activity{
     RelativeLayout layout, header;
     ImageButton listBtn, arBtn;
     TextView listText, arText, headerText;
+    Bundle returnDataBundle;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
 
+        returnDataBundle = new Bundle();
 
         //Landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -140,8 +142,14 @@ public class MenuActivity extends Activity{
         listBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent listScreen = new Intent(getApplicationContext(),  MainActivity.class);
-                startActivity(listScreen);
+
+                if(returnDataBundle.size() > 0)
+                    listScreen.putExtras(returnDataBundle);
+
+                    startActivity(listScreen);
+
             }
         });
 
@@ -149,9 +157,17 @@ public class MenuActivity extends Activity{
             @Override
             public void onClick(View v) {
                 Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
-                startActivity(cameraScreen);
+                startActivityForResult(cameraScreen, 1);
             }
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+
+            returnDataBundle = data.getExtras();
+        }
     }
 
 }
