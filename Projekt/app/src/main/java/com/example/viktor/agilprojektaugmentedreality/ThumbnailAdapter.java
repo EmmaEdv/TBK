@@ -38,16 +38,22 @@ public class ThumbnailAdapter extends ArrayAdapter<ThumbnailItem>{
         // 2. Get rowView from inflater
         View rowView = inflater.inflate(R.layout.row, parent, false);
 
-        // 3. Set different title views according to position in the list
+        // 3. set views for structuring different elements in the rows
+
+        //view for displaying the title
         TextView titleView;
+
+        //view for displaying the has-been-found-by-metaio status
+        TextView statusView;
 
         // 3.1 Create typeface for custom fonts
         Typeface font = Typeface.createFromAsset(context.getAssets(), "Berlin Sans FB.ttf");
 
+        //for now, the headeres are hard coded
         if(position == 0 || position == 6) {
             rowView.setBackgroundColor(Color.DKGRAY);
 
-            // 4. Set the text for textView
+            // 4. Set the textView
             titleView = (TextView) rowView.findViewById(R.id.headtitle);
 
             // 4.1 Set font for Textview
@@ -56,21 +62,42 @@ public class ThumbnailAdapter extends ArrayAdapter<ThumbnailItem>{
         else {
             rowView.setBackgroundColor(Color.WHITE);
 
-            // 4.2 Set the text for textView
+            // 4.2 Set the textView
             titleView = (TextView) rowView.findViewById(R.id.title);
+            //and the statusview
+            statusView = (TextView) rowView.findViewById(R.id.status);
 
-            // 4.3 Set font for Textview ...again
+            //set the statusviews text content
+            statusView.setText(itemsArrayList.get(position).getStatus());
+
+            //if the status is FOUND set the text to green. not great solution..
+            if(itemsArrayList.get(position).getFound()){
+                statusView.setTextColor(Color.parseColor("#4BE38A"));
+            }
+            // 4.3 Set font for Textview and StatusView
             titleView.setTypeface(font);
+            statusView.setTypeface(font);
 
             // 5. Set image
             ImageView thumbnailView = (ImageView) rowView.findViewById(R.id.thumbnail);
             thumbnailView.setImageResource(itemsArrayList.get(position).getResource());
         }
 
+        //set the text for the title view. from the list in MainActivity
         titleView.setText(itemsArrayList.get(position).getTitle());
 
         // 6. Return rowView
         return rowView;
     }
 
+    //method for uptating the found property of each item.
+    public void updateStatus(int position, boolean found){
+        TextView tv;
+        itemsArrayList.get(position).setFound(found);
+        View v = getView(position, null, null);
+        if(v != null){
+            tv = (TextView)v.findViewById(R.id.status);
+            tv.setText(itemsArrayList.get(position).getStatus());
+        }
+    }
 }

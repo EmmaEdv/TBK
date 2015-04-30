@@ -1,5 +1,6 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ public class CameraActivity extends ARViewActivity {
     File trackingConfigFile;
 
     private MetaioSDKCallbackHandler mCallbackHandler;
+
 
     private int buildStep = 0;
 
@@ -228,6 +230,7 @@ public class CameraActivity extends ARViewActivity {
         }
 
         showStep();
+
         showinfoBox();
         topText.setVisibility(View.VISIBLE);
     }
@@ -270,8 +273,15 @@ public class CameraActivity extends ARViewActivity {
     }
 
     //List
-    public void showPopup(View v) {
+    public void showPopup(final View v) {
         popup = new PopupMenu(this, v);
+        popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                v.setSelected(false);
+            }
+        });
+
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_cameralist, popup.getMenu());
 
@@ -311,7 +321,6 @@ public class CameraActivity extends ARViewActivity {
         itemRyggTopF  = new SpannableString("Rygg topp (Found)");
         itemRyggTopF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.ryggTop)), 0, itemRyggTopF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-
         popup.show();
 
         if(sitsFound){
@@ -346,10 +355,28 @@ public class CameraActivity extends ARViewActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        // Create intent and with it send a bundle
+        // populated with data if we found parts
+        Intent returnIntent = new Intent();
+
+        returnIntent.putExtra("foundSits", sitsFound);
+        returnIntent.putExtra("foundRightSide", rightSideFound);
+        returnIntent.putExtra("foundLeftSide", leftSideFound);
+        returnIntent.putExtra("foundRyggMid", ryggMidFound);
+        returnIntent.putExtra("foundRyggTop", ryggTopFound);
+
+        setResult(0,returnIntent);
+        finish();
+    }
+
     public void listBtnClick(View v) {
         //findViewById(R.id.infoBox).setVisibility(View.INVISIBLE);
+        Log.i("listBtnClick", "isSelected: " + v.isSelected());
+        v.setSelected(!v.isSelected());
         initiated = true;
-
         showPopup(v);
     }
 
@@ -392,11 +419,13 @@ public class CameraActivity extends ARViewActivity {
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
                 sits.setRotation(new Rotation(1.57f, 0.0f, 0.0f));
-                sits.setTranslation(new Vector3d(-900.0f, 900.0f, -600.0f));
+                sits.setTranslation(new Vector3d(-2300.0f, 2800.0f, -1300.0f));
+                sits.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "seatTexture.png"));
+                sits.setTransparency(0.5f);
 
                 if (sits != null) {
                     // Set geometry properties
-                    sits.setScale(11f);
+                    sits.setScale(24.0f);
                     sits.setVisible(false);
                     MetaioDebug.log("Loaded geometry " + sitsModel);
                 }
@@ -406,15 +435,26 @@ public class CameraActivity extends ARViewActivity {
 
             if (sidaModel != null) {
 
+                //Specialare, samma model för båda sidorna, kan behövas bytas ut senare...
                 rightSide = metaioSDK.createGeometry(sidaModel);
+                rightSide.setTranslation(new Vector3d(200.0f, -5500.0f, -1000.0f));
+                rightSide.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "leftSideTexture.png"));
+                rightSide.setTransparency(0.5f);
+
                 leftSide = metaioSDK.createGeometry(sidaModel2);
+                leftSide.setRotation(new Rotation(0.0f, 3.14f, 0.0f));
+                leftSide.setTranslation(new Vector3d(200.0f, -5000.0f, -1000.0f));
+                leftSide.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "rightSideTexture.png"));
+                leftSide.setTransparency(0.5f);
+
 
                 if (rightSide != null) {
                     // Set geometry properties
-                    rightSide.setScale(4f);
+                    rightSide.setScale(23.0f);
+                    leftSide.setScale(23.0f);
+
                     rightSide.setVisible(false);
-                    leftSide.setScale(4f);
-                    leftSide.setVisible(false);
+
                     MetaioDebug.log("Loaded geometry "+sidaModel);
                 }
                 else
@@ -423,9 +463,15 @@ public class CameraActivity extends ARViewActivity {
 
             if (ryggToppModel != null) {
                 rygg_top = metaioSDK.createGeometry(ryggToppModel);
+                rygg_top.setRotation(new Rotation(0.0f, 1.57f, 0.0f));
+                rygg_top.setTranslation(new Vector3d(1600.0f, -400.0f, -300.0f));
+                rygg_top.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "backTopTexture.png"));
+                rygg_top.setTransparency(0.5f);
+
                 if (rygg_top != null) {
                     // Set geometry properties
-                    rygg_top.setScale(4f);
+                    rygg_top.setScale(24.0f);
+
                     rygg_top.setVisible(false);
                     MetaioDebug.log("Loaded geometry " + ryggToppModel);
                 }
@@ -435,9 +481,13 @@ public class CameraActivity extends ARViewActivity {
 
             if (ryggMidModel != null) {
                 rygg_mid = metaioSDK.createGeometry(ryggMidModel);
+                rygg_mid.setRotation(new Rotation(0.0f, 1.57f, 0.0f));
+                rygg_mid.setTranslation(new Vector3d(-100.0f,4000f, -300.0f));
+                rygg_mid.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "backMidTexture.png"));
+                rygg_mid.setTransparency(0.5f);
                 if (rygg_mid != null) {
                     // Set geometry properties
-                    rygg_mid.setScale(4f);
+                    rygg_mid.setScale(22.0f);
                     rygg_mid.setVisible(false);
                     MetaioDebug.log("Loaded geometry " + ryggMidModel);
                 }
@@ -536,9 +586,9 @@ public class CameraActivity extends ARViewActivity {
                                 }
                             });
 
-                            sits.setVisible(true);
-                            rygg_mid.setVisible(true);
-                            rygg_top.setVisible(true);
+                          //  sits.setVisible(true);
+                          //  rygg_mid.setVisible(true);
+                           // rygg_top.setVisible(true);
 
                             if(buildStep==0) {
                                 rightSide.setVisible(true);

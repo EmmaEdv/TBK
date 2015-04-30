@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-
 /**
  * Created by emmaedv on 21/04/15.
  */
@@ -24,11 +23,16 @@ public class MenuActivity extends Activity{
     ImageButton listBtn, arBtn;
     TextView listText, arText, headerText;
 
+    // Bundle to be populated with found parts from the metaio view
+    Bundle returnDataBundle;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
 
+        // Initiate bundle
+        returnDataBundle = new Bundle();
 
         //Landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -58,10 +62,10 @@ public class MenuActivity extends Activity{
         headerText = new TextView(this);
 
         //Set id:s
-        listBtn.setId(R.id.listButton);
-        arBtn.setId(R.id.arButton);
-        listText.setId(R.id.listText);
-        arText.setId(R.id.arText);
+        listBtn.setId(R.id.listBtn);
+        arBtn.setId(R.id.arBtn);
+        listText.setId(R.id.listTxt);
+        arText.setId(R.id.arTxt);
         headerText.setId(R.id.headerText);
 
         //Set text and images
@@ -94,7 +98,7 @@ public class MenuActivity extends Activity{
 
         //Set layout parameters
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-        RelativeLayout.LayoutParams.MATCH_PARENT);
+                RelativeLayout.LayoutParams.MATCH_PARENT);
         //Set params of layout
         layout.setLayoutParams(params);
         layout.setBackgroundColor(getResources().getColor(R.color.WHITE));
@@ -140,8 +144,15 @@ public class MenuActivity extends Activity{
         listBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent listScreen = new Intent(getApplicationContext(),  MainActivity.class);
+
+                // If bundle has been populated, send it with the intent to listScreen
+                if(returnDataBundle.size() > 0)
+                    listScreen.putExtras(returnDataBundle);
+
                 startActivity(listScreen);
+
             }
         });
 
@@ -149,9 +160,20 @@ public class MenuActivity extends Activity{
             @Override
             public void onClick(View v) {
                 Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
-                startActivity(cameraScreen);
+
+                // We expect a result from this intent.
+                startActivityForResult(cameraScreen, 1);
             }
         });
+    }
+
+    // Gets the data from the Metaioview to our bundle
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+
+            returnDataBundle = data.getExtras();
+        }
     }
 
 }
