@@ -264,8 +264,15 @@ public class CameraActivity extends ARViewActivity {
     }
 
     //List
-    public void showPopup(View v) {
+    public void showPopup(final View v) {
         popup = new PopupMenu(this, v);
+        popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                v.setSelected(false);
+            }
+        });
+
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_cameralist, popup.getMenu());
 
@@ -305,7 +312,6 @@ public class CameraActivity extends ARViewActivity {
         itemRyggTopF  = new SpannableString("Rygg topp (Found)");
         itemRyggTopF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.ryggTop)), 0, itemRyggTopF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-
         popup.show();
 
         if(sitsFound){
@@ -342,8 +348,9 @@ public class CameraActivity extends ARViewActivity {
 
     public void listBtnClick(View v) {
         //findViewById(R.id.infoBox).setVisibility(View.INVISIBLE);
+        Log.i("listBtnClick", "isSelected: " + v.isSelected());
+        v.setSelected(!v.isSelected());
         initiated = true;
-
         showPopup(v);
     }
 
