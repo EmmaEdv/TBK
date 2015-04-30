@@ -7,7 +7,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -41,10 +40,12 @@ public class MainActivity extends Activity {
     protected static float[] ryggMittNormals;
     protected static float[] ryggMittCoords;
 
-    // Arrays for "ram" objects
+    // Arrays for frame objects
     protected static float[] ramVerts;
     protected static float[] ramNormals;
-    protected static float[] ramCoords;
+    protected static float[] ramCoordsRight;
+    // Color array for the left frame
+    protected static float[] ramCoordsLeft;
 
     // Arrays for "sits" objects
     protected static float[] sitsVerts;
@@ -99,33 +100,34 @@ public class MainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
-                listView.setItemChecked(position, true);
-                // Check which object to render
-                switch (position) {
-                    case 1:
-                        currentObject = 1;
-                        numObjectVerts = ryggTopVerts.length;
-                        break;
-                    case 2:
-                        currentObject = 2;
-                        numObjectVerts = ryggMittVerts.length;
-                        break;
-                    case 3:
-                        currentObject = 3;
-                        numObjectVerts = ramVerts.length;
-                        break;
-                    case 4:
-                        currentObject = 4;
-                        numObjectVerts = sitsVerts.length;
-                        break;
-                    default:
-                        currentObject = 1;
-                        numObjectVerts = ryggTopVerts.length;
-                        break;
-                }
-
-
+            listView.setItemChecked(position, true);
+            // Check which object to render
+            switch (position) {
+                case 1:
+                    currentObject = 1;
+                    numObjectVerts = ryggTopVerts.length;
+                    break;
+                case 2:
+                    currentObject = 2;
+                    numObjectVerts = ryggMittVerts.length;
+                    break;
+                case 3:
+                    currentObject = 3;
+                    numObjectVerts = ramVerts.length;
+                    break;
+                case 4:
+                    currentObject = 4;
+                    numObjectVerts = ramVerts.length;
+                    break;
+                case 5:
+                    currentObject = 5;
+                    numObjectVerts = sitsVerts.length;
+                    break;
+                default:
+                    currentObject = 1;
+                    numObjectVerts = ryggTopVerts.length;
+                    break;
+            }
             }
         });
         // Get the GL Surface View from the activity XML by Id
@@ -173,7 +175,8 @@ public class MainActivity extends Activity {
         items.add(new ThumbnailItem(R.drawable.rygg_topp, "Stora delar"));
         items.add(new ThumbnailItem(R.drawable.rygg_topp, "Ryggstöd topp"));
         items.add(new ThumbnailItem(R.drawable.rygg_mitt, "Ryggstöd mitten"));
-        items.add(new ThumbnailItem(R.drawable.ram, "Ram 2x"));
+        items.add(new ThumbnailItem(R.drawable.ram, "Ram höger"));
+        items.add(new ThumbnailItem(R.drawable.ram, "Ram vänster"));
         items.add(new ThumbnailItem(R.drawable.sits, "Sits"));
         items.add(new ThumbnailItem(R.drawable.rygg_topp, "Små delar"));
         items.add(new ThumbnailItem(R.drawable.skruv, "Skruv 6x"));
@@ -334,9 +337,9 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Creates a color list with one single color
+     * Creates a color list with one single rgb-color
      */
-    public float[] createColorCoords(float color) {
+    public float[] createColorCoords(float r, float g, float b, float a) {
 
         // Calculate how many color coordinates that we need for the object
         double s = ( numObjectVerts * (4.0 / 3.0));
@@ -346,8 +349,12 @@ public class MainActivity extends Activity {
         float[] colorCoords = new float[SIZE];
 
         // Set the color
-        for(int i = 0; i < SIZE; i++)
-            colorCoords[i] = color;
+        for(int i = 0; i < SIZE; i += 4) {
+            colorCoords[i] = r;
+            colorCoords[i + 1] = g;
+            colorCoords[i + 2] = b;
+            colorCoords[i + 3] = a;
+        }
 
         return colorCoords;
     }
@@ -357,7 +364,7 @@ public class MainActivity extends Activity {
      */
     void loadObjectLists() {
 
-        // Object 1
+        // Set vertecies and normals of all objects
         try {
             ryggTopVerts = readObjVertecies(R.raw.rygg_top);
             ryggMittVerts = readObjVertecies(R.raw.rygg_mid);
@@ -372,15 +379,12 @@ public class MainActivity extends Activity {
             e.printStackTrace();
         }
 
-        try {
-            ryggTopNormals = readObjNormals(R.raw.rygg_top);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Set colors for all objects
+        ryggTopCoords = createColorCoords(0.68f, 0.91f, 0.65f, 1.0f);
+        ryggMittCoords = createColorCoords(0.91f, 0.66f, 0.66f, 1.0f);
+        ramCoordsRight = createColorCoords(0.72f, 0.65f, 0.91f, 1.0f);
+        ramCoordsLeft = createColorCoords(0.65f, 0.91f, 0.90f, 1.0f);
+        sitsCoords = createColorCoords(0.88f, 0.74f, 0.47f, 1.0f);
 
-        ryggTopCoords = createColorCoords(1.0f);
-        ryggMittCoords = createColorCoords(1.0f);
-        ramCoords = createColorCoords(1.0f);
-        sitsCoords = createColorCoords(1.0f);
     }
 }
