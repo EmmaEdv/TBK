@@ -44,6 +44,18 @@
             android:background="@android:color/transparent"
             android:scaleType="fitXY" />
 
+        <ImageButton
+            android:layout_width="@dimen/topBarButtonSize"
+            android:layout_height="@dimen/topBarButtonSize"
+            android:id="@+id/arrowBtn2"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentStart="false"
+            android:src="@drawable/backbuttonstate"
+            android:scaleType="fitXY"
+            android:layout_alignParentBottom="false"
+            android:background="@color/transparent"
+            android:onClick="backBtnClick" />
+
 
     </RelativeLayout>
 

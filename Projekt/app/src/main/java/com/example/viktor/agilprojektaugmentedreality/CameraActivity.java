@@ -43,7 +43,7 @@ public class CameraActivity extends ARViewActivity {
     TextView topText, infoText;
     Button prevButton, nextButton;
     RelativeLayout infoBox;
-    ImageButton helpButton, listButton;
+    ImageButton helpButton, listButton, arrowButton;
     ImageView infoImage;
 
     /**
@@ -113,6 +113,7 @@ public class CameraActivity extends ARViewActivity {
         nextButton = (Button) mGUIView.findViewById(R.id.nextButton);
         helpButton = (ImageButton) mGUIView.findViewById(R.id.helpBtn);
         listButton = (ImageButton) mGUIView.findViewById(R.id.listBtn);
+        arrowButton = (ImageButton) mGUIView.findViewById(R.id.arrowBtn);
         infoBox = (RelativeLayout) mGUIView.findViewById(R.id.infoBox);
         infoImage = (ImageView) mGUIView.findViewById(R.id.infoImage);
 
@@ -261,6 +262,11 @@ public class CameraActivity extends ARViewActivity {
         infoBox.setVisibility(View.VISIBLE);
         helpButton.setImageResource(R.drawable.wrench_button_pressed);
         helpClick = true;
+    }
+
+    public void backBtnClick(View v) {
+        v.setSelected(!v.isSelected());
+
     }
 
     //List
