@@ -267,6 +267,7 @@ public class MainActivity extends Activity {
     public void backBtnClick(View v){
         v.setSelected(!v.isSelected());
         finish();
+        MenuActivity.resetButtons();
     }
 
     /**
