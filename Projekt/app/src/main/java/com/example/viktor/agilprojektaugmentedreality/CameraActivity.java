@@ -19,10 +19,14 @@ import android.widget.TextView;
 import android.widget.PopupMenu;
 import com.metaio.sdk.ARViewActivity;
 import com.metaio.sdk.MetaioDebug;
+import com.metaio.sdk.jni.Camera;
+import com.metaio.sdk.jni.CameraVector;
 import com.metaio.sdk.jni.IGeometry;
+import com.metaio.sdk.jni.IMetaioSDKAndroid;
 import com.metaio.sdk.jni.IMetaioSDKCallback;
 import com.metaio.sdk.jni.Rotation;
 import com.metaio.sdk.jni.TrackingValuesVector;
+import com.metaio.sdk.jni.Vector2di;
 import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.io.AssetsManager;
 import java.io.File;
@@ -46,7 +50,6 @@ public class CameraActivity extends ARViewActivity {
     RelativeLayout infoBox;
     ImageButton helpButton, listButton, arrowButton;
     ImageView infoImage;
-
     /**
      * Currently loaded tracking configuration file
      */
@@ -102,6 +105,8 @@ public class CameraActivity extends ARViewActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.camera_activity);
 
+
+
         //Locks the orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -123,6 +128,7 @@ public class CameraActivity extends ARViewActivity {
         infoText.setTypeface(font);
         prevButton.setTypeface(font);
         nextButton.setTypeface(font);
+       // System.out.println(metaioSDK.getCameraParameters());
     }
 
 
@@ -153,7 +159,7 @@ public class CameraActivity extends ARViewActivity {
                 infoText.setVisibility(View.INVISIBLE);
                 infoImage.setVisibility(View.VISIBLE);
                 infoImage.setImageResource(R.drawable.step1_color);
-            break;
+                break;
             case 2:
                 rygg_mid.setVisible(false);
                 rygg_top.setVisible(false);
@@ -245,6 +251,30 @@ public class CameraActivity extends ARViewActivity {
         }
         showStep();
         showinfoBox();
+    }
+
+    //Starts the camera after animation is done
+    public void lightenCamera(){
+        metaioSDK.startCamera();
+        metaioSDK.setSeeThrough(false);
+        prevButton.setVisibility(View.VISIBLE);
+        nextButton.setVisibility(View.VISIBLE);
+        infoBox.setVisibility(View.VISIBLE);
+        helpButton.setImageResource(R.drawable.wrench_button_pressed);
+        helpClick = true;
+
+        }
+    //Darkens the camera before animation
+    //infoBox is set to invisible, make sure you also handle the showInfoBox() function in prev and nextStep()
+    public void darkenCamera(){
+        metaioSDK.stopCamera();
+        //metaioSDK.setSeeThroughColor(255,0,0,255);
+        metaioSDK.setSeeThrough(true);
+        prevButton.setVisibility(View.GONE);
+        nextButton.setVisibility(View.GONE);
+        infoBox.setVisibility(View.INVISIBLE);
+        helpButton.setImageResource(R.drawable.wrench_button);
+        helpClick = false;
     }
 
     public void btnHelp(View v)
@@ -522,6 +552,54 @@ public class CameraActivity extends ARViewActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    //Sets camera resolution and picks camera.
+    @Override
+    protected void startCamera()
+    {
+        final CameraVector cameras = metaioSDK.getCameraList();
+
+
+        if (!cameras.isEmpty())
+        {
+            Camera camera = cameras.get(0);
+
+            // Try to choose the front back camera
+            for (int i = 0; i < cameras.size(); i++)
+            {
+
+                if (cameras.get(i).getFacing() == Camera.FACE_FRONT)
+                {
+                     camera = cameras.get(i);
+
+                }
+
+                if (cameras.get(i).getFacing() == Camera.FACE_BACK)
+                {
+                    camera = cameras.get(i);
+                    break;
+                }
+            }
+            camera.setResolution(new Vector2di(1920,1080));
+            camera.setDownsample(1);
+            metaioSDK.startCamera(camera);
+        }
+        else
+        {
+            MetaioDebug.log(Log.WARN, "No camera found on the device!");
+        }
+    }
+
+    //Auto focus, old code but it works.
+    @Override
+    public void onSurfaceChanged(int width, int height)
+    {
+        android.hardware.Camera camera = IMetaioSDKAndroid.getCamera(this);
+        android.hardware.Camera.Parameters params = camera.getParameters();
+        params.setFocusMode("continuous-picture");
+        camera.setParameters(params);
     }
 
     @Override
