@@ -5,4 +5,8 @@
     <dimen name="buttonWidth">125dp</dimen>
     <dimen name="buttonHeight">150dp</dimen>
     <dimen name="topBarButtonSize">60dp</dimen>
+    <dimen name="listWidth">200dp</dimen>
+    <dimen name="listHeight">250dp</dimen>
+    <dimen name="listItemHeight">50dp</dimen>
+    <dimen name="listItemWidth">125dp</dimen>
 </resources>

@@ -25,6 +25,15 @@
 
     <string name="nextStep">Nästa</string>
     <string name="prevStep">Föregående</string>
-    <string name="goAnimate">go Animate!</string>
+    <string name="goAnimate">Animera</string>
+
+    <string name="sideR">Sida - Höger</string>
+    <string name="sideL">Sida - Vänster</string>
+    <string name="backT">Rygg - Topp</string>
+    <string name="backM">Rygg - Mitt</string>
+    <string name="seat">Sits</string>
+
+    <string name="found">Hittad</string>
+    <string name="not_found">Ej hittad</string>
 
 </resources>

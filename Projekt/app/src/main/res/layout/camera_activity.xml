@@ -66,8 +66,7 @@
         android:layout_width="@dimen/infoBoxWidth"
         android:layout_alignParentRight="true"
         android:layout_marginTop="70dp"
-        android:background="@color/custom_gray"
-        >
+        android:background="@color/custom_gray">
 
         <ImageView
             android:id="@+id/infoImage"
@@ -87,12 +86,22 @@
             android:padding="10dp"
             android:text="@string/stepStart" />
 
-        </RelativeLayout>
+        <Button
+            android:id="@+id/goAnimate"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:onClick="animate"
+            android:text="@string/goAnimate"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/buttonBar"
         android:background="@null"
-        android:layout_width="500dp"
+        android:layout_width="@dimen/infoBoxWidth"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="false"
@@ -103,15 +112,6 @@
         android:layout_marginTop="10dp">
 
         <Button
-            android:id="@+id/nextButton"
-            android:layout_width="@dimen/buttonWidth"
-            android:layout_height="wrap_content"
-            android:onClick="nextStep"
-            android:text="@string/nextStep"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentEnd="true" />
-
-        <Button
             android:id="@+id/prevButton"
             android:layout_width="@dimen/buttonWidth"
             android:layout_height="wrap_content"
@@ -120,19 +120,128 @@
             android:text="@string/prevStep"
             android:layout_alignParentLeft="false"
             android:layout_alignParentBottom="false"
-            android:layout_toLeftOf="@+id/nextButton"/>
-
+            android:layout_alignParentStart="true" />
 
         <Button
-            android:id="@+id/goAnimate"
+            android:id="@+id/nextButton"
             android:layout_width="@dimen/buttonWidth"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:onClick="animate"
-            android:text="@string/goAnimate"
+            android:onClick="nextStep"
+            android:text="@string/nextStep"
             android:layout_alignParentBottom="false"
-            android:layout_toLeftOf="@id/prevButton" />
+            android:layout_alignParentEnd="true" />
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="@dimen/listWidth"
+        android:layout_height="@dimen/listHeight"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/topBar"
+        android:background="@color/WHITE"
+        android:id="@+id/popupList">
+
+        <TextView
+            android:layout_width="@dimen/listItemWidth"
+            android:layout_height="@dimen/listItemHeight"
+            android:text="@string/backM"
+            android:id="@+id/backM_text"
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/ryggMid" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/listItemHeight"
+            android:text="@string/not_found"
+            android:id="@+id/backM_found"
+            android:layout_toRightOf="@+id/backM_text"
+            android:layout_alignTop="@+id/backM_text"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/ryggMid" />
+
+        <TextView
+            android:layout_width="@dimen/listItemWidth"
+            android:layout_height="@dimen/listItemHeight"
+            android:text="@string/backT"
+            android:id="@+id/backT_text"
+            android:layout_below="@+id/backM_text"
+            android:layout_alignLeft="@+id/backM_text"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/ryggTop" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/listItemHeight"
+            android:text="@string/not_found"
+            android:id="@+id/backT_found"
+            android:layout_toRightOf="@+id/backT_text"
+            android:layout_alignTop="@+id/backT_text"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/ryggTop" />
+
+        <TextView
+            android:layout_width="@dimen/listItemWidth"
+            android:layout_height="@dimen/listItemHeight"
+            android:text="@string/sideR"
+            android:id="@+id/sideR_text"
+            android:layout_below="@+id/backT_text"
+            android:layout_alignLeft="@+id/backT_text"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/sidaHoger" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/listItemHeight"
+            android:text="@string/not_found"
+            android:id="@+id/sideR_found"
+            android:layout_toRightOf="@+id/sideR_text"
+            android:layout_alignTop="@+id/sideR_text"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/sidaHoger" />
+
+        <TextView
+            android:layout_width="@dimen/listItemWidth"
+            android:layout_height="@dimen/listItemHeight"
+            android:text="@string/sideL"
+            android:id="@+id/sideL_text"
+            android:layout_alignLeft="@+id/sideR_text"
+            android:layout_below="@+id/sideR_text"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/sidaVanster" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/listItemHeight"
+            android:text="@string/not_found"
+            android:id="@+id/sideL_found"
+            android:layout_toRightOf="@+id/sideL_text"
+            android:layout_alignTop="@+id/sideL_text"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/sidaVanster" />
+
+        <TextView
+            android:layout_width="@dimen/listItemWidth"
+            android:layout_height="@dimen/listItemHeight"
+            android:text="@string/seat"
+            android:id="@+id/seat_text"
+            android:layout_below="@+id/sideL_text"
+            android:layout_alignLeft="@+id/sideL_text"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/sits" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/listItemHeight"
+            android:text="@string/not_found"
+            android:id="@+id/seat_found"
+            android:layout_toRightOf="@+id/seat_text"
+            android:layout_alignTop="@+id/seat_text"
+            android:gravity="center_vertical|center_horizontal"
+            android:background="@color/sits" />
     </RelativeLayout>
 
 </RelativeLayout>

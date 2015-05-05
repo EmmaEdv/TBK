@@ -39,9 +39,10 @@ public class CameraActivity extends ARViewActivity {
 
     private TrackingValuesVector poses;
 
-    TextView topText, infoText;
+    TextView topText, infoText, sideRText, sideLText, seatText, backMText, backTText,
+            sideRFound, sideLFound, seatFound, backMFound, backTFound;
     Button prevButton, nextButton, animateButton;
-    RelativeLayout infoBox;
+    RelativeLayout infoBox, popupList;
     ImageButton helpButton, listButton, arrowButton;
     ImageView infoImage;
 
@@ -120,11 +121,33 @@ public class CameraActivity extends ARViewActivity {
         infoBox = (RelativeLayout) mGUIView.findViewById(R.id.infoBox);
         infoImage = (ImageView) mGUIView.findViewById(R.id.infoImage);
 
+        popupList = (RelativeLayout) mGUIView.findViewById(R.id.popupList);
+        sideLText = (TextView) mGUIView.findViewById(R.id.sideL_text);
+        sideRText = (TextView) mGUIView.findViewById(R.id.sideR_text);
+        seatText = (TextView) mGUIView.findViewById(R.id.seat_text);
+        backMText = (TextView) mGUIView.findViewById(R.id.backM_text);
+        backTText = (TextView) mGUIView.findViewById(R.id.backT_text);
+        sideLFound = (TextView) mGUIView.findViewById(R.id.sideL_found);
+        sideRFound = (TextView) mGUIView.findViewById(R.id.sideR_found);
+        seatFound = (TextView) mGUIView.findViewById(R.id.seat_found);
+        backMFound = (TextView) mGUIView.findViewById(R.id.backM_found);
+        backTFound = (TextView) mGUIView.findViewById(R.id.backT_found);
+
         topText.setTypeface(font);
         infoText.setTypeface(font);
         prevButton.setTypeface(font);
         nextButton.setTypeface(font);
         animateButton.setTypeface(font);
+        sideLText.setTypeface(font);
+        sideRText.setTypeface(font);
+        seatText.setTypeface(font);
+        backTText.setTypeface(font);
+        backMText.setTypeface(font);
+        sideLFound.setTypeface(font);
+        sideRFound.setTypeface(font);
+        seatFound.setTypeface(font);
+        backTText.setTypeface(font);
+        backMFound.setTypeface(font);
 
         // Set the booleans for "lilla listan"
         // Get the value from intent, default is false
@@ -343,33 +366,48 @@ public class CameraActivity extends ARViewActivity {
 
         if(sitsFound){
             item_sits.setTitle(itemSitsTextF);
+            seatFound.setText(R.string.not_found);
         }
-        else
+        else {
             item_sits.setTitle(itemSitsTextNF);
+            seatFound.setText(R.string.found);
+        }
 
         if(rightSideFound){
             item_right.setTitle(itemRightSideF);
+            sideRFound.setText(R.string.not_found);
         }
-        else
+        else {
             item_right.setTitle(itemRightSideNF);
+            sideRFound.setText(R.string.found);
+        }
 
         if(leftSideFound){
             item_left.setTitle(itemLeftSideF);
+            sideLFound.setText(R.string.found);
         }
-        else
+        else {
             item_left.setTitle(itemLeftSideNF);
+            sideLFound.setText(R.string.not_found);
+        }
 
         if(ryggMidFound){
             item_ryggmid.setTitle(itemRyggMidF);
+            backMFound.setText(R.string.found);
         }
-        else
+        else {
             item_ryggmid.setTitle(itemRyggMidNF);
+            backMFound.setText(R.string.not_found);
+        }
 
         if(ryggTopFound){
             item_ryggtop.setTitle(itemRyggTopF);
+            backTFound.setText(R.string.found);
         }
-        else
+        else {
             item_ryggtop.setTitle(itemRyggTopNF);
+            backTFound.setText(R.string.not_found);
+        }
 
     }
 
@@ -586,22 +624,27 @@ public class CameraActivity extends ARViewActivity {
 
                                         if (sits.getIsRendered()) {
                                             item_sits.setTitle(itemSitsTextF);
+                                            seatFound.setText(R.string.found);
                                             sitsFound = true;
                                         }
                                         if (rightSide.getIsRendered()) {
                                             item_right.setTitle(itemRightSideF);
+                                            sideRFound.setText(R.string.found);
                                             rightSideFound = true;
                                         }
                                         if (leftSide.getIsRendered()) {
                                             item_left.setTitle(itemLeftSideF);
+                                            sideLFound.setText(R.string.found);
                                             leftSideFound = true;
                                         }
                                         if (rygg_mid.getIsRendered()) {
                                             item_ryggmid.setTitle(itemRyggMidF);
+                                            backMFound.setText(R.string.found);
                                             ryggMidFound = true;
                                         }
                                         if (rygg_top.getIsRendered()) {
                                             item_ryggtop.setTitle(itemRyggTopF);
+                                            backTFound.setText(R.string.found);
                                             ryggTopFound = true;
                                         }
                                     }
