@@ -44,7 +44,7 @@ public class CameraActivity extends ARViewActivity {
     TextView topText, infoText;
     Button prevButton, nextButton;
     RelativeLayout infoBox;
-    ImageButton helpButton, listButton;
+    ImageButton helpButton, listButton, arrowButton;
     ImageView infoImage;
 
     /**
@@ -117,6 +117,7 @@ public class CameraActivity extends ARViewActivity {
         nextButton = (Button) mGUIView.findViewById(R.id.nextButton);
         helpButton = (ImageButton) mGUIView.findViewById(R.id.helpBtn);
         listButton = (ImageButton) mGUIView.findViewById(R.id.listBtn);
+        arrowButton = (ImageButton) mGUIView.findViewById(R.id.arrowBtn);
         infoBox = (RelativeLayout) mGUIView.findViewById(R.id.infoBox);
         infoImage = (ImageView) mGUIView.findViewById(R.id.infoImage);
 
@@ -268,9 +269,21 @@ public class CameraActivity extends ARViewActivity {
         helpClick = true;
     }
 
+    public void backBtnClick(View v) {
+        v.setSelected(!v.isSelected());
+        goBack();
+    }
+
     //List
-    public void showPopup(View v) {
+    public void showPopup(final View v) {
         popup = new PopupMenu(this, v);
+        popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                v.setSelected(false);
+            }
+        });
+
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_cameralist, popup.getMenu());
 
@@ -310,7 +323,6 @@ public class CameraActivity extends ARViewActivity {
         itemRyggTopF  = new SpannableString("Rygg topp (Found)");
         itemRyggTopF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.ryggTop)), 0, itemRyggTopF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-
         popup.show();
 
         if(sitsFound){
@@ -347,7 +359,10 @@ public class CameraActivity extends ARViewActivity {
 
     @Override
     public void onBackPressed() {
+        goBack();
+    }
 
+    public void goBack(){
         // Create intent and with it send a bundle
         // populated with data if we found parts
 
@@ -365,8 +380,9 @@ public class CameraActivity extends ARViewActivity {
 
     public void listBtnClick(View v) {
         //findViewById(R.id.infoBox).setVisibility(View.INVISIBLE);
+        Log.i("listBtnClick", "isSelected: " + v.isSelected());
+        v.setSelected(!v.isSelected());
         initiated = true;
-
         showPopup(v);
     }
 
