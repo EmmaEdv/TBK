@@ -60,8 +60,6 @@ public class ThumbnailAdapter extends ArrayAdapter<ThumbnailItem>{
             titleView.setTypeface(font);
         }
         else {
-            rowView.setBackgroundColor(Color.WHITE);
-
             // 4.2 Set the textView
             titleView = (TextView) rowView.findViewById(R.id.title);
             //and the statusview

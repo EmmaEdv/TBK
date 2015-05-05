@@ -73,6 +73,8 @@ public class MainActivity extends Activity {
     private float mDensity;
     public static int currentObject = 1;
 
+    // get intent.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mDensity = getResources().getDisplayMetrics().density;
@@ -267,6 +269,7 @@ public class MainActivity extends Activity {
     public void backBtnClick(View v){
         v.setSelected(!v.isSelected());
         finish();
+        MenuActivity.resetButtons();
     }
 
     /**

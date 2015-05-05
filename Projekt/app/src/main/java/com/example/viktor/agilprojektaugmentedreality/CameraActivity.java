@@ -34,9 +34,7 @@ import java.io.IOException;
 
 public class CameraActivity extends ARViewActivity {
 
-    /**
-     * Reference to loaded metaioman geometry
-     */
+
     private IGeometry sits;
     private IGeometry rightSide;
     private IGeometry leftSide;
@@ -46,13 +44,22 @@ public class CameraActivity extends ARViewActivity {
     private TrackingValuesVector poses;
 
     TextView topText, infoText;
-    Button prevButton, nextButton;
+    Button prevButton, nextButton, animateButton;
     RelativeLayout infoBox;
     ImageButton helpButton, listButton, arrowButton;
     ImageView infoImage;
-    /**
-     * Currently loaded tracking configuration file
-     */
+
+    // Set the booleans for "lilla listan"
+    // Get the value from intent, default is false
+    boolean sitsFound;
+    boolean leftSideFound;
+    boolean rightSideFound;
+    boolean ryggMidFound;
+    boolean ryggTopFound;
+
+
+    //Currently loaded tracking configuration file
+
     File trackingConfigFile;
 
     private MetaioSDKCallbackHandler mCallbackHandler;
@@ -67,15 +74,10 @@ public class CameraActivity extends ARViewActivity {
 
     boolean initiated = false;
 
+
     //Bools to check if button in topbar is clicked or not
     boolean helpClick = true;
     boolean listClick = false;
-
-    boolean sitsFound = false;
-    boolean leftSideFound = false;
-    boolean rightSideFound = false;
-    boolean ryggMidFound = false;
-    boolean ryggTopFound = false;
 
     // En lång radda spannable strings
     // Behövs för att ändra färg på menu items
@@ -118,6 +120,7 @@ public class CameraActivity extends ARViewActivity {
         infoText = (TextView) mGUIView.findViewById(R.id.infoText);
         prevButton = (Button) mGUIView.findViewById(R.id.prevButton);
         nextButton = (Button) mGUIView.findViewById(R.id.nextButton);
+        animateButton = (Button) mGUIView.findViewById(R.id.goAnimate);
         helpButton = (ImageButton) mGUIView.findViewById(R.id.helpBtn);
         listButton = (ImageButton) mGUIView.findViewById(R.id.listBtn);
         arrowButton = (ImageButton) mGUIView.findViewById(R.id.arrowBtn);
@@ -128,7 +131,17 @@ public class CameraActivity extends ARViewActivity {
         infoText.setTypeface(font);
         prevButton.setTypeface(font);
         nextButton.setTypeface(font);
-       // System.out.println(metaioSDK.getCameraParameters());
+
+        animateButton.setTypeface(font);
+
+        // Set the booleans for "lilla listan"
+        // Get the value from intent, default is false
+        sitsFound = getIntent().getBooleanExtra("foundSits", false);
+        leftSideFound = getIntent().getBooleanExtra("foundLeftSide", false);
+        rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
+        ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
+        ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
+
     }
 
 
@@ -143,6 +156,7 @@ public class CameraActivity extends ARViewActivity {
                 rygg_mid.setVisible(true);
                 rygg_top.setVisible(true);
                 prevButton.setVisibility(View.GONE);
+                animateButton.setVisibility(View.GONE);
                 topText.setText(R.string.step_zero);
                 infoImage.setVisibility(View.INVISIBLE);
                 infoText.setText(R.string.stepStart);
@@ -155,6 +169,7 @@ public class CameraActivity extends ARViewActivity {
                 leftSide.setVisible(false);
                 sits.setVisible(false);
                 prevButton.setVisibility(View.VISIBLE);
+                animateButton.setVisibility(View.VISIBLE);
                 topText.setText(R.string.step_one);
                 infoText.setVisibility(View.INVISIBLE);
                 infoImage.setVisibility(View.VISIBLE);
@@ -253,6 +268,7 @@ public class CameraActivity extends ARViewActivity {
         showinfoBox();
     }
 
+
     //Starts the camera after animation is done
     public void lightenCamera(){
         metaioSDK.startCamera();
@@ -266,7 +282,7 @@ public class CameraActivity extends ARViewActivity {
         }
     //Darkens the camera before animation
     //infoBox is set to invisible, make sure you also handle the showInfoBox() function in prev and nextStep()
-    public void darkenCamera(){
+    public void darkenCamera() {
         metaioSDK.stopCamera();
         //metaioSDK.setSeeThroughColor(255,0,0,255);
         metaioSDK.setSeeThrough(true);
@@ -275,6 +291,20 @@ public class CameraActivity extends ARViewActivity {
         infoBox.setVisibility(View.INVISIBLE);
         helpButton.setImageResource(R.drawable.wrench_button);
         helpClick = false;
+    }
+
+    //variable for demonstration purpose, can be removed later
+    boolean checkCamera = true;
+    public void animate(View v) {
+
+        // Animate();
+        if (checkCamera) {
+            darkenCamera();
+            checkCamera = false;
+        } else {
+            lightenCamera();
+            checkCamera = true;
+        }
     }
 
     public void btnHelp(View v)
@@ -300,6 +330,7 @@ public class CameraActivity extends ARViewActivity {
     public void backBtnClick(View v) {
         v.setSelected(!v.isSelected());
         goBack();
+        MenuActivity.resetButtons();
     }
 
     //List
@@ -393,6 +424,7 @@ public class CameraActivity extends ARViewActivity {
     public void goBack(){
         // Create intent and with it send a bundle
         // populated with data if we found parts
+
         Intent returnIntent = new Intent();
 
         returnIntent.putExtra("foundSits", sitsFound);
@@ -516,7 +548,7 @@ public class CameraActivity extends ARViewActivity {
                 rygg_mid = metaioSDK.createGeometry(ryggMidModel);
                 rygg_mid.setRotation(new Rotation(0.0f, 1.57f, 0.0f));
                 rygg_mid.setTranslation(new Vector3d(-100.0f,4000f, -300.0f));
-                rygg_mid.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "backMidTexture.png"));
+                rygg_mid.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "ryggMidUVWMap.png")); //backMidTexture.png
                 rygg_mid.setTransparency(0.5f);
                 if (rygg_mid != null) {
                     // Set geometry properties
