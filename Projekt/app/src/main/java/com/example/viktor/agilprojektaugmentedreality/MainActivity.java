@@ -73,6 +73,8 @@ public class MainActivity extends Activity {
     private float mDensity;
     public static int currentObject = 1;
 
+    // get intent.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mDensity = getResources().getDisplayMetrics().density;

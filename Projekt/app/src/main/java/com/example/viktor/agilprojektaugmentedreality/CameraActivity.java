@@ -350,6 +350,7 @@ public class CameraActivity extends ARViewActivity {
 
         // Create intent and with it send a bundle
         // populated with data if we found parts
+
         Intent returnIntent = new Intent();
 
         returnIntent.putExtra("foundSits", sitsFound);
