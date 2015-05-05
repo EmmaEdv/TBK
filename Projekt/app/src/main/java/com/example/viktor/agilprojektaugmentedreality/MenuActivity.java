@@ -163,6 +163,7 @@ public class MenuActivity extends Activity{
         arBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 setButtonAlpha(arBtn);
                 Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
 
