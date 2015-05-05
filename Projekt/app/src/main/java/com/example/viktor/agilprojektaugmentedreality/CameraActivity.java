@@ -30,9 +30,7 @@ import java.io.IOException;
 
 public class CameraActivity extends ARViewActivity {
 
-    /**
-     * Reference to loaded metaioman geometry
-     */
+
     private IGeometry sits;
     private IGeometry rightSide;
     private IGeometry leftSide;
@@ -47,9 +45,16 @@ public class CameraActivity extends ARViewActivity {
     ImageButton helpButton, listButton, arrowButton;
     ImageView infoImage;
 
-    /**
-     * Currently loaded tracking configuration file
-     */
+    // Set the booleans for "lilla listan"
+    // Get the value from intent, default is false
+    boolean sitsFound;// = getIntent().getBooleanExtra("foundSits", false);
+    boolean leftSideFound;// = getIntent().getBooleanExtra("foundLeftSide", false);
+    boolean rightSideFound;// = getIntent().getBooleanExtra("foundRightSide", false);
+    boolean ryggMidFound;// = getIntent().getBooleanExtra("foundRyggMid", false);
+    boolean ryggTopFound;// = getIntent().getBooleanExtra("foundRyggTop", false);
+
+
+    //Currently loaded tracking configuration file
     File trackingConfigFile;
 
     private MetaioSDKCallbackHandler mCallbackHandler;
@@ -68,13 +73,7 @@ public class CameraActivity extends ARViewActivity {
     boolean helpClick = true;
     boolean listClick = false;
 
-    // Set the booleans for "lilla listan"
-    // Get the value from intent, default is false
-    boolean sitsFound = getIntent().getBooleanExtra("foundSits", false);
-    boolean leftSideFound = getIntent().getBooleanExtra("foundLeftSide", false);
-    boolean rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
-    boolean ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
-    boolean ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
+
 
     // En lång radda spannable strings
     // Behövs för att ändra färg på menu items
@@ -125,6 +124,14 @@ public class CameraActivity extends ARViewActivity {
         infoText.setTypeface(font);
         prevButton.setTypeface(font);
         nextButton.setTypeface(font);
+
+        // Set the booleans for "lilla listan"
+        // Get the value from intent, default is false
+        sitsFound = getIntent().getBooleanExtra("foundSits", false);
+        leftSideFound = getIntent().getBooleanExtra("foundLeftSide", false);
+        rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
+        ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
+        ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
     }
 
 

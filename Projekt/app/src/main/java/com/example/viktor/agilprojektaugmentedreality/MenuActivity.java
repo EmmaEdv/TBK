@@ -22,7 +22,6 @@ public class MenuActivity extends Activity{
     RelativeLayout layout, header;
     ImageButton listBtn, arBtn;
     TextView listText, arText, headerText;
-    Bundle returnDataBundle;
 
     // Bundle to be populated with found parts from the metaio view
     Bundle returnDataBundle;
@@ -32,10 +31,8 @@ public class MenuActivity extends Activity{
 
         Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
 
-<<<<<<< HEAD
         // Initiate bundle
-=======
->>>>>>> viktor
+
         returnDataBundle = new Bundle();
 
         //Landscape
@@ -151,18 +148,12 @@ public class MenuActivity extends Activity{
 
                 Intent listScreen = new Intent(getApplicationContext(),  MainActivity.class);
 
-<<<<<<< HEAD
                 // If bundle has been populated, send it with the intent to listScreen
                 if(returnDataBundle.size() > 0)
                     listScreen.putExtras(returnDataBundle);
 
                 startActivity(listScreen);
-=======
-                if(returnDataBundle.size() > 0)
-                    listScreen.putExtras(returnDataBundle);
 
-                    startActivity(listScreen);
->>>>>>> viktor
 
             }
         });
@@ -171,24 +162,18 @@ public class MenuActivity extends Activity{
             @Override
             public void onClick(View v) {
                 Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
-<<<<<<< HEAD
 
                 // Send the data if they have been found previously.
                 if(returnDataBundle.size() > 0)
                     cameraScreen.putExtras(returnDataBundle);
 
                 // We expect a result from this intent.
-=======
->>>>>>> viktor
                 startActivityForResult(cameraScreen, 1);
             }
         });
     }
 
-<<<<<<< HEAD
     // Gets the data from the Metaioview to our bundle
-=======
->>>>>>> viktor
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 1) {
