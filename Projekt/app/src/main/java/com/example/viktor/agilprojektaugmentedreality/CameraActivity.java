@@ -279,6 +279,7 @@ public class CameraActivity extends ARViewActivity {
     public void backBtnClick(View v) {
         v.setSelected(!v.isSelected());
         goBack();
+        MenuActivity.resetButtons();
     }
 
     //List

@@ -3,9 +3,11 @@ package com.example.viktor.agilprojektaugmentedreality;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -20,7 +22,7 @@ import android.widget.TextView;
  */
 public class MenuActivity extends Activity{
     RelativeLayout layout, header;
-    ImageButton listBtn, arBtn;
+    static ImageButton listBtn, arBtn;
     TextView listText, arText, headerText;
 
     // Bundle to be populated with found parts from the metaio view
@@ -71,7 +73,6 @@ public class MenuActivity extends Activity{
 
         //Set text and images
         listBtn.setBackgroundResource(R.drawable.list_icon);
-        //listBtn.setBackgroundColor(getResources().getColor(R.color.blue));
         listBtn.setAdjustViewBounds(true);
 
         arBtn.setBackgroundResource(R.drawable.mount_icon);
@@ -145,6 +146,7 @@ public class MenuActivity extends Activity{
         listBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonAlpha(listBtn);
 
                 Intent listScreen = new Intent(getApplicationContext(),  MainActivity.class);
 
@@ -161,6 +163,7 @@ public class MenuActivity extends Activity{
         arBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonAlpha(arBtn);
                 Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
 
                 // Send the data if they have been found previously.
@@ -182,4 +185,12 @@ public class MenuActivity extends Activity{
         }
     }
 
+    public void setButtonAlpha(ImageButton button){
+        button.setAlpha(0.6f);
+    }
+
+    public static void resetButtons(){
+        listBtn.setAlpha(1.0f);
+        arBtn.setAlpha(1.0f);
+    }
 }

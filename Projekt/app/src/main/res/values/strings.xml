@@ -11,8 +11,8 @@
     <string name="arButton">Montera</string>
     <string name="stepButton">Instruktioner</string>
 
+    <string name="stepStart">Se om alla delar är hittade genom att hålla kameran över QR-koderna på vardera del. Klicka på nästa för att komma till nästa steg i monteringen.</string>
     <string name="stepDone">Färdig, bra jobbat!</string>
-    <string name="stepStart" >Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
 
     <string name="step_zero">Montering</string>
     <string name="step_one">Montering: Steg 1</string>
