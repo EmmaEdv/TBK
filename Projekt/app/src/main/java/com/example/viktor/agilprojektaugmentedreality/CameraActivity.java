@@ -497,7 +497,7 @@ public class CameraActivity extends ARViewActivity {
                 rygg_mid = metaioSDK.createGeometry(ryggMidModel);
                 rygg_mid.setRotation(new Rotation(0.0f, 1.57f, 0.0f));
                 rygg_mid.setTranslation(new Vector3d(-100.0f,4000f, -300.0f));
-                rygg_mid.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "backMidTexture.png"));
+                rygg_mid.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "ryggMidUVWMap.png")); //backMidTexture.png
                 rygg_mid.setTransparency(0.5f);
                 if (rygg_mid != null) {
                     // Set geometry properties
