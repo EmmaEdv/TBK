@@ -156,7 +156,12 @@ public class MenuActivity extends Activity{
         arBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
+
+                if(returnDataBundle.size() > 0)
+                    cameraScreen.putExtras(returnDataBundle);
+
                 startActivityForResult(cameraScreen, 1);
             }
         });
