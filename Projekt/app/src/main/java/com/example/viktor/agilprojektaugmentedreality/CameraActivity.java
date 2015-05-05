@@ -614,7 +614,7 @@ public class CameraActivity extends ARViewActivity {
                     break;
                 }
             }
-            camera.setResolution(new Vector2di(1920,1080));
+            camera.setResolution(new Vector2di(1920,1440));
             camera.setDownsample(1);
             metaioSDK.startCamera(camera);
         }
