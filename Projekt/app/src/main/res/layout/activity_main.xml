@@ -25,6 +25,17 @@
             android:textSize="40px"
             />
 
+        <ImageButton
+            android:layout_width="@dimen/topBarButtonSize"
+            android:layout_height="@dimen/topBarButtonSize"
+            android:id="@+id/arrowBtn1"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/backbuttonstate"
+            android:scaleType="fitXY"
+            android:background="@color/transparent"
+            android:onClick="backBtnClick" />
+
     </RelativeLayout>
 
     <!-- List View -->

@@ -10,6 +10,20 @@
     <string name="listButton">Lista över delar</string>
     <string name="arButton">Montera</string>
     <string name="stepButton">Instruktioner</string>
-    <string name="extraButton">Hejhej</string>
+
+    <string name="stepStart">Se om alla delar är hittade genom att hålla kameran över QR-koderna på vardera del. Klicka på nästa för att komma till nästa steg i monteringen.</string>
+    <string name="stepDone">Färdig, bra jobbat!</string>
+
+    <string name="step_zero">Montering</string>
+    <string name="step_one">Montering: Steg 1</string>
+    <string name="step_two">Montering: Steg 2</string>
+    <string name="step_three">Montering: Steg 3</string>
+    <string name="step_four">Montering: Steg 4</string>
+    <string name="step_five">Montering: Steg 5</string>
+    <string name="step_six">Montering: Steg 6</string>
+    <string name="step_seven">Montering: Klar!</string>
+
+    <string name="nextStep">Nästa</string>
+    <string name="prevStep">Föregående</string>
 
 </resources>

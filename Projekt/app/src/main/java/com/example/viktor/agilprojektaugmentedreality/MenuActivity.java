@@ -3,9 +3,11 @@ package com.example.viktor.agilprojektaugmentedreality;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -15,20 +17,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-
 /**
  * Created by emmaedv on 21/04/15.
  */
 public class MenuActivity extends Activity{
     RelativeLayout layout, header;
-    ImageButton listBtn, arBtn;
+    static ImageButton listBtn, arBtn;
     TextView listText, arText, headerText;
+
+    // Bundle to be populated with found parts from the metaio view
     Bundle returnDataBundle;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
+
+        // Initiate bundle
 
         returnDataBundle = new Bundle();
 
@@ -60,15 +65,14 @@ public class MenuActivity extends Activity{
         headerText = new TextView(this);
 
         //Set id:s
-        listBtn.setId(R.id.listButton);
-        arBtn.setId(R.id.arButton);
-        listText.setId(R.id.listText);
-        arText.setId(R.id.arText);
+        listBtn.setId(R.id.listBtn);
+        arBtn.setId(R.id.arBtn);
+        listText.setId(R.id.listTxt);
+        arText.setId(R.id.arTxt);
         headerText.setId(R.id.headerText);
 
         //Set text and images
         listBtn.setBackgroundResource(R.drawable.list_icon);
-        //listBtn.setBackgroundColor(getResources().getColor(R.color.blue));
         listBtn.setAdjustViewBounds(true);
 
         arBtn.setBackgroundResource(R.drawable.mount_icon);
@@ -96,7 +100,7 @@ public class MenuActivity extends Activity{
 
         //Set layout parameters
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-        RelativeLayout.LayoutParams.MATCH_PARENT);
+                RelativeLayout.LayoutParams.MATCH_PARENT);
         //Set params of layout
         layout.setLayoutParams(params);
         layout.setBackgroundColor(getResources().getColor(R.color.WHITE));
@@ -142,13 +146,16 @@ public class MenuActivity extends Activity{
         listBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setButtonAlpha(listBtn);
 
                 Intent listScreen = new Intent(getApplicationContext(),  MainActivity.class);
 
+                // If bundle has been populated, send it with the intent to listScreen
                 if(returnDataBundle.size() > 0)
                     listScreen.putExtras(returnDataBundle);
 
-                    startActivity(listScreen);
+                startActivity(listScreen);
+
 
             }
         });
@@ -156,17 +163,29 @@ public class MenuActivity extends Activity{
         arBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+<<<<<<< HEAD
 
                 Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
 
                 if(returnDataBundle.size() > 0)
                     cameraScreen.putExtras(returnDataBundle);
 
+=======
+                setButtonAlpha(arBtn);
+                Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
+
+                // Send the data if they have been found previously.
+                if(returnDataBundle.size() > 0)
+                    cameraScreen.putExtras(returnDataBundle);
+
+                // We expect a result from this intent.
+>>>>>>> 13cc1ae0f0f4ce2cea28c3cc20bb2e70a40e2a84
                 startActivityForResult(cameraScreen, 1);
             }
         });
     }
 
+    // Gets the data from the Metaioview to our bundle
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 1) {
@@ -175,4 +194,12 @@ public class MenuActivity extends Activity{
         }
     }
 
+    public void setButtonAlpha(ImageButton button){
+        button.setAlpha(0.6f);
+    }
+
+    public static void resetButtons(){
+        listBtn.setAlpha(1.0f);
+        arBtn.setAlpha(1.0f);
+    }
 }

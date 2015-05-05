@@ -1,6 +1,7 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.PopupMenu;
@@ -28,48 +30,46 @@ import java.io.IOException;
 
 public class CameraActivity extends ARViewActivity {
 
-    /**
-     * Reference to loaded metaioman geometry
-     */
+
     private IGeometry sits;
     private IGeometry rightSide;
     private IGeometry leftSide;
     private IGeometry rygg_top;
     private IGeometry rygg_mid;
-    private TutorialCases TC = new TutorialCases();
 
     private TrackingValuesVector poses;
 
     TextView topText, infoText;
-
     Button prevButton, nextButton;
-
     RelativeLayout infoBox;
+    ImageButton helpButton, listButton, arrowButton;
+    ImageView infoImage;
 
-    ImageButton helpButton;
+    // Set the booleans for "lilla listan"
+    // Get the value from intent, default is false
+    boolean sitsFound;// = getIntent().getBooleanExtra("foundSits", false);
+    boolean leftSideFound;// = getIntent().getBooleanExtra("foundLeftSide", false);
+    boolean rightSideFound;// = getIntent().getBooleanExtra("foundRightSide", false);
+    boolean ryggMidFound;// = getIntent().getBooleanExtra("foundRyggMid", false);
+    boolean ryggTopFound;// = getIntent().getBooleanExtra("foundRyggTop", false);
 
-    boolean helpClick = true;
 
-    /**
-     * Currently loaded tracking configuration file
-     */
+    //Currently loaded tracking configuration file
     File trackingConfigFile;
 
     private MetaioSDKCallbackHandler mCallbackHandler;
+
 
     private int buildStep = 0;
 
     // Da popup menu
     PopupMenu popup;
 
-    MenuItem item_sits;
-    MenuItem item_right;
-    MenuItem item_left;
-    MenuItem item_ryggtop;
-    MenuItem item_ryggmid;
+    MenuItem item_sits, item_right, item_left,item_ryggtop, item_ryggmid;
 
     boolean initiated = false;
 
+<<<<<<< HEAD
     // Set the booleans for "lilla listan"
     // Get the value from intent, default is false
     boolean sitsFound = getIntent().getBooleanExtra("foundSits", false);
@@ -77,6 +77,12 @@ public class CameraActivity extends ARViewActivity {
     boolean rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
     boolean ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
     boolean ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
+=======
+    //Bools to check if button in topbar is clicked or not
+    boolean helpClick = true;
+    boolean listClick = false;
+
+>>>>>>> 13cc1ae0f0f4ce2cea28c3cc20bb2e70a40e2a84
 
 
     // En lång radda spannable strings
@@ -97,8 +103,7 @@ public class CameraActivity extends ARViewActivity {
     SpannableString itemRyggTopNF;
 
     @Override
-    protected int getGUILayout()
-    {
+    protected int getGUILayout() {
         // Attaching layout to the activity
         return R.layout.camera_activity;
     }
@@ -108,23 +113,36 @@ public class CameraActivity extends ARViewActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.camera_activity);
 
+        //Locks the orientation to landscape
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         mCallbackHandler = new MetaioSDKCallbackHandler();
 
         Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
 
-        topText = (TextView) mGUIView.findViewById(R.id.topText0);
+        topText = (TextView) mGUIView.findViewById(R.id.topText);
         infoText = (TextView) mGUIView.findViewById(R.id.infoText);
         prevButton = (Button) mGUIView.findViewById(R.id.prevButton);
         nextButton = (Button) mGUIView.findViewById(R.id.nextButton);
         helpButton = (ImageButton) mGUIView.findViewById(R.id.helpBtn);
+        listButton = (ImageButton) mGUIView.findViewById(R.id.listBtn);
+        arrowButton = (ImageButton) mGUIView.findViewById(R.id.arrowBtn);
         infoBox = (RelativeLayout) mGUIView.findViewById(R.id.infoBox);
+        infoImage = (ImageView) mGUIView.findViewById(R.id.infoImage);
 
         topText.setTypeface(font);
         infoText.setTypeface(font);
         prevButton.setTypeface(font);
         nextButton.setTypeface(font);
-    }
 
+        // Set the booleans for "lilla listan"
+        // Get the value from intent, default is false
+        sitsFound = getIntent().getBooleanExtra("foundSits", false);
+        leftSideFound = getIntent().getBooleanExtra("foundLeftSide", false);
+        rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
+        ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
+        ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
+    }
 
 
     public void showStep() {
@@ -137,8 +155,11 @@ public class CameraActivity extends ARViewActivity {
                 sits.setVisible(true);
                 rygg_mid.setVisible(true);
                 rygg_top.setVisible(true);
-                TC.case0(this.mGUIView);
-
+                prevButton.setVisibility(View.GONE);
+                topText.setText(R.string.step_zero);
+                infoImage.setVisibility(View.INVISIBLE);
+                infoText.setText(R.string.stepStart);
+                infoText.setVisibility(View.VISIBLE);
             break;
             case 1:
                 rygg_mid.setVisible(true);
@@ -146,7 +167,11 @@ public class CameraActivity extends ARViewActivity {
                 rightSide.setVisible(false);
                 leftSide.setVisible(false);
                 sits.setVisible(false);
-              TC.case1(this.mGUIView);
+                prevButton.setVisibility(View.VISIBLE);
+                topText.setText(R.string.step_one);
+                infoText.setVisibility(View.INVISIBLE);
+                infoImage.setVisibility(View.VISIBLE);
+                infoImage.setImageResource(R.drawable.step1_color);
             break;
             case 2:
                 rygg_mid.setVisible(false);
@@ -154,8 +179,8 @@ public class CameraActivity extends ARViewActivity {
                 rightSide.setVisible(false);
                 leftSide.setVisible(false);
                 sits.setVisible(true);
-             TC.case2(this.mGUIView);
-
+                topText.setText(R.string.step_two);
+                infoImage.setImageResource(R.drawable.step2_color);
             break;
             case 3:
                 rygg_mid.setVisible(false);
@@ -163,7 +188,8 @@ public class CameraActivity extends ARViewActivity {
                 rightSide.setVisible(true);
                 leftSide.setVisible(false);
                 sits.setVisible(false);
-              TC.case3(this.mGUIView);
+                topText.setText(R.string.step_three);
+                infoImage.setImageResource(R.drawable.step3_color);
             break;
             case 4:
                 rygg_mid.setVisible(false);
@@ -171,8 +197,8 @@ public class CameraActivity extends ARViewActivity {
                 rightSide.setVisible(false);
                 leftSide.setVisible(true);
                 sits.setVisible(false);
-             TC.case4(this.mGUIView);
-
+                topText.setText(R.string.step_four);
+                infoImage.setImageResource(R.drawable.step4_color);
             break;
             case 5:
                 rygg_mid.setVisible(false);
@@ -180,7 +206,8 @@ public class CameraActivity extends ARViewActivity {
                 rightSide.setVisible(false);
                 leftSide.setVisible(false);
                 sits.setVisible(false);
-             TC.case5(this.mGUIView);
+                topText.setText(R.string.step_five);
+                infoImage.setImageResource(R.drawable.step5_color);
             break;
             case 6:
                 rygg_mid.setVisible(false);
@@ -188,7 +215,11 @@ public class CameraActivity extends ARViewActivity {
                 rightSide.setVisible(false);
                 leftSide.setVisible(false);
                 sits.setVisible(false);
-               TC.case6(this.mGUIView);
+                nextButton.setVisibility(View.VISIBLE);
+                topText.setText(R.string.step_six);
+                infoImage.setImageResource(R.drawable.step6_color);
+                infoText.setVisibility(View.INVISIBLE);
+                infoImage.setVisibility(View.VISIBLE);
             break;
             case 7:
                 rygg_mid.setVisible(false);
@@ -196,12 +227,16 @@ public class CameraActivity extends ARViewActivity {
                 rightSide.setVisible(false);
                 leftSide.setVisible(false);
                 sits.setVisible(false);
-             TC.case7(this.mGUIView);
+                nextButton.setVisibility(View.GONE);
+                topText.setText(R.string.step_seven);
+                infoImage.setVisibility(View.INVISIBLE);
+                infoText.setText(R.string.stepDone);
+                infoText.setVisibility(View.VISIBLE);
              break;
 
         }
 
-        System.out.println("i showStep " + buildStep);
+        //System.out.println("i showStep " + buildStep);
     }
 
     /**
@@ -214,11 +249,9 @@ public class CameraActivity extends ARViewActivity {
         }
 
         showStep();
-        topText.setVisibility(View.VISIBLE);
 
-        //findViewById(R.id.infoBox).setVisibility(View.VISIBLE);
-        prevButton.setVisibility(View.VISIBLE);
-        infoText.setVisibility(View.GONE);
+        showinfoBox();
+        topText.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -230,31 +263,45 @@ public class CameraActivity extends ARViewActivity {
             buildStep--;
         }
         showStep();
-
-        topText.setVisibility(View.INVISIBLE);
-        prevButton.setVisibility(View.GONE);
+        showinfoBox();
     }
 
     public void btnHelp(View v)
     {
-        if(helpClick)
-        {
+        if(helpClick){
             infoBox.setVisibility(View.INVISIBLE);
             helpButton.setImageResource(R.drawable.wrench_button);
             helpClick = false;
         }
-        else
-        {
+        else {
             infoBox.setVisibility(View.VISIBLE);
             helpButton.setImageResource(R.drawable.wrench_button_pressed);
             helpClick = true;
         }
     }
 
-    //List
-    public void showPopup(View v) {
+    public void showinfoBox(){
+        infoBox.setVisibility(View.VISIBLE);
+        helpButton.setImageResource(R.drawable.wrench_button_pressed);
+        helpClick = true;
+    }
 
+    public void backBtnClick(View v) {
+        v.setSelected(!v.isSelected());
+        goBack();
+        MenuActivity.resetButtons();
+    }
+
+    //List
+    public void showPopup(final View v) {
         popup = new PopupMenu(this, v);
+        popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                v.setSelected(false);
+            }
+        });
+
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_cameralist, popup.getMenu());
 
@@ -294,7 +341,6 @@ public class CameraActivity extends ARViewActivity {
         itemRyggTopF  = new SpannableString("Rygg topp (Found)");
         itemRyggTopF.setSpan(new ForegroundColorSpan(getApplicationContext().getResources().getColor(R.color.ryggTop)), 0, itemRyggTopF.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-
         popup.show();
 
         if(sitsFound){
@@ -331,6 +377,12 @@ public class CameraActivity extends ARViewActivity {
 
     @Override
     public void onBackPressed() {
+        goBack();
+    }
+
+    public void goBack(){
+        // Create intent and with it send a bundle
+        // populated with data if we found parts
 
         Intent returnIntent = new Intent();
 
@@ -346,6 +398,8 @@ public class CameraActivity extends ARViewActivity {
 
     public void listBtnClick(View v) {
         //findViewById(R.id.infoBox).setVisibility(View.INVISIBLE);
+        Log.i("listBtnClick", "isSelected: " + v.isSelected());
+        v.setSelected(!v.isSelected());
         initiated = true;
         showPopup(v);
     }
@@ -386,16 +440,16 @@ public class CameraActivity extends ARViewActivity {
             final File ryggMidModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_mid.obj");
             final File sidaModel2 = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
 
-
-
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
                 sits.setRotation(new Rotation(1.57f, 0.0f, 0.0f));
-                sits.setTranslation(new Vector3d(-900.0f, 900.0f, -600.0f));
+                sits.setTranslation(new Vector3d(-2300.0f, 2800.0f, -1300.0f));
+                sits.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "seatTexture.png"));
+                sits.setTransparency(0.5f);
 
                 if (sits != null) {
                     // Set geometry properties
-                    sits.setScale(11f);
+                    sits.setScale(24.0f);
                     sits.setVisible(false);
                     MetaioDebug.log("Loaded geometry " + sitsModel);
                 }
@@ -405,28 +459,43 @@ public class CameraActivity extends ARViewActivity {
 
             if (sidaModel != null) {
 
+                //Specialare, samma model för båda sidorna, kan behövas bytas ut senare...
                 rightSide = metaioSDK.createGeometry(sidaModel);
+                rightSide.setTranslation(new Vector3d(200.0f, -5500.0f, -1000.0f));
+                rightSide.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "leftSideTexture.png"));
+                rightSide.setTransparency(0.5f);
+
                 leftSide = metaioSDK.createGeometry(sidaModel2);
+                leftSide.setRotation(new Rotation(0.0f, 3.14f, 0.0f));
+                leftSide.setTranslation(new Vector3d(200.0f, -5000.0f, -1000.0f));
+                leftSide.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "rightSideTexture.png"));
+                leftSide.setTransparency(0.5f);
+
 
                 if (rightSide != null) {
                     // Set geometry properties
-                    rightSide.setScale(4f);
+                    rightSide.setScale(23.0f);
+                    leftSide.setScale(23.0f);
+
                     rightSide.setVisible(false);
-                    leftSide.setScale(4f);
-                    leftSide.setVisible(false);
+
                     MetaioDebug.log("Loaded geometry "+sidaModel);
                 }
                 else
                     MetaioDebug.log(Log.ERROR, "Error loading geometry: "+sidaModel);
             }
 
-
-
             if (ryggToppModel != null) {
                 rygg_top = metaioSDK.createGeometry(ryggToppModel);
+                rygg_top.setRotation(new Rotation(0.0f, 1.57f, 0.0f));
+                rygg_top.setTranslation(new Vector3d(1600.0f, -400.0f, -300.0f));
+                rygg_top.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "backTopTexture.png"));
+                rygg_top.setTransparency(0.5f);
+
                 if (rygg_top != null) {
                     // Set geometry properties
-                    rygg_top.setScale(4f);
+                    rygg_top.setScale(24.0f);
+
                     rygg_top.setVisible(false);
                     MetaioDebug.log("Loaded geometry " + ryggToppModel);
                 }
@@ -436,9 +505,13 @@ public class CameraActivity extends ARViewActivity {
 
             if (ryggMidModel != null) {
                 rygg_mid = metaioSDK.createGeometry(ryggMidModel);
+                rygg_mid.setRotation(new Rotation(0.0f, 1.57f, 0.0f));
+                rygg_mid.setTranslation(new Vector3d(-100.0f,4000f, -300.0f));
+                rygg_mid.setTexture(AssetsManager.getAssetPathAsFile(getApplicationContext(), "backMidTexture.png"));
+                rygg_mid.setTransparency(0.5f);
                 if (rygg_mid != null) {
                     // Set geometry properties
-                    rygg_mid.setScale(4f);
+                    rygg_mid.setScale(22.0f);
                     rygg_mid.setVisible(false);
                     MetaioDebug.log("Loaded geometry " + ryggMidModel);
                 }
@@ -492,14 +565,12 @@ public class CameraActivity extends ARViewActivity {
 
         @Override
         public void onTrackingEvent(TrackingValuesVector trackingValues) {
-
             // if we detect any target, we bind the loaded geometry to this target
             if (rightSide != null && sits != null && rygg_top != null && rygg_mid != null) {
 
                 for (int i = 0; i < trackingValues.size(); i++) {
 
                     //TrackingValue is received from TrackingData_PictureMarker.xml
-
                     if (metaioSDK != null) {
                         // get all detected poses/targets
                         poses = metaioSDK.getTrackingValues();
@@ -510,11 +581,11 @@ public class CameraActivity extends ARViewActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-
                                     // If popuplist has been created
                                     if(initiated) {
 
                                         // Tillåter oss att ändra listan dynamiskt
+
                                         if (sits.getIsRendered()) {
                                             item_sits.setTitle(itemSitsTextF);
                                             sitsFound = true;
@@ -539,9 +610,9 @@ public class CameraActivity extends ARViewActivity {
                                 }
                             });
 
-                            sits.setVisible(true);
-                            rygg_mid.setVisible(true);
-                            rygg_top.setVisible(true);
+                          //  sits.setVisible(true);
+                          //  rygg_mid.setVisible(true);
+                           // rygg_top.setVisible(true);
 
                             if(buildStep==0) {
                                 rightSide.setVisible(true);
@@ -549,8 +620,6 @@ public class CameraActivity extends ARViewActivity {
                                 rygg_mid.setVisible(true);
                                 rygg_top.setVisible(true);
                                 sits.setVisible(true);
-
-
                             }
 
                             if(buildStep==1) {
@@ -569,15 +638,12 @@ public class CameraActivity extends ARViewActivity {
                                 leftSide.setVisible(true);
                             }
 
-
                             //Added
-
                             rightSide.setCoordinateSystemID(1);
                             leftSide.setCoordinateSystemID(5);
                             sits.setCoordinateSystemID(2);
                             rygg_mid.setCoordinateSystemID(3);
                             rygg_top.setCoordinateSystemID(4);
-
                         }
                     }
                 }

@@ -337,6 +337,34 @@ public class Object {
                     .order(ByteOrder.nativeOrder()).asFloatBuffer();
             mCubeNormals.put(MainActivity.sitsNormals).position(0);
         }
+
+        else if (MainActivity.currentObject == 7) {
+            mCubePositions = ByteBuffer.allocateDirect(MainActivity.screwVerts.length * mBytesPerFloat)
+                    .order(ByteOrder.nativeOrder()).asFloatBuffer();
+            mCubePositions.put(MainActivity.screwVerts).position(0);
+
+            mCubeColors = ByteBuffer.allocateDirect(MainActivity.screwCoords.length * mBytesPerFloat)
+                    .order(ByteOrder.nativeOrder()).asFloatBuffer();
+            mCubeColors.put(MainActivity.screwCoords).position(0);
+
+            mCubeNormals = ByteBuffer.allocateDirect(MainActivity.screwNormals.length * mBytesPerFloat)
+                    .order(ByteOrder.nativeOrder()).asFloatBuffer();
+            mCubeNormals.put(MainActivity.screwNormals).position(0);
+        }
+
+        else if (MainActivity.currentObject == 8) {
+            mCubePositions = ByteBuffer.allocateDirect(MainActivity.plugVerts.length * mBytesPerFloat)
+                    .order(ByteOrder.nativeOrder()).asFloatBuffer();
+            mCubePositions.put(MainActivity.plugVerts).position(0);
+
+            mCubeColors = ByteBuffer.allocateDirect(MainActivity.plugCoords.length * mBytesPerFloat)
+                    .order(ByteOrder.nativeOrder()).asFloatBuffer();
+            mCubeColors.put(MainActivity.plugCoords).position(0);
+
+            mCubeNormals = ByteBuffer.allocateDirect(MainActivity.plugNormals.length * mBytesPerFloat)
+                    .order(ByteOrder.nativeOrder()).asFloatBuffer();
+            mCubeNormals.put(MainActivity.plugNormals).position(0);
+        }
     }
 
     /**************************************************
