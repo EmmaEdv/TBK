@@ -68,11 +68,13 @@ public class CameraActivity extends ARViewActivity {
     boolean helpClick = true;
     boolean listClick = false;
 
-    boolean sitsFound = false;
-    boolean leftSideFound = false;
-    boolean rightSideFound = false;
-    boolean ryggMidFound = false;
-    boolean ryggTopFound = false;
+    // Set the booleans for "lilla listan"
+    // Get the value from intent, default is false
+    boolean sitsFound = getIntent().getBooleanExtra("foundSits", false);
+    boolean leftSideFound = getIntent().getBooleanExtra("foundLeftSide", false);
+    boolean rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
+    boolean ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
+    boolean ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
 
     // En lång radda spannable strings
     // Behövs för att ändra färg på menu items

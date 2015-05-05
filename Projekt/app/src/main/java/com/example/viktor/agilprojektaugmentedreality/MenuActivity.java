@@ -162,6 +162,10 @@ public class MenuActivity extends Activity{
             public void onClick(View v) {
                 Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
 
+                // Send the data if they have been found previously.
+                if(returnDataBundle.size() > 0)
+                    cameraScreen.putExtras(returnDataBundle);
+
                 // We expect a result from this intent.
                 startActivityForResult(cameraScreen, 1);
             }
