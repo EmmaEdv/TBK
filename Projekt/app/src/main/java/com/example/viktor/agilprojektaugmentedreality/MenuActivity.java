@@ -163,14 +163,7 @@ public class MenuActivity extends Activity{
         arBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-<<<<<<< HEAD
 
-                Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
-
-                if(returnDataBundle.size() > 0)
-                    cameraScreen.putExtras(returnDataBundle);
-
-=======
                 setButtonAlpha(arBtn);
                 Intent cameraScreen = new Intent(getApplicationContext(),  CameraActivity.class);
 
@@ -179,7 +172,6 @@ public class MenuActivity extends Activity{
                     cameraScreen.putExtras(returnDataBundle);
 
                 // We expect a result from this intent.
->>>>>>> 13cc1ae0f0f4ce2cea28c3cc20bb2e70a40e2a84
                 startActivityForResult(cameraScreen, 1);
             }
         });

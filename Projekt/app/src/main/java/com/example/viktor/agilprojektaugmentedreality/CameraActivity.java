@@ -40,18 +40,18 @@ public class CameraActivity extends ARViewActivity {
     private TrackingValuesVector poses;
 
     TextView topText, infoText;
-    Button prevButton, nextButton;
+    Button prevButton, nextButton, animateButton;
     RelativeLayout infoBox;
     ImageButton helpButton, listButton, arrowButton;
     ImageView infoImage;
 
     // Set the booleans for "lilla listan"
     // Get the value from intent, default is false
-    boolean sitsFound;// = getIntent().getBooleanExtra("foundSits", false);
-    boolean leftSideFound;// = getIntent().getBooleanExtra("foundLeftSide", false);
-    boolean rightSideFound;// = getIntent().getBooleanExtra("foundRightSide", false);
-    boolean ryggMidFound;// = getIntent().getBooleanExtra("foundRyggMid", false);
-    boolean ryggTopFound;// = getIntent().getBooleanExtra("foundRyggTop", false);
+    boolean sitsFound;
+    boolean leftSideFound;
+    boolean rightSideFound;
+    boolean ryggMidFound;
+    boolean ryggTopFound;
 
 
     //Currently loaded tracking configuration file
@@ -69,21 +69,10 @@ public class CameraActivity extends ARViewActivity {
 
     boolean initiated = false;
 
-<<<<<<< HEAD
-    // Set the booleans for "lilla listan"
-    // Get the value from intent, default is false
-    boolean sitsFound = getIntent().getBooleanExtra("foundSits", false);
-    boolean leftSideFound = getIntent().getBooleanExtra("foundLeftSide", false);
-    boolean rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
-    boolean ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
-    boolean ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
-=======
+
     //Bools to check if button in topbar is clicked or not
     boolean helpClick = true;
     boolean listClick = false;
-
->>>>>>> 13cc1ae0f0f4ce2cea28c3cc20bb2e70a40e2a84
-
 
     // En lång radda spannable strings
     // Behövs för att ändra färg på menu items
@@ -124,6 +113,7 @@ public class CameraActivity extends ARViewActivity {
         infoText = (TextView) mGUIView.findViewById(R.id.infoText);
         prevButton = (Button) mGUIView.findViewById(R.id.prevButton);
         nextButton = (Button) mGUIView.findViewById(R.id.nextButton);
+        animateButton = (Button) mGUIView.findViewById(R.id.goAnimate);
         helpButton = (ImageButton) mGUIView.findViewById(R.id.helpBtn);
         listButton = (ImageButton) mGUIView.findViewById(R.id.listBtn);
         arrowButton = (ImageButton) mGUIView.findViewById(R.id.arrowBtn);
@@ -134,6 +124,7 @@ public class CameraActivity extends ARViewActivity {
         infoText.setTypeface(font);
         prevButton.setTypeface(font);
         nextButton.setTypeface(font);
+        animateButton.setTypeface(font);
 
         // Set the booleans for "lilla listan"
         // Get the value from intent, default is false
@@ -156,6 +147,7 @@ public class CameraActivity extends ARViewActivity {
                 rygg_mid.setVisible(true);
                 rygg_top.setVisible(true);
                 prevButton.setVisibility(View.GONE);
+                animateButton.setVisibility(View.GONE);
                 topText.setText(R.string.step_zero);
                 infoImage.setVisibility(View.INVISIBLE);
                 infoText.setText(R.string.stepStart);
@@ -168,6 +160,7 @@ public class CameraActivity extends ARViewActivity {
                 leftSide.setVisible(false);
                 sits.setVisible(false);
                 prevButton.setVisibility(View.VISIBLE);
+                animateButton.setVisibility(View.VISIBLE);
                 topText.setText(R.string.step_one);
                 infoText.setVisibility(View.INVISIBLE);
                 infoImage.setVisibility(View.VISIBLE);
@@ -264,6 +257,11 @@ public class CameraActivity extends ARViewActivity {
         }
         showStep();
         showinfoBox();
+    }
+
+    public void animate(View v) {
+
+        // Animate();
     }
 
     public void btnHelp(View v)

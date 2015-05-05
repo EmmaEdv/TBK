@@ -25,5 +25,6 @@
 
     <string name="nextStep">Nästa</string>
     <string name="prevStep">Föregående</string>
+    <string name="goAnimate">go Animate!</string>
 
 </resources>

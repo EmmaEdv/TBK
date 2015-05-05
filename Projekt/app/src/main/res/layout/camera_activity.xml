@@ -92,7 +92,7 @@
     <RelativeLayout
         android:id="@+id/buttonBar"
         android:background="@null"
-        android:layout_width="@dimen/infoBoxWidth"
+        android:layout_width="500dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="false"
@@ -103,6 +103,15 @@
         android:layout_marginTop="10dp">
 
         <Button
+            android:id="@+id/nextButton"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="wrap_content"
+            android:onClick="nextStep"
+            android:text="@string/nextStep"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentEnd="true" />
+
+        <Button
             android:id="@+id/prevButton"
             android:layout_width="@dimen/buttonWidth"
             android:layout_height="wrap_content"
@@ -111,16 +120,18 @@
             android:text="@string/prevStep"
             android:layout_alignParentLeft="false"
             android:layout_alignParentBottom="false"
-            android:layout_alignParentStart="true" />
+            android:layout_toLeftOf="@+id/nextButton"/>
+
 
         <Button
-            android:id="@+id/nextButton"
+            android:id="@+id/goAnimate"
             android:layout_width="@dimen/buttonWidth"
             android:layout_height="wrap_content"
-            android:onClick="nextStep"
-            android:text="@string/nextStep"
+            android:visibility="gone"
+            android:onClick="animate"
+            android:text="@string/goAnimate"
             android:layout_alignParentBottom="false"
-            android:layout_alignParentEnd="true" />
+            android:layout_toLeftOf="@id/prevButton" />
 
     </RelativeLayout>
 
