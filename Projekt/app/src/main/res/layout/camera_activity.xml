@@ -142,7 +142,8 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/topBar"
         android:background="@color/WHITE"
-        android:id="@+id/popupList">
+        android:id="@+id/popupList"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="@dimen/listItemWidth"

@@ -22,7 +22,7 @@ public class ThumbnailAdapter extends ArrayAdapter<ThumbnailItem>{
 
     public ThumbnailAdapter(Context context, ArrayList<ThumbnailItem> itemsArrayList) {
 
-        super(context, R.layout.row, itemsArrayList);
+        super(context, R.layout.thumbnail_item, itemsArrayList);
 
         this.context = context;
         this.itemsArrayList = itemsArrayList;
@@ -36,7 +36,7 @@ public class ThumbnailAdapter extends ArrayAdapter<ThumbnailItem>{
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // 2. Get rowView from inflater
-        View rowView = inflater.inflate(R.layout.row, parent, false);
+        View rowView = inflater.inflate(R.layout.thumbnail_item, parent, false);
 
         // 3. set views for structuring different elements in the rows
 
@@ -65,8 +65,8 @@ public class ThumbnailAdapter extends ArrayAdapter<ThumbnailItem>{
             //and the statusview
             statusView = (TextView) rowView.findViewById(R.id.status);
 
-            //set the statusviews text content
-            statusView.setText(itemsArrayList.get(position).getStatus());
+            //set the statusviews text content. For smaller parts, put no text
+            statusView.setText(  position > 6 ? "" : itemsArrayList.get(position).getStatus());
 
             //if the status is FOUND set the text to green. not great solution..
             if(itemsArrayList.get(position).getFound()){

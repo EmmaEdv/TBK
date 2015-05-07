@@ -26,6 +26,7 @@
     <string name="nextStep">Nästa</string>
     <string name="prevStep">Föregående</string>
     <string name="goAnimate">Animera</string>
+    <string name="stopAnimate">Tillbaka</string>
 
     <string name="sideR">Sida - Höger</string>
     <string name="sideL">Sida - Vänster</string>

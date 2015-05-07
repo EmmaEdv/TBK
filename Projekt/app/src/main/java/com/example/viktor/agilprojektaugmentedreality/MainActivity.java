@@ -52,7 +52,6 @@ public class MainActivity extends Activity {
     protected static float[] sitsNormals;
     protected static float[] sitsCoords;
 
-
     // Arrays for screw
     protected static float[] screwVerts;
     protected static float[] screwNormals;
@@ -77,18 +76,21 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mDensity = getResources().getDisplayMetrics().density;
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
         //Locks the orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        mDensity = getResources().getDisplayMetrics().density;
+
         //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
-
-        setContentView(R.layout.activity_main);
 
         // Load vertex, normal and color lists for all objects
         loadObjectLists();
@@ -269,6 +271,12 @@ public class MainActivity extends Activity {
     public void backBtnClick(View v){
         v.setSelected(!v.isSelected());
         finish();
+        MenuActivity.resetButtons();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         MenuActivity.resetButtons();
     }
 
