@@ -182,7 +182,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         // Draw some objects.
         Matrix.setIdentityM(object.getModelMatrix(), 0);
         Matrix.translateM(object.getModelMatrix(), 0, 0.0f, 0.0f, -2.8f);
-        Matrix.rotateM(object.getModelMatrix(), 0, angleInDegrees, 1.0f, 1.0f, 0.0f);
+        Matrix.rotateM(object.getModelMatrix(), 0, 90.0f, 0.0f, 1.0f, 0.0f);
+        Matrix.rotateM(object.getModelMatrix(), 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
         Matrix.rotateM(object.getModelMatrix(), 0, mDeltaX, 0.0f, 1.0f, 0.0f);
         Matrix.rotateM(object.getModelMatrix(), 0, mDeltaY, 1.0f, 0.0f, 0.0f);
         object.draw();
