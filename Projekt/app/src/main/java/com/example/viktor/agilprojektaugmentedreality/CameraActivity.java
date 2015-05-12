@@ -16,7 +16,10 @@ import com.metaio.sdk.ARViewActivity;
 import com.metaio.sdk.MetaioDebug;
 import com.metaio.sdk.jni.Camera;
 import com.metaio.sdk.jni.CameraVector;
+import com.metaio.sdk.jni.ELIGHT_TYPE;
 import com.metaio.sdk.jni.IGeometry;
+import com.metaio.sdk.jni.ILight;
+import com.metaio.sdk.jni.IMetaioSDK;
 import com.metaio.sdk.jni.IMetaioSDKAndroid;
 import com.metaio.sdk.jni.IMetaioSDKCallback;
 import com.metaio.sdk.jni.Rotation;
@@ -35,6 +38,8 @@ public class CameraActivity extends ARViewActivity {
     private IGeometry rygg_top;
     private IGeometry rygg_mid;
     private IGeometry stepOne;
+    private ILight mDirectionalLight;
+
 
 
     private TrackingValuesVector poses;
@@ -80,7 +85,6 @@ public class CameraActivity extends ARViewActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //Locks the orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -135,7 +139,6 @@ public class CameraActivity extends ARViewActivity {
         rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
         ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
         ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
-
     }
 
 
@@ -284,6 +287,7 @@ public class CameraActivity extends ARViewActivity {
         popupList.setVisibility(View.GONE);
         listClick = false;
         animateButton.setText(R.string.stopAnimate);
+        createLight();
     }
 
     //Controls the button for darkening/lightening camera and animation
@@ -301,12 +305,25 @@ public class CameraActivity extends ARViewActivity {
         }
     }
 
+  //Creates light for the animation in the tutorial
+    private void createLight(){
+        metaioSDK.setAmbientLight(new Vector3d(0.05f));
+        mDirectionalLight = metaioSDK.createLight();
+        mDirectionalLight.setType(ELIGHT_TYPE.ELIGHT_TYPE_DIRECTIONAL);
+        mDirectionalLight.setAmbientColor(new Vector3d(0.3f, 0.3f, 0.3f));
+        mDirectionalLight.setDiffuseColor(new Vector3d(0.8f, 0.8f, 0.8f));
+        mDirectionalLight.setCoordinateSystemID(0);
+        mDirectionalLight.setEnabled(false);
+
+    }
+
     //Controls what gets animated at a certain step in the tutorial
     private void startAnimating(){
-
+        mDirectionalLight.setEnabled(true);
         switch(buildStep){
             case 1:
                     stepOne.setCoordinateSystemID(0);
+                    stepOne.setDynamicLightingEnabled(true);
                     stepOne.setScale(2.0f);
                     stepOne.setTranslation(new Vector3d(0, 0, -10000));
                     stepOne.setRotation(new Rotation(-0.785f, -0.3925f, 1.57f));
@@ -323,6 +340,7 @@ public class CameraActivity extends ARViewActivity {
 
     //Stops the animation at a certain step
     private void stopAnimating(){
+        mDirectionalLight.setEnabled(false);
 
         switch(buildStep){
             case 1:
