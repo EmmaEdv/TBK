@@ -38,6 +38,7 @@ public class CameraActivity extends ARViewActivity {
     private IGeometry rygg_top;
     private IGeometry rygg_mid;
     private IGeometry stepOne;
+    private IGeometry stepThree;
     private ILight mDirectionalLight;
 
 
@@ -333,6 +334,19 @@ public class CameraActivity extends ARViewActivity {
                     stepOne.startAnimation("Scene", true);
 
                 break;
+            case 3:
+                stepThree.setCoordinateSystemID(0);
+                stepThree.setDynamicLightingEnabled(true);
+                stepThree.setScale(6.0f);
+                stepThree.setTranslation(new Vector3d(0, -1200, -10000));
+                //stepThree.setRotation(new Rotation(-0.785f, -5.1f, 1.0f));
+                stepThree.setRotation(new Rotation(-0.0f, 1.57f, 0.0f));
+                stepThree.setDynamicLightingEnabled(true);
+                stepThree.setVisible(true);
+                stepThree.setAnimationSpeed(15);
+                stepThree.startAnimation("Scene", true);
+
+                break;
 
         }
 
@@ -347,6 +361,10 @@ public class CameraActivity extends ARViewActivity {
                 stepOne.setVisible(false);
                 stepOne.stopAnimation();
                 break;
+            case 3:
+                stepThree.setVisible(false);
+                stepThree.stopAnimation();
+            break;
         }
 
     }
@@ -475,6 +493,10 @@ public class CameraActivity extends ARViewActivity {
 
             final File stepOneFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step1_9.zip");
             stepOne =   metaioSDK.createGeometry(stepOneFile);
+
+
+            final File stepThreeFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg3_fixad.zip");
+            stepThree =   metaioSDK.createGeometry(stepThreeFile);
 
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
