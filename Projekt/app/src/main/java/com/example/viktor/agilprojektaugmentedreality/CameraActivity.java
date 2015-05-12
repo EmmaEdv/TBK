@@ -34,6 +34,8 @@ public class CameraActivity extends ARViewActivity {
     private IGeometry leftSide;
     private IGeometry rygg_top;
     private IGeometry rygg_mid;
+    private IGeometry stepOne;
+
 
     private TrackingValuesVector poses;
 
@@ -51,6 +53,9 @@ public class CameraActivity extends ARViewActivity {
     boolean rightSideFound;
     boolean ryggMidFound;
     boolean ryggTopFound;
+
+    boolean checkCamera = true;
+
 
     //Currently loaded tracking configuration file
 
@@ -269,7 +274,7 @@ public class CameraActivity extends ARViewActivity {
     //infoBox is set to invisible, make sure you also handle the showInfoBox() function in prev and nextStep()
     public void darkenCamera() {
         metaioSDK.stopCamera();
-        //metaioSDK.setSeeThroughColor(255,0,0,255);
+        metaioSDK.setSeeThroughColor(150,150,150,255);
         metaioSDK.setSeeThrough(true);
         prevButton.setVisibility(View.GONE);
         nextButton.setVisibility(View.GONE);
@@ -281,19 +286,53 @@ public class CameraActivity extends ARViewActivity {
         animateButton.setText(R.string.stopAnimate);
     }
 
-    //variable for demonstration purpose, can be removed later
-    boolean checkCamera = true;
+    //Controls the button for darkening/lightening camera and animation
     public void animate(View v) {
 
         // Animate();
         if (checkCamera) {
             darkenCamera();
+            startAnimating();
             checkCamera = false;
         } else {
             lightenCamera();
+            stopAnimating();
             checkCamera = true;
         }
     }
+
+    //Controls what gets animated at a certain step in the tutorial
+    private void startAnimating(){
+
+        switch(buildStep){
+            case 1:
+                    stepOne.setCoordinateSystemID(0);
+                    stepOne.setScale(2.0f);
+                    stepOne.setTranslation(new Vector3d(0, 0, -10000));
+                    stepOne.setRotation(new Rotation(-0.785f, -0.3925f, 1.57f));
+                    stepOne.setDynamicLightingEnabled(true);
+                    stepOne.setVisible(true);
+                    stepOne.setAnimationSpeed(15);
+                    stepOne.startAnimation("Scene", true);
+
+                break;
+
+        }
+
+    }
+
+    //Stops the animation at a certain step
+    private void stopAnimating(){
+
+        switch(buildStep){
+            case 1:
+                stepOne.setVisible(false);
+                stepOne.stopAnimation();
+                break;
+        }
+
+    }
+
 
     public void btnHelp(View v) {
         if(helpClick){
@@ -414,6 +453,10 @@ public class CameraActivity extends ARViewActivity {
             final File ryggToppModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_top.obj");
             final File ryggMidModel = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/rygg_mid.obj");
             final File sidaModel2 = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
+
+
+            final File stepOneFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step1_9.zip");
+            stepOne =   metaioSDK.createGeometry(stepOneFile);
 
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
