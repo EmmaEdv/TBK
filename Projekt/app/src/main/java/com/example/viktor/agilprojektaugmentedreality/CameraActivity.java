@@ -219,6 +219,7 @@ public class CameraActivity extends ARViewActivity {
                 sits.setVisible(false);
                 nextButton.setVisibility(View.VISIBLE);
                 topText.setText(R.string.step_six);
+                animateButton.setVisibility(View.VISIBLE);
                 infoImage.setImageResource(R.drawable.step6_color);
                 infoText.setVisibility(View.INVISIBLE);
                 infoImage.setVisibility(View.VISIBLE);
@@ -231,6 +232,7 @@ public class CameraActivity extends ARViewActivity {
                 sits.setVisible(false);
                 nextButton.setVisibility(View.GONE);
                 topText.setText(R.string.step_seven);
+                animateButton.setVisibility(View.GONE);
                 infoImage.setVisibility(View.INVISIBLE);
                 infoText.setText(R.string.stepDone);
                 infoText.setVisibility(View.VISIBLE);
