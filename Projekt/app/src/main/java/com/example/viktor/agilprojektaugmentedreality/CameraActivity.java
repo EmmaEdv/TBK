@@ -339,6 +339,18 @@ public class CameraActivity extends ARViewActivity {
 
                 break;
 
+            case 2:
+                stepTwo.setCoordinateSystemID(0);
+                stepTwo.setScale(10.0f);
+                stepTwo.setTranslation(new Vector3d(1000, 0, -12000));
+                stepTwo.setRotation(new Rotation(2.0f, -1.0f, -0.3f));
+                stepTwo.setDynamicLightingEnabled(true);
+                stepTwo.setVisible(true);
+                stepTwo.setAnimationSpeed(15);
+                stepTwo.startAnimation("Scene", true);
+
+                break;
+
             case 4:
                 stepFour.setCoordinateSystemID(0);
                 stepFour.setDynamicLightingEnabled(true);
@@ -377,20 +389,6 @@ public class CameraActivity extends ARViewActivity {
                 stepSix.startAnimation("Scene", true);
 
                 break;
-
-            case 2:
-                stepTwo.setCoordinateSystemID(0);
-                stepTwo.setScale(10.0f);
-                stepTwo.setTranslation(new Vector3d(1000, 0, -12000));
-                stepTwo.setRotation(new Rotation(2.0f, -1.0f, -0.3f));
-                stepTwo.setDynamicLightingEnabled(true);
-                stepTwo.setVisible(true);
-                stepTwo.setAnimationSpeed(15);
-                stepTwo.startAnimation("Scene", true);
-
-                break;
-
-
         }
 
     }
