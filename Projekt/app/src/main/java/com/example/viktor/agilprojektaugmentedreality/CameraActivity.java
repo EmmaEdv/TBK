@@ -341,8 +341,8 @@ public class CameraActivity extends ARViewActivity {
                 stepFour.setCoordinateSystemID(0);
                 stepFour.setDynamicLightingEnabled(true);
                 stepFour.setScale(6.0f);
-                stepFour.setTranslation(new Vector3d(0, 0, -10000));
-                stepFour.setRotation(new Rotation(-1.4f, 2.1f, 0.6f));
+                stepFour.setTranslation(new Vector3d(900, 800, -8000));
+                stepFour.setRotation(new Rotation(-1.7f, 2.2f, 0.0f));
                 stepFour.setDynamicLightingEnabled(true);
                 stepFour.setVisible(true);
                 stepFour.setAnimationSpeed(15);
@@ -354,8 +354,8 @@ public class CameraActivity extends ARViewActivity {
                 stepFive.setCoordinateSystemID(0);
                 stepFive.setDynamicLightingEnabled(true);
                 stepFive.setScale(6.0f);
-                stepFive.setTranslation(new Vector3d(0, 0, -10000));
-                stepFive.setRotation(new Rotation(-1.0f, 1.0f, 0.0f));
+                stepFive.setTranslation(new Vector3d(900, 800, -8000));
+                stepFive.setRotation(new Rotation(-1.7f, 2.2f, 0.0f));
                 stepFive.setDynamicLightingEnabled(true);
                 stepFive.setVisible(true);
                 stepFive.setAnimationSpeed(15);
@@ -367,8 +367,8 @@ public class CameraActivity extends ARViewActivity {
                 stepSix.setCoordinateSystemID(0);
                 stepSix.setDynamicLightingEnabled(true);
                 stepSix.setScale(6.0f);
-                stepSix.setTranslation(new Vector3d(0, 0, -10000));
-                stepSix.setRotation(new Rotation(-1.0f, 1.5f, 0.0f));
+                stepSix.setTranslation(new Vector3d(900, -700, -8000));
+                stepSix.setRotation(new Rotation(1.9f, -1.1f, 0.0f));
                 stepSix.setDynamicLightingEnabled(true);
                 stepSix.setVisible(true);
                 stepSix.setAnimationSpeed(15);
