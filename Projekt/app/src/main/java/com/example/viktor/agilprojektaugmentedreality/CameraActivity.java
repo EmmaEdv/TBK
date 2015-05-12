@@ -39,6 +39,7 @@ public class CameraActivity extends ARViewActivity {
     private IGeometry rygg_mid;
 
     private IGeometry stepOne;
+    private IGeometry stepThree;
     private IGeometry stepTwo;
     private IGeometry stepFour;
     private IGeometry stepFive;
@@ -350,7 +351,18 @@ public class CameraActivity extends ARViewActivity {
                 stepTwo.setVisible(true);
                 stepTwo.setAnimationSpeed(15);
                 stepTwo.startAnimation("Scene", true);
+                break;
 
+            case 3:
+                stepThree.setCoordinateSystemID(0);
+                stepThree.setDynamicLightingEnabled(true);
+                stepThree.setScale(6.0f);
+                stepThree.setTranslation(new Vector3d(0, -1200, -10000));
+                stepThree.setRotation(new Rotation(-0.0f, 1.57f, 0.0f));
+                stepThree.setDynamicLightingEnabled(true);
+                stepThree.setVisible(true);
+                stepThree.setAnimationSpeed(15);
+                stepThree.startAnimation("Scene", true);
                 break;
 
             case 4:
@@ -363,7 +375,6 @@ public class CameraActivity extends ARViewActivity {
                 stepFour.setVisible(true);
                 stepFour.setAnimationSpeed(15);
                 stepFour.startAnimation("Scene", true);
-
                 break;
 
             case 5:
@@ -376,7 +387,6 @@ public class CameraActivity extends ARViewActivity {
                 stepFive.setVisible(true);
                 stepFive.setAnimationSpeed(15);
                 stepFive.startAnimation("Scene", true);
-
                 break;
 
             case 6:
@@ -389,10 +399,8 @@ public class CameraActivity extends ARViewActivity {
                 stepSix.setVisible(true);
                 stepSix.setAnimationSpeed(15);
                 stepSix.startAnimation("Scene", true);
-
                 break;
         }
-
     }
 
     //Stops the animation at a certain step
@@ -408,23 +416,29 @@ public class CameraActivity extends ARViewActivity {
             case 2:
                 stepTwo.setVisible(false);
                 stepTwo.stopAnimation();
+                break;
+
+            case 3:
+                stepThree.setVisible(false);
+                stepThree.stopAnimation();
+                break;
 
             case 4:
                 stepFour.setVisible(false);
                 stepFour.stopAnimation();
                 break;
+
             case 5:
                 stepFive.setVisible(false);
                 stepFive.stopAnimation();
                 break;
+
             case 6:
                 stepSix.setVisible(false);
                 stepSix.stopAnimation();
                 break;
         }
-
     }
-
 
     public void btnHelp(View v) {
         if(helpClick){
@@ -558,6 +572,10 @@ public class CameraActivity extends ARViewActivity {
             stepFour =   metaioSDK.createGeometry(stepFourFile);
             stepFive =   metaioSDK.createGeometry(stepFiveFile);
             stepSix =   metaioSDK.createGeometry(stepSixFile);
+
+
+            final File stepThreeFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg3_fixad.zip");
+            stepThree =   metaioSDK.createGeometry(stepThreeFile);
 
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
