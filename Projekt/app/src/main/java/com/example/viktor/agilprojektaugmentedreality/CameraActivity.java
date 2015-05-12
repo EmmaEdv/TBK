@@ -34,8 +34,9 @@ public class CameraActivity extends ARViewActivity {
     private IGeometry leftSide;
     private IGeometry rygg_top;
     private IGeometry rygg_mid;
-    private IGeometry stepOne;
 
+    private IGeometry stepOne;
+    private IGeometry stepTwo;
 
     private TrackingValuesVector poses;
 
@@ -123,7 +124,6 @@ public class CameraActivity extends ARViewActivity {
         backTText.setTypeface(font);
         backMText.setTypeface(font);
         sideLFound.setTypeface(font);
-        sideRFound.setTypeface(font);
         seatFound.setTypeface(font);
         backTText.setTypeface(font);
         backMFound.setTypeface(font);
@@ -235,9 +235,10 @@ public class CameraActivity extends ARViewActivity {
      * nextStep button click, for next step in the building schematics
      */
     public void nextStep(View v) {
-        if (buildStep < 7) {
+
+        if (buildStep < 7)
             buildStep++;
-        }
+
 
         showStep();
 
@@ -317,6 +318,19 @@ public class CameraActivity extends ARViewActivity {
 
                 break;
 
+            case 2:
+                stepTwo.setCoordinateSystemID(0);
+                stepTwo.setScale(10.0f);
+                stepTwo.setTranslation(new Vector3d(1000, 0, -12000));
+                stepTwo.setRotation(new Rotation(2.0f, -1.0f, -0.3f));
+                stepTwo.setDynamicLightingEnabled(true);
+                stepTwo.setVisible(true);
+                stepTwo.setAnimationSpeed(15);
+                stepTwo.startAnimation("Scene", true);
+
+                break;
+
+
         }
 
     }
@@ -328,6 +342,11 @@ public class CameraActivity extends ARViewActivity {
             case 1:
                 stepOne.setVisible(false);
                 stepOne.stopAnimation();
+                break;
+
+            case 2:
+                stepTwo.setVisible(false);
+                stepTwo.stopAnimation();
                 break;
         }
 
@@ -456,7 +475,10 @@ public class CameraActivity extends ARViewActivity {
 
 
             final File stepOneFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step1_9.zip");
-            stepOne =   metaioSDK.createGeometry(stepOneFile);
+            stepOne = metaioSDK.createGeometry(stepOneFile);
+
+            final File stepTwoFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step2.zip");
+            stepTwo = metaioSDK.createGeometry(stepTwoFile);
 
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
