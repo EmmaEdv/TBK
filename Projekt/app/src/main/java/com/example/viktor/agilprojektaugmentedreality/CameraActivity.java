@@ -16,7 +16,10 @@ import com.metaio.sdk.ARViewActivity;
 import com.metaio.sdk.MetaioDebug;
 import com.metaio.sdk.jni.Camera;
 import com.metaio.sdk.jni.CameraVector;
+import com.metaio.sdk.jni.ELIGHT_TYPE;
 import com.metaio.sdk.jni.IGeometry;
+import com.metaio.sdk.jni.ILight;
+import com.metaio.sdk.jni.IMetaioSDK;
 import com.metaio.sdk.jni.IMetaioSDKAndroid;
 import com.metaio.sdk.jni.IMetaioSDKCallback;
 import com.metaio.sdk.jni.Rotation;
@@ -37,6 +40,12 @@ public class CameraActivity extends ARViewActivity {
 
     private IGeometry stepOne;
     private IGeometry stepTwo;
+    private IGeometry stepFour;
+    private IGeometry stepFive;
+    private IGeometry stepSix;
+    private ILight mDirectionalLight;
+
+
 
     private TrackingValuesVector poses;
 
@@ -81,7 +90,6 @@ public class CameraActivity extends ARViewActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //Locks the orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -135,7 +143,6 @@ public class CameraActivity extends ARViewActivity {
         rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
         ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
         ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
-
     }
 
 
@@ -285,6 +292,7 @@ public class CameraActivity extends ARViewActivity {
         popupList.setVisibility(View.GONE);
         listClick = false;
         animateButton.setText(R.string.stopAnimate);
+        createLight();
     }
 
     //Controls the button for darkening/lightening camera and animation
@@ -302,19 +310,71 @@ public class CameraActivity extends ARViewActivity {
         }
     }
 
+  //Creates light for the animation in the tutorial
+    private void createLight(){
+        metaioSDK.setAmbientLight(new Vector3d(0.05f));
+        mDirectionalLight = metaioSDK.createLight();
+        mDirectionalLight.setType(ELIGHT_TYPE.ELIGHT_TYPE_DIRECTIONAL);
+        mDirectionalLight.setAmbientColor(new Vector3d(0.3f, 0.3f, 0.3f));
+        mDirectionalLight.setDiffuseColor(new Vector3d(0.8f, 0.8f, 0.8f));
+        mDirectionalLight.setCoordinateSystemID(0);
+        mDirectionalLight.setEnabled(false);
+
+    }
+
     //Controls what gets animated at a certain step in the tutorial
     private void startAnimating(){
-
+        mDirectionalLight.setEnabled(true);
         switch(buildStep){
             case 1:
-                    stepOne.setCoordinateSystemID(0);
-                    stepOne.setScale(2.0f);
-                    stepOne.setTranslation(new Vector3d(0, 0, -10000));
-                    stepOne.setRotation(new Rotation(-0.785f, -0.3925f, 1.57f));
-                    stepOne.setDynamicLightingEnabled(true);
-                    stepOne.setVisible(true);
-                    stepOne.setAnimationSpeed(15);
-                    stepOne.startAnimation("Scene", true);
+                stepOne.setCoordinateSystemID(0);
+                stepOne.setDynamicLightingEnabled(true);
+                stepOne.setScale(2.0f);
+                stepOne.setTranslation(new Vector3d(0, 0, -10000));
+                stepOne.setRotation(new Rotation(-0.785f, -0.3925f, 1.57f));
+                stepOne.setDynamicLightingEnabled(true);
+                stepOne.setVisible(true);
+                stepOne.setAnimationSpeed(15);
+                stepOne.startAnimation("Scene", true);
+
+                break;
+
+            case 4:
+                stepFour.setCoordinateSystemID(0);
+                stepFour.setDynamicLightingEnabled(true);
+                stepFour.setScale(6.0f);
+                stepFour.setTranslation(new Vector3d(0, 0, -10000));
+                stepFour.setRotation(new Rotation(-1.4f, 2.1f, 0.6f));
+                stepFour.setDynamicLightingEnabled(true);
+                stepFour.setVisible(true);
+                stepFour.setAnimationSpeed(15);
+                stepFour.startAnimation("Scene", true);
+
+                break;
+
+            case 5:
+                stepFive.setCoordinateSystemID(0);
+                stepFive.setDynamicLightingEnabled(true);
+                stepFive.setScale(6.0f);
+                stepFive.setTranslation(new Vector3d(0, 0, -10000));
+                stepFive.setRotation(new Rotation(-1.0f, 1.0f, 0.0f));
+                stepFive.setDynamicLightingEnabled(true);
+                stepFive.setVisible(true);
+                stepFive.setAnimationSpeed(15);
+                stepFive.startAnimation("Scene", true);
+
+                break;
+
+            case 6:
+                stepSix.setCoordinateSystemID(0);
+                stepSix.setDynamicLightingEnabled(true);
+                stepSix.setScale(6.0f);
+                stepSix.setTranslation(new Vector3d(0, 0, -10000));
+                stepSix.setRotation(new Rotation(-1.0f, 1.5f, 0.0f));
+                stepSix.setDynamicLightingEnabled(true);
+                stepSix.setVisible(true);
+                stepSix.setAnimationSpeed(15);
+                stepSix.startAnimation("Scene", true);
 
                 break;
 
@@ -337,6 +397,7 @@ public class CameraActivity extends ARViewActivity {
 
     //Stops the animation at a certain step
     private void stopAnimating(){
+        mDirectionalLight.setEnabled(false);
 
         switch(buildStep){
             case 1:
@@ -347,6 +408,18 @@ public class CameraActivity extends ARViewActivity {
             case 2:
                 stepTwo.setVisible(false);
                 stepTwo.stopAnimation();
+
+            case 4:
+                stepFour.setVisible(false);
+                stepFour.stopAnimation();
+                break;
+            case 5:
+                stepFive.setVisible(false);
+                stepFive.stopAnimation();
+                break;
+            case 6:
+                stepSix.setVisible(false);
+                stepSix.stopAnimation();
                 break;
         }
 
@@ -475,10 +548,16 @@ public class CameraActivity extends ARViewActivity {
 
 
             final File stepOneFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step1_9.zip");
-            stepOne = metaioSDK.createGeometry(stepOneFile);
-
             final File stepTwoFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step2.zip");
+            final File stepFourFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg_4.zip");
+            final File stepFiveFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg_5.zip");
+            final File stepSixFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg_6.zip");
+
+            stepOne =   metaioSDK.createGeometry(stepOneFile);
             stepTwo = metaioSDK.createGeometry(stepTwoFile);
+            stepFour =   metaioSDK.createGeometry(stepFourFile);
+            stepFive =   metaioSDK.createGeometry(stepFiveFile);
+            stepSix =   metaioSDK.createGeometry(stepSixFile);
 
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
