@@ -1,8 +1,10 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,6 +30,9 @@ import com.metaio.sdk.jni.TrackingValuesVector;
 import com.metaio.sdk.jni.Vector2di;
 import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.io.AssetsManager;
+
+import junit.framework.Test;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -151,12 +156,6 @@ public class CameraActivity extends ARViewActivity {
 
     public void showStep() {
         //setVisible(true) for the objects that are included in that step
-        stepOne.setVisible(false);
-        stepTwo.setVisible(false);
-        stepThree.setVisible(false);
-        stepFour.setVisible(false);
-        stepFive.setVisible(false);
-        stepSix.setVisible(false);
 
         switch(buildStep){
             case 0:
@@ -624,6 +623,15 @@ public class CameraActivity extends ARViewActivity {
             final File stepThreeFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg3_fixad.zip");
             stepThree =   metaioSDK.createGeometry(stepThreeFile);
 
+
+            stepOne.setVisible(false);
+            stepTwo.setVisible(false);
+            stepThree.setVisible(false);
+            stepFour.setVisible(false);
+            stepFive.setVisible(false);
+            stepSix.setVisible(false);
+
+
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
                 sits.setRotation(new Rotation(1.57f, 0.0f, 0.0f));
@@ -796,6 +804,7 @@ public class CameraActivity extends ARViewActivity {
         @Override
         public void onTrackingEvent(TrackingValuesVector trackingValues) {
             // if we detect any target, we bind the loaded geometry to this target
+
             if (rightSide != null && sits != null && rygg_top != null && rygg_mid != null) {
 
                 for (int i = 0; i < trackingValues.size(); i++) {
@@ -813,31 +822,58 @@ public class CameraActivity extends ARViewActivity {
                                 public void run() {
                                     // If popuplist has been created
                                     if(initiated) {
+                                        //CameraShutter sound when found item
+                                        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.camerashutter);
                                         // Tillåter oss att ändra listan dynamiskt
                                         if (sits.getIsRendered()) {
                                             Log.i("OnTrackingEvent", "Hittar rygg topp");
                                             seatFound.setText(R.string.found);
-                                            sitsFound = true;
+
+                                            if(!sitsFound)
+                                            {
+                                                sitsFound = true;
+                                                mp.start();
+                                            }
                                         }
                                         if (rightSide.getIsRendered()) {
                                             Log.i("OnTrackingEvent","Hittar rygg topp");
                                             sideRFound.setText(R.string.found);
-                                            rightSideFound = true;
+
+                                            if(!rightSideFound)
+                                            {
+                                                rightSideFound = true;
+                                                mp.start();
+                                            }
                                         }
                                         if (leftSide.getIsRendered()) {
                                             Log.i("OnTrackingEvent", "Hittar rygg topp");
                                             sideLFound.setText(R.string.found);
-                                            leftSideFound = true;
+
+                                            if(!leftSideFound)
+                                            {
+                                                leftSideFound = true;
+                                                mp.start();
+                                            }
                                         }
                                         if (rygg_mid.getIsRendered()) {
                                             Log.i("OnTrackingEvent","Hittar rygg topp");
                                             backMFound.setText(R.string.found);
-                                            ryggMidFound = true;
+
+                                            if(!ryggMidFound)
+                                            {
+                                                ryggMidFound = true;
+                                                mp.start();
+                                            }
                                         }
                                         if (rygg_top.getIsRendered()) {
                                             Log.i("OnTrackingEvent","Hittar rygg topp");
                                             backTFound.setText(R.string.found);
-                                            ryggTopFound = true;
+
+                                            if(!ryggTopFound)
+                                            {
+                                                ryggTopFound = true;
+                                                mp.start();
+                                            }
                                         }
                                     }
                                 }
