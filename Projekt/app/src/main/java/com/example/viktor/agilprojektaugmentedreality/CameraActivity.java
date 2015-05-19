@@ -813,7 +813,8 @@ public class CameraActivity extends ARViewActivity {
                     if (metaioSDK != null) {
                         // get all detected poses/targets
                         poses = metaioSDK.getTrackingValues();
-
+                        //CameraShutter sound when an item is found
+                        final MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.camerashutter);
                         //if we have detected one, attach our metaio man to this coordinate system Id
                         if (poses.size() != 0) {
 
@@ -822,13 +823,13 @@ public class CameraActivity extends ARViewActivity {
                                 public void run() {
                                     // If popuplist has been created
                                     if(initiated) {
-                                        //CameraShutter sound when found item
-                                        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.camerashutter);
+                                        // CameraShutter sound when an item is found
                                         // Tillåter oss att ändra listan dynamiskt
                                         if (sits.getIsRendered()) {
                                             Log.i("OnTrackingEvent", "Hittar rygg topp");
                                             seatFound.setText(R.string.found);
 
+                                            //CameraShutter sound when an item is found
                                             if(!sitsFound)
                                             {
                                                 sitsFound = true;
