@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -66,6 +67,7 @@ public class CameraActivity extends ARViewActivity {
     boolean ryggTopFound;
 
     boolean checkCamera = true;
+
 
 
     //Currently loaded tracking configuration file
@@ -305,12 +307,14 @@ public class CameraActivity extends ARViewActivity {
         if (checkCamera) {
             darkenCamera();
             startAnimating();
+            animateButton.setVisibility(View.GONE);
             checkCamera = false;
-        } else {
+        } /*else {
             lightenCamera();
             stopAnimating();
+            animateButton.setVisibility(View.VISIBLE);
             checkCamera = true;
-        }
+        }*/
     }
 
   //Creates light for the animation in the tutorial
@@ -459,10 +463,44 @@ public class CameraActivity extends ARViewActivity {
         helpClick = true;
     }
 
+    /*
+    * If the animate is active then the backBtnBlick should bring the user back to the original metaio view
+    * */
     public void backBtnClick(View v) {
-        v.setSelected(!v.isSelected());
-        goBack();
-        MenuActivity.resetButtons();
+        if(checkCamera) {
+            v.setSelected(!v.isSelected());
+            goBack();
+            MenuActivity.resetButtons();
+        }
+        else {
+            lightenCamera();
+            stopAnimating();
+            animateButton.setVisibility(View.VISIBLE);
+            checkCamera = true;
+        }
+    }
+
+    /*
+    * Changed behaviour for the standard back button, it should act as the backBtnClick do
+    * */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            // do something on back.
+
+            if(checkCamera) {
+                goBack();
+                MenuActivity.resetButtons();
+            }
+            else {
+                lightenCamera();
+                stopAnimating();
+                animateButton.setVisibility(View.VISIBLE);
+                checkCamera = true;
+            }
+
+        }
+        return true;
     }
 
     //List
