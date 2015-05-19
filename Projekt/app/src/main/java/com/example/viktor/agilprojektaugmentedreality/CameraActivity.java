@@ -138,8 +138,9 @@ public class CameraActivity extends ARViewActivity {
         backTText.setTypeface(font);
         backMText.setTypeface(font);
         sideLFound.setTypeface(font);
+        sideRFound.setTypeface(font);
         seatFound.setTypeface(font);
-        backTText.setTypeface(font);
+        backTFound.setTypeface(font);
         backMFound.setTypeface(font);
 
         // Set the booleans for "lilla listan"
