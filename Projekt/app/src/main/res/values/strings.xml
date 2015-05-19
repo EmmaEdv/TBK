@@ -11,7 +11,7 @@
     <string name="arButton">Montera</string>
     <string name="stepButton">Instruktioner</string>
 
-    <string name="stepStart">Se om alla delar är hittade genom att hålla kameran över QR-koderna på vardera del. Klicka på nästa för att komma till nästa steg i monteringen.</string>
+    <string name="stepStart">1. Håll kameran över QR-koden på vardera del.\n\n\n\n2. Klicka på listan ovan för att kontrollera att alla delar är funna.\n\n\n\n3. Klicka på Nästa för att komma till första steget i monteringen.</string>
     <string name="stepDone">Färdig, bra jobbat!</string>
 
     <string name="step_zero">Montering</string>
@@ -25,7 +25,7 @@
 
     <string name="nextStep">Nästa</string>
     <string name="prevStep">Föregående</string>
-    <string name="goAnimate">Animera</string>
+    <string name="goAnimate">Visa i 3D</string>
     <string name="stopAnimate">Tillbaka</string>
 
     <string name="sideR">Sida - Höger</string>

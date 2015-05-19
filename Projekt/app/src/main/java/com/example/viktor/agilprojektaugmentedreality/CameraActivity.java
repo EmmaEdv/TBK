@@ -1,10 +1,13 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +32,9 @@ import com.metaio.sdk.jni.TrackingValuesVector;
 import com.metaio.sdk.jni.Vector2di;
 import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.io.AssetsManager;
+
+import junit.framework.Test;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
@@ -75,6 +81,7 @@ public class CameraActivity extends ARViewActivity {
     float currentZrotation;
 
 
+
     //Currently loaded tracking configuration file
 
     File trackingConfigFile;
@@ -82,8 +89,6 @@ public class CameraActivity extends ARViewActivity {
     private MetaioSDKCallbackHandler mCallbackHandler;
 
     private int buildStep = 0;
-
-    boolean initiated = false;
 
     //Bools to check if button in topbar is clicked or not
     boolean helpClick = true;
@@ -151,8 +156,9 @@ public class CameraActivity extends ARViewActivity {
         backTText.setTypeface(font);
         backMText.setTypeface(font);
         sideLFound.setTypeface(font);
+        sideRFound.setTypeface(font);
         seatFound.setTypeface(font);
-        backTText.setTypeface(font);
+        backTFound.setTypeface(font);
         backMFound.setTypeface(font);
 
         // Set the booleans for "lilla listan"
@@ -328,12 +334,14 @@ public class CameraActivity extends ARViewActivity {
         if (checkCamera) {
             darkenCamera();
             startAnimating();
+            animateButton.setVisibility(View.GONE);
             checkCamera = false;
-        } else {
+        } /*else {
             lightenCamera();
             stopAnimating();
+            animateButton.setVisibility(View.VISIBLE);
             checkCamera = true;
-        }
+        }*/
     }
 
   //Creates light for the animation in the tutorial
@@ -499,10 +507,44 @@ public class CameraActivity extends ARViewActivity {
         helpClick = true;
     }
 
+    /*
+    * If the animate is active then the backBtnBlick should bring the user back to the original metaio view
+    * */
     public void backBtnClick(View v) {
-        v.setSelected(!v.isSelected());
-        goBack();
-        MenuActivity.resetButtons();
+        if(checkCamera) {
+            v.setSelected(!v.isSelected());
+            goBack();
+            MenuActivity.resetButtons();
+        }
+        else {
+            lightenCamera();
+            stopAnimating();
+            animateButton.setVisibility(View.VISIBLE);
+            checkCamera = true;
+        }
+    }
+
+    /*
+    * Changed behaviour for the standard back button, it should act as the backBtnClick do
+    * */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            // do something on back.
+
+            if(checkCamera) {
+                goBack();
+                MenuActivity.resetButtons();
+            }
+            else {
+                lightenCamera();
+                stopAnimating();
+                animateButton.setVisibility(View.VISIBLE);
+                checkCamera = true;
+            }
+
+        }
+        return true;
     }
 
     //List
@@ -562,7 +604,6 @@ public class CameraActivity extends ARViewActivity {
             showPopup(v);
             listClick = true;
         }
-        initiated = true;
     }
 
     @Override
@@ -603,18 +644,18 @@ public class CameraActivity extends ARViewActivity {
 
             final File stepOneFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step1_9.zip");
             final File stepTwoFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step2.zip");
+            final File stepThreeFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg3_fixad.zip");
             final File stepFourFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg_4.zip");
             final File stepFiveFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg_5.zip");
             final File stepSixFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg_6.zip");
 
             stepOne =   metaioSDK.createGeometry(stepOneFile);
             stepTwo = metaioSDK.createGeometry(stepTwoFile);
+            stepThree =   metaioSDK.createGeometry(stepThreeFile);
             stepFour =   metaioSDK.createGeometry(stepFourFile);
             stepFive =   metaioSDK.createGeometry(stepFiveFile);
             stepSix =   metaioSDK.createGeometry(stepSixFile);
 
-            final File stepThreeFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg3_fixad.zip");
-            stepThree =   metaioSDK.createGeometry(stepThreeFile);
 
             stepOne.setVisible(false);
             stepTwo.setVisible(false);
@@ -708,15 +749,10 @@ public class CameraActivity extends ARViewActivity {
 
     }
 
-    private MotionEvent event;
+
     @Override
     protected void onGeometryTouched(IGeometry geometry) {
-       /* if (stepOne.isVisible()) {
-            stepOne.setRotation(new Rotation(-0.785f, *getGestures(), 1.57f));
 
-        }
-*/
-        //event.getAction();
     }
 
 
@@ -860,6 +896,7 @@ public class CameraActivity extends ARViewActivity {
         @Override
         public void onTrackingEvent(TrackingValuesVector trackingValues) {
             // if we detect any target, we bind the loaded geometry to this target
+
             if (rightSide != null && sits != null && rygg_top != null && rygg_mid != null) {
 
                 for (int i = 0; i < trackingValues.size(); i++) {
@@ -868,7 +905,8 @@ public class CameraActivity extends ARViewActivity {
                     if (metaioSDK != null) {
                         // get all detected poses/targets
                         poses = metaioSDK.getTrackingValues();
-
+                        //CameraShutter sound when an item is found
+                        final MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.camerashutter);
                         //if we have detected one, attach our metaio man to this coordinate system Id
                         if (poses.size() != 0) {
 
@@ -876,32 +914,57 @@ public class CameraActivity extends ARViewActivity {
                                 @Override
                                 public void run() {
                                     // If popuplist has been created
-                                    if(initiated) {
-                                        // Tillåter oss att ändra listan dynamiskt
-                                        if (sits.getIsRendered()) {
-                                            Log.i("OnTrackingEvent", "Hittar rygg topp");
-                                            seatFound.setText(R.string.found);
+                                    // CameraShutter sound when an item is found
+                                    // Tillåter oss att ändra listan dynamiskt
+                                    if (sits.getIsRendered()) {
+                                        Log.i("OnTrackingEvent", "Hittar rygg topp");
+                                        seatFound.setText(R.string.found);
+
+                                        //CameraShutter sound when an item is found
+                                        if(!sitsFound)
+                                        {
                                             sitsFound = true;
+                                            mp.start();
                                         }
-                                        if (rightSide.getIsRendered()) {
-                                            Log.i("OnTrackingEvent","Hittar rygg topp");
-                                            sideRFound.setText(R.string.found);
+                                    }
+                                    if (rightSide.getIsRendered()) {
+                                        Log.i("OnTrackingEvent","Hittar rygg topp");
+                                        sideRFound.setText(R.string.found);
+
+                                        if(!rightSideFound)
+                                        {
                                             rightSideFound = true;
+                                            mp.start();
                                         }
-                                        if (leftSide.getIsRendered()) {
-                                            Log.i("OnTrackingEvent", "Hittar rygg topp");
-                                            sideLFound.setText(R.string.found);
+                                    }
+                                    if (leftSide.getIsRendered()) {
+                                        Log.i("OnTrackingEvent", "Hittar rygg topp");
+                                        sideLFound.setText(R.string.found);
+
+                                        if(!leftSideFound)
+                                        {
                                             leftSideFound = true;
+                                            mp.start();
                                         }
-                                        if (rygg_mid.getIsRendered()) {
-                                            Log.i("OnTrackingEvent","Hittar rygg topp");
-                                            backMFound.setText(R.string.found);
+                                    }
+                                    if (rygg_mid.getIsRendered()) {
+                                        Log.i("OnTrackingEvent","Hittar rygg topp");
+                                        backMFound.setText(R.string.found);
+
+                                        if(!ryggMidFound)
+                                        {
                                             ryggMidFound = true;
+                                            mp.start();
                                         }
-                                        if (rygg_top.getIsRendered()) {
-                                            Log.i("OnTrackingEvent","Hittar rygg topp");
-                                            backTFound.setText(R.string.found);
+                                    }
+                                    if (rygg_top.getIsRendered()) {
+                                        Log.i("OnTrackingEvent","Hittar rygg topp");
+                                        backTFound.setText(R.string.found);
+
+                                        if(!ryggTopFound)
+                                        {
                                             ryggTopFound = true;
+                                            mp.start();
                                         }
                                     }
                                 }
