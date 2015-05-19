@@ -83,8 +83,6 @@ public class CameraActivity extends ARViewActivity {
 
     private int buildStep = 0;
 
-    boolean initiated = false;
-
     //Bools to check if button in topbar is clicked or not
     boolean helpClick = true;
     boolean listClick = false;
@@ -568,7 +566,6 @@ public class CameraActivity extends ARViewActivity {
             showPopup(v);
             listClick = true;
         }
-        initiated = true;
     }
 
     @Override
@@ -822,59 +819,57 @@ public class CameraActivity extends ARViewActivity {
                                 @Override
                                 public void run() {
                                     // If popuplist has been created
-                                    if(initiated) {
-                                        // CameraShutter sound when an item is found
-                                        // Tillåter oss att ändra listan dynamiskt
-                                        if (sits.getIsRendered()) {
-                                            Log.i("OnTrackingEvent", "Hittar rygg topp");
-                                            seatFound.setText(R.string.found);
+                                    // CameraShutter sound when an item is found
+                                    // Tillåter oss att ändra listan dynamiskt
+                                    if (sits.getIsRendered()) {
+                                        Log.i("OnTrackingEvent", "Hittar rygg topp");
+                                        seatFound.setText(R.string.found);
 
-                                            //CameraShutter sound when an item is found
-                                            if(!sitsFound)
-                                            {
-                                                sitsFound = true;
-                                                mp.start();
-                                            }
+                                        //CameraShutter sound when an item is found
+                                        if(!sitsFound)
+                                        {
+                                            sitsFound = true;
+                                            mp.start();
                                         }
-                                        if (rightSide.getIsRendered()) {
-                                            Log.i("OnTrackingEvent","Hittar rygg topp");
-                                            sideRFound.setText(R.string.found);
+                                    }
+                                    if (rightSide.getIsRendered()) {
+                                        Log.i("OnTrackingEvent","Hittar rygg topp");
+                                        sideRFound.setText(R.string.found);
 
-                                            if(!rightSideFound)
-                                            {
-                                                rightSideFound = true;
-                                                mp.start();
-                                            }
+                                        if(!rightSideFound)
+                                        {
+                                            rightSideFound = true;
+                                            mp.start();
                                         }
-                                        if (leftSide.getIsRendered()) {
-                                            Log.i("OnTrackingEvent", "Hittar rygg topp");
-                                            sideLFound.setText(R.string.found);
+                                    }
+                                    if (leftSide.getIsRendered()) {
+                                        Log.i("OnTrackingEvent", "Hittar rygg topp");
+                                        sideLFound.setText(R.string.found);
 
-                                            if(!leftSideFound)
-                                            {
-                                                leftSideFound = true;
-                                                mp.start();
-                                            }
+                                        if(!leftSideFound)
+                                        {
+                                            leftSideFound = true;
+                                            mp.start();
                                         }
-                                        if (rygg_mid.getIsRendered()) {
-                                            Log.i("OnTrackingEvent","Hittar rygg topp");
-                                            backMFound.setText(R.string.found);
+                                    }
+                                    if (rygg_mid.getIsRendered()) {
+                                        Log.i("OnTrackingEvent","Hittar rygg topp");
+                                        backMFound.setText(R.string.found);
 
-                                            if(!ryggMidFound)
-                                            {
-                                                ryggMidFound = true;
-                                                mp.start();
-                                            }
+                                        if(!ryggMidFound)
+                                        {
+                                            ryggMidFound = true;
+                                            mp.start();
                                         }
-                                        if (rygg_top.getIsRendered()) {
-                                            Log.i("OnTrackingEvent","Hittar rygg topp");
-                                            backTFound.setText(R.string.found);
+                                    }
+                                    if (rygg_top.getIsRendered()) {
+                                        Log.i("OnTrackingEvent","Hittar rygg topp");
+                                        backTFound.setText(R.string.found);
 
-                                            if(!ryggTopFound)
-                                            {
-                                                ryggTopFound = true;
-                                                mp.start();
-                                            }
+                                        if(!ryggTopFound)
+                                        {
+                                            ryggTopFound = true;
+                                            mp.start();
                                         }
                                     }
                                 }
