@@ -151,6 +151,13 @@ public class CameraActivity extends ARViewActivity {
 
     public void showStep() {
         //setVisible(true) for the objects that are included in that step
+        stepOne.setVisible(false);
+        stepTwo.setVisible(false);
+        stepThree.setVisible(false);
+        stepFour.setVisible(false);
+        stepFive.setVisible(false);
+        stepSix.setVisible(false);
+
         switch(buildStep){
             case 0:
                 rightSide.setVisible(true);
@@ -272,6 +279,7 @@ public class CameraActivity extends ARViewActivity {
     //Starts the camera after animation is done
     public void lightenCamera(){
         metaioSDK.startCamera();
+        metaioSDK.resumeTracking();
         metaioSDK.setSeeThrough(false);
         prevButton.setVisibility(View.VISIBLE);
         nextButton.setVisibility(View.VISIBLE);
@@ -286,6 +294,7 @@ public class CameraActivity extends ARViewActivity {
     //Darkens the camera before animation
     //infoBox is set to invisible, make sure you also handle the showInfoBox() function in prev and nextStep()
     public void darkenCamera() {
+        metaioSDK.pauseTracking();
         metaioSDK.stopCamera();
         metaioSDK.setSeeThroughColor(150,150,150,255);
         metaioSDK.setSeeThrough(true);
