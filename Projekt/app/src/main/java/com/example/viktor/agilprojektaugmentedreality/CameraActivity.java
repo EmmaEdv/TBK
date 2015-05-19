@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -17,6 +18,7 @@ import com.metaio.sdk.MetaioDebug;
 import com.metaio.sdk.jni.Camera;
 import com.metaio.sdk.jni.CameraVector;
 import com.metaio.sdk.jni.ELIGHT_TYPE;
+import com.metaio.sdk.jni.GestureHandler;
 import com.metaio.sdk.jni.IGeometry;
 import com.metaio.sdk.jni.ILight;
 import com.metaio.sdk.jni.IMetaioSDK;
@@ -29,6 +31,7 @@ import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.io.AssetsManager;
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 
 public class CameraActivity extends ARViewActivity {
 
@@ -67,6 +70,10 @@ public class CameraActivity extends ARViewActivity {
 
     boolean checkCamera = true;
 
+    float currentYrotation;
+    float currentXrotation;
+    float currentZrotation;
+
 
     //Currently loaded tracking configuration file
 
@@ -82,6 +89,15 @@ public class CameraActivity extends ARViewActivity {
     boolean helpClick = true;
     boolean listClick = false;
 
+    //stepOne.setRotation(new Rotation(-0.785f, -0.3925f, 1.57f));
+
+
+    private float mPreviousX =-0.785f;
+    private float mPreviousY =-0.3925f;
+    private float mDensity;
+
+
+
     @Override
     protected int getGUILayout() {
         // Attaching layout to the activity
@@ -93,8 +109,10 @@ public class CameraActivity extends ARViewActivity {
         super.onCreate(savedInstanceState);
         //Locks the orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
+       mDensity= getResources().getDisplayMetrics().density;
         mCallbackHandler = new MetaioSDKCallbackHandler();
+
+
 
         Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
 
@@ -144,18 +162,13 @@ public class CameraActivity extends ARViewActivity {
         rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
         ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
         ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
+
+
     }
 
 
     public void showStep() {
         //setVisible(true) for the objects that are included in that step
-        stepOne.setVisible(false);
-        stepTwo.setVisible(false);
-        stepThree.setVisible(false);
-        stepFour.setVisible(false);
-        stepFive.setVisible(false);
-        stepSix.setVisible(false);
-
         switch(buildStep){
             case 0:
                 rightSide.setVisible(true);
@@ -182,6 +195,7 @@ public class CameraActivity extends ARViewActivity {
                 infoText.setVisibility(View.INVISIBLE);
                 infoImage.setVisibility(View.VISIBLE);
                 infoImage.setImageResource(R.drawable.step1_color);
+
                 break;
             case 2:
                 rygg_mid.setVisible(false);
@@ -191,7 +205,7 @@ public class CameraActivity extends ARViewActivity {
                 sits.setVisible(true);
                 topText.setText(R.string.step_two);
                 infoImage.setImageResource(R.drawable.step2_color);
-            break;
+                break;
             case 3:
                 rygg_mid.setVisible(false);
                 rygg_top.setVisible(false);
@@ -333,12 +347,15 @@ public class CameraActivity extends ARViewActivity {
         mDirectionalLight.setEnabled(false);
 
     }
-
     //Controls what gets animated at a certain step in the tutorial
+
     private void startAnimating(){
         mDirectionalLight.setEnabled(true);
         switch(buildStep){
             case 1:
+                currentXrotation =  -0.3925f;
+                currentYrotation = -0.785f;
+                currentZrotation = 1.57f;
                 stepOne.setCoordinateSystemID(0);
                 stepOne.setDynamicLightingEnabled(true);
                 stepOne.setScale(2.0f);
@@ -348,10 +365,12 @@ public class CameraActivity extends ARViewActivity {
                 stepOne.setVisible(true);
                 stepOne.setAnimationSpeed(15);
                 stepOne.startAnimation("Scene", true);
-
                 break;
 
             case 2:
+                currentYrotation = 2.0f;
+                currentXrotation =  -1.0f;
+                currentZrotation = -0.3f;
                 stepTwo.setCoordinateSystemID(0);
                 stepTwo.setScale(10.0f);
                 stepTwo.setTranslation(new Vector3d(1000, 0, -12000));
@@ -363,11 +382,14 @@ public class CameraActivity extends ARViewActivity {
                 break;
 
             case 3:
+                currentYrotation = 0.0f;
+                currentXrotation = 1.57f;
+                currentZrotation = 0.0f;
                 stepThree.setCoordinateSystemID(0);
                 stepThree.setDynamicLightingEnabled(true);
                 stepThree.setScale(6.0f);
                 stepThree.setTranslation(new Vector3d(0, -1200, -10000));
-                stepThree.setRotation(new Rotation(-0.0f, 1.57f, 0.0f));
+                stepThree.setRotation(new Rotation(0.0f, 1.57f, 0.0f));
                 stepThree.setDynamicLightingEnabled(true);
                 stepThree.setVisible(true);
                 stepThree.setAnimationSpeed(15);
@@ -375,6 +397,9 @@ public class CameraActivity extends ARViewActivity {
                 break;
 
             case 4:
+                currentYrotation = -1.7f;
+                currentXrotation = 2.2f;
+                currentZrotation = 0.0f;
                 stepFour.setCoordinateSystemID(0);
                 stepFour.setDynamicLightingEnabled(true);
                 stepFour.setScale(6.0f);
@@ -387,6 +412,9 @@ public class CameraActivity extends ARViewActivity {
                 break;
 
             case 5:
+                currentYrotation = -1.7f;
+                currentXrotation = 2.2f;
+                currentZrotation = 0.0f;
                 stepFive.setCoordinateSystemID(0);
                 stepFive.setDynamicLightingEnabled(true);
                 stepFive.setScale(6.0f);
@@ -399,6 +427,9 @@ public class CameraActivity extends ARViewActivity {
                 break;
 
             case 6:
+                currentYrotation = 1.9f;
+                currentXrotation = -1.1f;
+                currentZrotation = 0.0f;
                 stepSix.setCoordinateSystemID(0);
                 stepSix.setDynamicLightingEnabled(true);
                 stepSix.setScale(6.0f);
@@ -582,9 +613,15 @@ public class CameraActivity extends ARViewActivity {
             stepFive =   metaioSDK.createGeometry(stepFiveFile);
             stepSix =   metaioSDK.createGeometry(stepSixFile);
 
-
             final File stepThreeFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg3_fixad.zip");
             stepThree =   metaioSDK.createGeometry(stepThreeFile);
+
+            stepOne.setVisible(false);
+            stepTwo.setVisible(false);
+            stepThree.setVisible(false);
+            stepFour.setVisible(false);
+            stepFive.setVisible(false);
+            stepSix.setVisible(false);
 
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
@@ -667,12 +704,77 @@ public class CameraActivity extends ARViewActivity {
         catch (Exception e) {
             MetaioDebug.printStackTrace(Log.ERROR, e);
         }
+
+
     }
 
+    private MotionEvent event;
     @Override
     protected void onGeometryTouched(IGeometry geometry) {
+       /* if (stepOne.isVisible()) {
+            stepOne.setRotation(new Rotation(-0.785f, *getGestures(), 1.57f));
 
+        }
+*/
+        //event.getAction();
     }
+
+
+
+    @Override
+    public boolean onTouch (View v, MotionEvent event){
+
+        if (event != null) {
+            float x = event.getX();
+            float y = event.getY();
+
+            float deltaX = (x - mPreviousX) / mDensity / 2f;
+            float deltaY = (y - mPreviousY) / mDensity / 2f;
+            if(Math.abs(deltaX) < 20 && Math.abs(deltaY) < 20) {
+
+                    currentYrotation += deltaY / 100;
+                    currentXrotation += deltaX / 100;
+
+                if (stepOne.isVisible()){
+                    stepOne.setRotation(new Rotation(currentXrotation, currentYrotation, currentZrotation));
+            }
+                else if (stepTwo.isVisible()){
+                    stepTwo.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
+
+                }
+                else if(stepThree.isVisible())
+                {
+                    stepThree.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
+
+                }
+                else if(stepFour.isVisible())
+                {
+                    stepFour.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
+
+                }
+                else if(stepFive.isVisible())
+                {
+                    stepFive.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
+
+                }
+                else if(stepSix.isVisible())
+                {
+                    stepSix.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
+
+                }
+
+            }
+
+
+            mPreviousX = x;
+            mPreviousY = y;
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
