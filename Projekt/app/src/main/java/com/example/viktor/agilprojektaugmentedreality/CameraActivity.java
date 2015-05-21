@@ -1,12 +1,15 @@
 package com.example.viktor.agilprojektaugmentedreality;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -18,6 +21,7 @@ import com.metaio.sdk.MetaioDebug;
 import com.metaio.sdk.jni.Camera;
 import com.metaio.sdk.jni.CameraVector;
 import com.metaio.sdk.jni.ELIGHT_TYPE;
+import com.metaio.sdk.jni.GestureHandler;
 import com.metaio.sdk.jni.IGeometry;
 import com.metaio.sdk.jni.ILight;
 import com.metaio.sdk.jni.IMetaioSDK;
@@ -28,8 +32,12 @@ import com.metaio.sdk.jni.TrackingValuesVector;
 import com.metaio.sdk.jni.Vector2di;
 import com.metaio.sdk.jni.Vector3d;
 import com.metaio.tools.io.AssetsManager;
+
+import junit.framework.Test;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 
 public class CameraActivity extends ARViewActivity {
 
@@ -68,6 +76,10 @@ public class CameraActivity extends ARViewActivity {
 
     boolean checkCamera = true;
 
+    float currentYrotation;
+    float currentXrotation;
+    float currentZrotation;
+
 
 
     //Currently loaded tracking configuration file
@@ -78,11 +90,18 @@ public class CameraActivity extends ARViewActivity {
 
     private int buildStep = 0;
 
-    boolean initiated = false;
-
     //Bools to check if button in topbar is clicked or not
     boolean helpClick = true;
     boolean listClick = false;
+
+    //stepOne.setRotation(new Rotation(-0.785f, -0.3925f, 1.57f));
+
+
+    private float mPreviousX =-0.785f;
+    private float mPreviousY =-0.3925f;
+    private float mDensity;
+
+
 
     @Override
     protected int getGUILayout() {
@@ -95,8 +114,10 @@ public class CameraActivity extends ARViewActivity {
         super.onCreate(savedInstanceState);
         //Locks the orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
+       mDensity= getResources().getDisplayMetrics().density;
         mCallbackHandler = new MetaioSDKCallbackHandler();
+
+
 
         Typeface font = Typeface.createFromAsset(getAssets(), "Berlin Sans FB.ttf");
 
@@ -135,8 +156,9 @@ public class CameraActivity extends ARViewActivity {
         backTText.setTypeface(font);
         backMText.setTypeface(font);
         sideLFound.setTypeface(font);
+        sideRFound.setTypeface(font);
         seatFound.setTypeface(font);
-        backTText.setTypeface(font);
+        backTFound.setTypeface(font);
         backMFound.setTypeface(font);
 
         // Set the booleans for "lilla listan"
@@ -146,18 +168,13 @@ public class CameraActivity extends ARViewActivity {
         rightSideFound = getIntent().getBooleanExtra("foundRightSide", false);
         ryggMidFound = getIntent().getBooleanExtra("foundRyggMid", false);
         ryggTopFound = getIntent().getBooleanExtra("foundRyggTop", false);
+
+
     }
 
 
     public void showStep() {
         //setVisible(true) for the objects that are included in that step
-        stepOne.setVisible(false);
-        stepTwo.setVisible(false);
-        stepThree.setVisible(false);
-        stepFour.setVisible(false);
-        stepFive.setVisible(false);
-        stepSix.setVisible(false);
-
         switch(buildStep){
             case 0:
                 rightSide.setVisible(true);
@@ -184,6 +201,7 @@ public class CameraActivity extends ARViewActivity {
                 infoText.setVisibility(View.INVISIBLE);
                 infoImage.setVisibility(View.VISIBLE);
                 infoImage.setImageResource(R.drawable.step1_color);
+
                 break;
             case 2:
                 rygg_mid.setVisible(false);
@@ -193,7 +211,7 @@ public class CameraActivity extends ARViewActivity {
                 sits.setVisible(true);
                 topText.setText(R.string.step_two);
                 infoImage.setImageResource(R.drawable.step2_color);
-            break;
+                break;
             case 3:
                 rygg_mid.setVisible(false);
                 rygg_top.setVisible(false);
@@ -337,8 +355,8 @@ public class CameraActivity extends ARViewActivity {
         mDirectionalLight.setEnabled(false);
 
     }
-
     //Controls what gets animated at a certain step in the tutorial
+
     private void startAnimating(){
         mDirectionalLight.setEnabled(true);
         switch(buildStep){
@@ -347,7 +365,6 @@ public class CameraActivity extends ARViewActivity {
                 stepOne.setDynamicLightingEnabled(true);
                 stepOne.setScale(2.0f);
                 stepOne.setTranslation(new Vector3d(0.0f, 0.0f, -100.0f));
-                //stepOne.setRotation(new Rotation(-0.785f, -0.3925f, 1.57f));
                 stepOne.setDynamicLightingEnabled(true);
                 stepOne.setVisible(true);
                 stepOne.startAnimation("Default Take", true);
@@ -358,9 +375,7 @@ public class CameraActivity extends ARViewActivity {
                 stepTwo.setCoordinateSystemID(0);
                 stepTwo.setDynamicLightingEnabled(true);
                 stepTwo.setScale(7.0f);
-                stepTwo.setTranslation(new Vector3d(10.0f, 0.0f, -75.0f));
-                stepTwo.setRotation(new Rotation(1.4f, 0.6f, 3.14f));
-                stepTwo.setTransparency(0.2f);
+                stepTwo.setTranslation(new Vector3d(0.0f, 0.0f, -75.0f));
                 stepTwo.setDynamicLightingEnabled(true);
                 stepTwo.setVisible(true);
                 stepTwo.startAnimation("Default Take", true);
@@ -371,7 +386,6 @@ public class CameraActivity extends ARViewActivity {
                 stepThree.setDynamicLightingEnabled(true);
                 stepThree.setScale(6.0f);
                 stepThree.setTranslation(new Vector3d(0.0f, 0.0f, -75.0f));
-                stepThree.setRotation(new Rotation(-0.0f, 1.57f, 0.0f));
                 stepThree.setDynamicLightingEnabled(true);
                 stepThree.setVisible(true);
                 stepThree.startAnimation("Default Take", true);
@@ -382,7 +396,6 @@ public class CameraActivity extends ARViewActivity {
                 stepFour.setDynamicLightingEnabled(true);
                 stepFour.setScale(6.0f);
                 stepFour.setTranslation(new Vector3d(0.0f, 0.0f, -75.0f));
-                stepFour.setRotation(new Rotation(-1.7f, 2.2f, 0.0f));
                 stepFour.setDynamicLightingEnabled(true);
                 stepFour.setVisible(true);
                 stepFour.startAnimation("Default Take", true);
@@ -393,7 +406,6 @@ public class CameraActivity extends ARViewActivity {
                 stepFive.setDynamicLightingEnabled(true);
                 stepFive.setScale(6.0f);
                 stepFive.setTranslation(new Vector3d(0.0f, 0.0f, -75.0f));
-                stepFive.setRotation(new Rotation(-1.7f, 2.2f, 0.0f));
                 stepFive.setDynamicLightingEnabled(true);
                 stepFive.setVisible(true);
                 stepFive.startAnimation("Default Take", true);
@@ -403,12 +415,10 @@ public class CameraActivity extends ARViewActivity {
                 stepSix.setCoordinateSystemID(0);
                 stepSix.setDynamicLightingEnabled(true);
                 stepSix.setScale(6.0f);
-                stepSix.setTranslation(new Vector3d(900, -700, -8000));
-                stepSix.setRotation(new Rotation(1.9f, -1.1f, 0.0f));
+                stepSix.setTranslation(new Vector3d(0.0f, 0.0f, -75.0f));
                 stepSix.setDynamicLightingEnabled(true);
                 stepSix.setVisible(true);
-                stepSix.setAnimationSpeed(15);
-                stepSix.startAnimation("Scene", true);
+                stepSix.startAnimation("Default Take", true);
                 break;
         }
     }
@@ -566,7 +576,6 @@ public class CameraActivity extends ARViewActivity {
             showPopup(v);
             listClick = true;
         }
-        initiated = true;
     }
 
     @Override
@@ -605,12 +614,13 @@ public class CameraActivity extends ARViewActivity {
             final File sidaModel2 = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
 
 
+
             final File stepOneFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_1.zip");
             final File stepTwoFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_2.zip");
             final File stepThreeFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_3.zip");
             final File stepFourFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_4.zip");
             final File stepFiveFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_5.zip");
-            final File stepSixFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg_6.zip");
+            final File stepSixFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_6.zip");
 
             stepOne =   metaioSDK.createGeometry(stepOneFile);
             stepTwo = metaioSDK.createGeometry(stepTwoFile);
@@ -619,9 +629,12 @@ public class CameraActivity extends ARViewActivity {
             stepFive =   metaioSDK.createGeometry(stepFiveFile);
             stepSix =   metaioSDK.createGeometry(stepSixFile);
 
-
-
-
+            stepOne.setVisible(false);
+            stepTwo.setVisible(false);
+            stepThree.setVisible(false);
+            stepFour.setVisible(false);
+            stepFive.setVisible(false);
+            stepSix.setVisible(false);
 
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
@@ -704,12 +717,72 @@ public class CameraActivity extends ARViewActivity {
         catch (Exception e) {
             MetaioDebug.printStackTrace(Log.ERROR, e);
         }
+
+
     }
+
 
     @Override
     protected void onGeometryTouched(IGeometry geometry) {
 
     }
+
+
+
+    @Override
+    public boolean onTouch (View v, MotionEvent event){
+
+        if (event != null) {
+            float x = event.getX();
+            float y = event.getY();
+
+            float deltaX = (x - mPreviousX) / mDensity / 2f;
+            float deltaY = (y - mPreviousY) / mDensity / 2f;
+            if(Math.abs(deltaX) < 20 && Math.abs(deltaY) < 20) {
+
+                    currentYrotation += deltaY / 100;
+                    currentXrotation += deltaX / 100;
+
+                if (stepOne.isVisible()){
+                    stepOne.setRotation(new Rotation(currentXrotation, currentYrotation, currentZrotation));
+            }
+                else if (stepTwo.isVisible()){
+                    stepTwo.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
+
+                }
+                else if(stepThree.isVisible())
+                {
+                    stepThree.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
+
+                }
+                else if(stepFour.isVisible())
+                {
+                    stepFour.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
+
+                }
+                else if(stepFive.isVisible())
+                {
+                    stepFive.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
+
+                }
+                else if(stepSix.isVisible())
+                {
+                    stepSix.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
+
+                }
+
+            }
+
+
+            mPreviousX = x;
+            mPreviousY = y;
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -795,6 +868,7 @@ public class CameraActivity extends ARViewActivity {
         @Override
         public void onTrackingEvent(TrackingValuesVector trackingValues) {
             // if we detect any target, we bind the loaded geometry to this target
+
             if (rightSide != null && sits != null && rygg_top != null && rygg_mid != null) {
 
                 for (int i = 0; i < trackingValues.size(); i++) {
@@ -803,7 +877,8 @@ public class CameraActivity extends ARViewActivity {
                     if (metaioSDK != null) {
                         // get all detected poses/targets
                         poses = metaioSDK.getTrackingValues();
-
+                        //CameraShutter sound when an item is found
+                        final MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.camerashutter);
                         //if we have detected one, attach our metaio man to this coordinate system Id
                         if (poses.size() != 0) {
 
@@ -811,32 +886,57 @@ public class CameraActivity extends ARViewActivity {
                                 @Override
                                 public void run() {
                                     // If popuplist has been created
-                                    if(initiated) {
-                                        // Tillåter oss att ändra listan dynamiskt
-                                        if (sits.getIsRendered()) {
-                                            Log.i("OnTrackingEvent", "Hittar rygg topp");
-                                            seatFound.setText(R.string.found);
+                                    // CameraShutter sound when an item is found
+                                    // Tillåter oss att ändra listan dynamiskt
+                                    if (sits.getIsRendered()) {
+                                        Log.i("OnTrackingEvent", "Hittar rygg topp");
+                                        seatFound.setText(R.string.found);
+
+                                        //CameraShutter sound when an item is found
+                                        if(!sitsFound)
+                                        {
                                             sitsFound = true;
+                                            mp.start();
                                         }
-                                        if (rightSide.getIsRendered()) {
-                                            Log.i("OnTrackingEvent","Hittar rygg topp");
-                                            sideRFound.setText(R.string.found);
+                                    }
+                                    if (rightSide.getIsRendered()) {
+                                        Log.i("OnTrackingEvent","Hittar rygg topp");
+                                        sideRFound.setText(R.string.found);
+
+                                        if(!rightSideFound)
+                                        {
                                             rightSideFound = true;
+                                            mp.start();
                                         }
-                                        if (leftSide.getIsRendered()) {
-                                            Log.i("OnTrackingEvent", "Hittar rygg topp");
-                                            sideLFound.setText(R.string.found);
+                                    }
+                                    if (leftSide.getIsRendered()) {
+                                        Log.i("OnTrackingEvent", "Hittar rygg topp");
+                                        sideLFound.setText(R.string.found);
+
+                                        if(!leftSideFound)
+                                        {
                                             leftSideFound = true;
+                                            mp.start();
                                         }
-                                        if (rygg_mid.getIsRendered()) {
-                                            Log.i("OnTrackingEvent","Hittar rygg topp");
-                                            backMFound.setText(R.string.found);
+                                    }
+                                    if (rygg_mid.getIsRendered()) {
+                                        Log.i("OnTrackingEvent","Hittar rygg topp");
+                                        backMFound.setText(R.string.found);
+
+                                        if(!ryggMidFound)
+                                        {
                                             ryggMidFound = true;
+                                            mp.start();
                                         }
-                                        if (rygg_top.getIsRendered()) {
-                                            Log.i("OnTrackingEvent","Hittar rygg topp");
-                                            backTFound.setText(R.string.found);
+                                    }
+                                    if (rygg_top.getIsRendered()) {
+                                        Log.i("OnTrackingEvent","Hittar rygg topp");
+                                        backTFound.setText(R.string.found);
+
+                                        if(!ryggTopFound)
+                                        {
                                             ryggTopFound = true;
+                                            mp.start();
                                         }
                                     }
                                 }
