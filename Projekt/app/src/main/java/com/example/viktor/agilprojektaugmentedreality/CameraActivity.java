@@ -273,14 +273,14 @@ public class CameraActivity extends ARViewActivity {
      */
     public void nextStep(View v) {
 
-        if (buildStep < 7)
-            buildStep++;
+            if (buildStep < 7)
+                buildStep++;
 
 
-        showStep();
+            showStep();
 
-        showinfoBox();
-        topText.setVisibility(View.VISIBLE);
+            showinfoBox();
+            topText.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -365,6 +365,14 @@ public class CameraActivity extends ARViewActivity {
                 stepOne.setDynamicLightingEnabled(true);
                 stepOne.setScale(2.0f);
                 stepOne.setTranslation(new Vector3d(0.0f, 0.0f, -100.0f));
+               // currentYrotation =  0.785f;
+               // currentXrotation = -0.3925f;
+               // currentZrotation = 1.57f;
+               // stepOne.setCoordinateSystemID(0);
+               // stepOne.setDynamicLightingEnabled(true);
+                //stepOne.setScale(2.0f);
+               // stepOne.setTranslation(new Vector3d(0, 0, -10000));
+                //stepOne.setRotation(new Rotation(-0.3925f,-0.785f, 1.57f));
                 stepOne.setDynamicLightingEnabled(true);
                 stepOne.setVisible(true);
                 stepOne.startAnimation("Default Take", true);
@@ -744,7 +752,7 @@ public class CameraActivity extends ARViewActivity {
                     currentXrotation += deltaX / 100;
 
                 if (stepOne.isVisible()){
-                    stepOne.setRotation(new Rotation(currentXrotation, currentYrotation, currentZrotation));
+                    stepOne.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
             }
                 else if (stepTwo.isVisible()){
                     stepTwo.setRotation(new Rotation(currentYrotation, currentXrotation, currentZrotation));
