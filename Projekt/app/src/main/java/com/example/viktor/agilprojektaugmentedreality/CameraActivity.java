@@ -273,14 +273,14 @@ public class CameraActivity extends ARViewActivity {
      */
     public void nextStep(View v) {
 
-        if (buildStep < 7)
-            buildStep++;
+            if (buildStep < 7)
+                buildStep++;
 
 
-        showStep();
+            showStep();
 
-        showinfoBox();
-        topText.setVisibility(View.VISIBLE);
+            showinfoBox();
+            topText.setVisibility(View.VISIBLE);
     }
 
     /**
