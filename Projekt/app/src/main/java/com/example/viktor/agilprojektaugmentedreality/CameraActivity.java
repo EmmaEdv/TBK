@@ -346,60 +346,57 @@ public class CameraActivity extends ARViewActivity {
                 stepOne.setCoordinateSystemID(0);
                 stepOne.setDynamicLightingEnabled(true);
                 stepOne.setScale(2.0f);
-                stepOne.setTranslation(new Vector3d(0, 0, -10000));
-                stepOne.setRotation(new Rotation(-0.785f, -0.3925f, 1.57f));
+                stepOne.setTranslation(new Vector3d(0.0f, 0.0f, -100.0f));
+                //stepOne.setRotation(new Rotation(-0.785f, -0.3925f, 1.57f));
                 stepOne.setDynamicLightingEnabled(true);
                 stepOne.setVisible(true);
-                stepOne.setAnimationSpeed(15);
-                stepOne.startAnimation("Scene", true);
+                stepOne.startAnimation("Default Take", true);
 
                 break;
 
             case 2:
                 stepTwo.setCoordinateSystemID(0);
-                stepTwo.setScale(10.0f);
-                stepTwo.setTranslation(new Vector3d(1000, 0, -12000));
-                stepTwo.setRotation(new Rotation(2.0f, -1.0f, -0.3f));
+                stepTwo.setDynamicLightingEnabled(true);
+                stepTwo.setScale(7.0f);
+                stepTwo.setTranslation(new Vector3d(10.0f, 0.0f, -75.0f));
+                stepTwo.setRotation(new Rotation(1.4f, 0.6f, 3.14f));
+                stepTwo.setTransparency(0.2f);
                 stepTwo.setDynamicLightingEnabled(true);
                 stepTwo.setVisible(true);
-                stepTwo.setAnimationSpeed(15);
-                stepTwo.startAnimation("Scene", true);
+                stepTwo.startAnimation("Default Take", true);
                 break;
 
             case 3:
                 stepThree.setCoordinateSystemID(0);
                 stepThree.setDynamicLightingEnabled(true);
                 stepThree.setScale(6.0f);
-                stepThree.setTranslation(new Vector3d(0, -1200, -10000));
+                stepThree.setTranslation(new Vector3d(0.0f, 0.0f, -75.0f));
                 stepThree.setRotation(new Rotation(-0.0f, 1.57f, 0.0f));
                 stepThree.setDynamicLightingEnabled(true);
                 stepThree.setVisible(true);
-                stepThree.setAnimationSpeed(15);
-                stepThree.startAnimation("Scene", true);
+                stepThree.startAnimation("Default Take", true);
                 break;
 
             case 4:
                 stepFour.setCoordinateSystemID(0);
                 stepFour.setDynamicLightingEnabled(true);
                 stepFour.setScale(6.0f);
-                stepFour.setTranslation(new Vector3d(900, 800, -8000));
+                stepFour.setTranslation(new Vector3d(0.0f, 0.0f, -75.0f));
                 stepFour.setRotation(new Rotation(-1.7f, 2.2f, 0.0f));
                 stepFour.setDynamicLightingEnabled(true);
                 stepFour.setVisible(true);
-                stepFour.setAnimationSpeed(15);
-                stepFour.startAnimation("Scene", true);
+                stepFour.startAnimation("Default Take", true);
                 break;
 
             case 5:
                 stepFive.setCoordinateSystemID(0);
                 stepFive.setDynamicLightingEnabled(true);
                 stepFive.setScale(6.0f);
-                stepFive.setTranslation(new Vector3d(900, 800, -8000));
+                stepFive.setTranslation(new Vector3d(0.0f, 0.0f, -75.0f));
                 stepFive.setRotation(new Rotation(-1.7f, 2.2f, 0.0f));
                 stepFive.setDynamicLightingEnabled(true);
                 stepFive.setVisible(true);
-                stepFive.setAnimationSpeed(15);
-                stepFive.startAnimation("Scene", true);
+                stepFive.startAnimation("Default Take", true);
                 break;
 
             case 6:
@@ -608,21 +605,23 @@ public class CameraActivity extends ARViewActivity {
             final File sidaModel2 = AssetsManager.getAssetPathAsFile(getApplicationContext(), "pictureMarker/Assets/sida.obj");
 
 
-            final File stepOneFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step1_9.zip");
-            final File stepTwoFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step2.zip");
-            final File stepFourFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg_4.zip");
-            final File stepFiveFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg_5.zip");
+            final File stepOneFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_1.zip");
+            final File stepTwoFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_2.zip");
+            final File stepThreeFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_3.zip");
+            final File stepFourFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_4.zip");
+            final File stepFiveFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "step_5.zip");
             final File stepSixFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg_6.zip");
 
             stepOne =   metaioSDK.createGeometry(stepOneFile);
             stepTwo = metaioSDK.createGeometry(stepTwoFile);
+            stepThree =   metaioSDK.createGeometry(stepThreeFile);
             stepFour =   metaioSDK.createGeometry(stepFourFile);
             stepFive =   metaioSDK.createGeometry(stepFiveFile);
             stepSix =   metaioSDK.createGeometry(stepSixFile);
 
 
-            final File stepThreeFile = AssetsManager.getAssetPathAsFile(getApplicationContext(), "steg3_fixad.zip");
-            stepThree =   metaioSDK.createGeometry(stepThreeFile);
+
+
 
             if (sitsModel != null) {
                 sits = metaioSDK.createGeometry(sitsModel);
